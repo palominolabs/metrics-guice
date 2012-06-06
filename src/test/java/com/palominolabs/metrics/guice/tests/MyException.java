@@ -1,4 +1,4 @@
-package com.exampe.metrics.guice.tests;
+package com.palominolabs.metrics.guice.tests;
 
 public class MyException extends RuntimeException {
 

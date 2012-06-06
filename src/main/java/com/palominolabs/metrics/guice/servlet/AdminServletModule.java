@@ -1,4 +1,4 @@
-package com.example.metrics.guice.servlet;
+package com.palominolabs.metrics.guice.servlet;
 
 import com.yammer.metrics.reporting.AdminServlet;
 import org.codehaus.jackson.JsonFactory;

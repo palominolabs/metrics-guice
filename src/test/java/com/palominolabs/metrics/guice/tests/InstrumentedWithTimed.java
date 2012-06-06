@@ -1,4 +1,4 @@
-package com.exampe.metrics.guice.tests;
+package com.palominolabs.metrics.guice.tests;
 
 import com.yammer.metrics.annotation.Timed;
 

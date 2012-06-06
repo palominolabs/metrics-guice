@@ -1,4 +1,4 @@
-package com.exampe.metrics.guice.tests;
+package com.palominolabs.metrics.guice.tests;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -6,7 +6,7 @@ import com.yammer.metrics.HealthChecks;
 import com.yammer.metrics.Metrics;
 import com.yammer.metrics.core.HealthCheckRegistry;
 import com.yammer.metrics.core.MetricsRegistry;
-import com.example.metrics.guice.InstrumentationModule;
+import com.palominolabs.metrics.guice.InstrumentationModule;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;

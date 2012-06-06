@@ -1,7 +1,6 @@
-package com.exampe.metrics.guice.tests;
+package com.palominolabs.metrics.guice.tests;
 
 import com.yammer.metrics.annotation.Metered;
-import com.yammer.metrics.annotation.Timed;
 
 import java.util.concurrent.TimeUnit;
 

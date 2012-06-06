@@ -1,4 +1,4 @@
-package com.example.metrics.guice;
+package com.palominolabs.metrics.guice;
 
 import com.yammer.metrics.annotation.Timed;
 import com.yammer.metrics.core.MetricName;

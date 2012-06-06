@@ -1,4 +1,4 @@
-package com.example.metrics.guice;
+package com.palominolabs.metrics.guice;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;

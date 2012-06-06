@@ -1,10 +1,10 @@
-package com.exampe.metrics.guice.tests;
+package com.palominolabs.metrics.guice.tests;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.yammer.metrics.annotation.ExceptionMetered;
 import com.yammer.metrics.core.*;
-import com.example.metrics.guice.InstrumentationModule;
+import com.palominolabs.metrics.guice.InstrumentationModule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

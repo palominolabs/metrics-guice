@@ -1,4 +1,4 @@
-package com.example.metrics.guice;
+package com.palominolabs.metrics.guice;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
@@ -10,12 +10,12 @@ import org.aopalliance.intercept.MethodInterceptor;
 import java.lang.reflect.Method;
 
 /**
- * A listener which adds method interceptors to metered methods.
+ * A listener which adds method interceptors to timed methods.
  */
-class MeteredListener implements TypeListener {
+class TimedListener implements TypeListener {
     private final MetricsRegistry metricsRegistry;
 
-    MeteredListener(MetricsRegistry metricsRegistry) {
+    TimedListener(MetricsRegistry metricsRegistry) {
         this.metricsRegistry = metricsRegistry;
     }
 
@@ -26,9 +26,8 @@ class MeteredListener implements TypeListener {
 
         do {
             for (Method method : klass.getDeclaredMethods()) {
-                final MethodInterceptor interceptor = MeteredInterceptor.forMethod(metricsRegistry,
-                                                                                   klass,
-                                                                                   method);
+                final MethodInterceptor interceptor = TimedInterceptor.forMethod(metricsRegistry,
+                                                                                 klass, method);
                 if (interceptor != null) {
                     encounter.bindInterceptor(Matchers.only(method), interceptor);
                 }

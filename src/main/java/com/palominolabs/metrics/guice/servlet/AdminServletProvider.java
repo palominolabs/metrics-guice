@@ -1,4 +1,4 @@
-package com.example.metrics.guice.servlet;
+package com.palominolabs.metrics.guice.servlet;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
