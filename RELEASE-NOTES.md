@@ -1,0 +1,2 @@
+- 3.0.0
+-- Update to Jackson 2.0.2

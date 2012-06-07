@@ -1,12 +1,16 @@
 package com.palominolabs.metrics.guice.servlet;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.yammer.metrics.core.*;
-import com.yammer.metrics.reporting.*;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.yammer.metrics.servlet.AdminServlet;
+import com.yammer.metrics.servlet.HealthCheckServlet;
+import com.yammer.metrics.servlet.MetricsServlet;
+import com.yammer.metrics.servlet.PingServlet;
+import com.yammer.metrics.servlet.ThreadDumpServlet;
 
 import java.util.Set;
 
