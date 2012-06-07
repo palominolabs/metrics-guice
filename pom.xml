@@ -10,6 +10,41 @@
     <name>Metrics Guice Support</name>
     <packaging>bundle</packaging>
 
+    <description>Guice integration with Metrics.</description>
+
+    <url>https://github.com/palominolabs/metrics-guice</url>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+      <connection>scm:git:git@github.com:palominolabs/metrics-guice.git</connection>
+      <url>https://github.com/palominolabs/metrics-guice</url>
+    </scm>
+
+    <issueManagement>
+        <system>github</system>
+        <url>http://github.com/palominolabs/metrics-guice/issues#issue/</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <name>Coda Hale</name>
+            <email>coda.hale@gmail.com</email>
+            <timezone>-8</timezone>
+        </developer>
+        <developer>
+            <name>Marshall Pierce</name>
+            <email>marshall@mpierce.org</email>
+            <timezone>-8</timezone>
+        </developer>
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
