@@ -10,6 +10,12 @@
     <name>Metrics Guice Support</name>
     <packaging>bundle</packaging>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <description>Guice integration with Metrics.</description>
 
     <url>https://github.com/palominolabs/metrics-guice</url>
@@ -23,8 +29,9 @@
     </licenses>
 
     <scm>
-      <connection>scm:git:git@github.com:palominolabs/metrics-guice.git</connection>
-      <url>https://github.com/palominolabs/metrics-guice</url>
+        <connection>scm:git:git@github.com:palominolabs/metrics-guice.git</connection>
+        <developerConnection>scm:git:git@github.com:palominolabs/metrics-guice.git</developerConnection>
+        <url>https://github.com/palominolabs/metrics-guice</url>
     </scm>
 
     <issueManagement>
