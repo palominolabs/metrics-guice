@@ -21,14 +21,12 @@ class GaugeListener implements TypeListener {
 
     @Override
     public <I> void hear(final TypeLiteral<I> literal, TypeEncounter<I> encounter) {
-        for (final Method method : literal.getRawType().getMethods()) {
+        Class<? super I> klass = literal.getRawType();
+        for (final Method method : klass.getMethods()) {
             final Gauge annotation = method.getAnnotation(Gauge.class);
             if (annotation != null) {
                 if (method.getParameterTypes().length == 0) {
-                    final String group = MetricNames.chooseDomain(annotation.group(), literal.getRawType());
-                    final String type = MetricNames.chooseType(annotation.type(), literal.getRawType());
-                    final String name = MetricNames.chooseName(annotation.name(), method);
-                    final MetricName metricName = new MetricName(group, type, name);
+                    final MetricName metricName = MetricName.forGaugeMethod(klass, method, annotation);
                     encounter.register(new GaugeInjectionListener<I>(metricsRegistry,
                                                                      metricName,
                                                                      method));

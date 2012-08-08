@@ -18,24 +18,13 @@ class ExceptionMeteredInterceptor implements MethodInterceptor {
     static MethodInterceptor forMethod(MetricsRegistry metricsRegistry, Class<?> klass, Method method) {
         final ExceptionMetered annotation = method.getAnnotation(ExceptionMetered.class);
         if (annotation != null) {
-            final String group = MetricNames.chooseDomain(annotation.group(), klass);
-            final String type = MetricNames.chooseType(annotation.type(), klass);
-            final String name = determineName(annotation, method);
-            final MetricName metricName = new MetricName(group, type, name);
+            final MetricName metricName = MetricName.forExceptionMeteredMethod(klass, method, annotation);
             final Meter meter = metricsRegistry.newMeter(metricName,
                                                                annotation.eventType(),
                                                                annotation.rateUnit());
             return new ExceptionMeteredInterceptor(meter, annotation.cause());
         }
         return null;
-    }
-
-    private static String determineName(ExceptionMetered annotation, Method method) {
-        if (annotation.name().isEmpty()) {
-            return method.getName() + ExceptionMetered.DEFAULT_NAME_SUFFIX;
-        } else {
-            return annotation.name();
-        }
     }
 
     private final Meter meter;
