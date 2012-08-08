@@ -56,7 +56,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <metrics.version>3.0.0-SNAPSHOT</metrics.version>
-        <slf4j.version>1.6.5</slf4j.version>
+        <slf4j.version>1.6.6</slf4j.version>
         <guice.version>3.0</guice.version>
         <servlet.version>2.5</servlet.version>
         <jackson.version>2.0.2</jackson.version>
