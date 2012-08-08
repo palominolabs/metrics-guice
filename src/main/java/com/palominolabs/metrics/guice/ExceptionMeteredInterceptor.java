@@ -18,8 +18,8 @@ class ExceptionMeteredInterceptor implements MethodInterceptor {
     static MethodInterceptor forMethod(MetricsRegistry metricsRegistry, Class<?> klass, Method method) {
         final ExceptionMetered annotation = method.getAnnotation(ExceptionMetered.class);
         if (annotation != null) {
-            final String group = MetricName.chooseGroup(annotation.group(), klass);
-            final String type = MetricName.chooseType(annotation.type(), klass);
+            final String group = MetricNames.chooseDomain(annotation.group(), klass);
+            final String type = MetricNames.chooseType(annotation.type(), klass);
             final String name = determineName(annotation, method);
             final MetricName metricName = new MetricName(group, type, name);
             final Meter meter = metricsRegistry.newMeter(metricName,
