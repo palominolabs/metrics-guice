@@ -32,11 +32,6 @@ public class MeteredTest {
         this.instance = injector.getInstance(InstrumentedWithMetered.class);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        registry.shutdown();
-    }
-
     @Test
     public void aMeteredAnnotatedMethod() throws Exception {
 

@@ -31,11 +31,6 @@ public class ExceptionMeteredTest {
         this.instance = injector.getInstance(InstrumentedWithExceptionMetered.class);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        registry.shutdown();
-    }
-
     @Test
     public void anExceptionMeteredAnnotatedMethodWithPublicScope() throws Exception {
 

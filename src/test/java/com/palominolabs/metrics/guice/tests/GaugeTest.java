@@ -35,12 +35,6 @@ public class GaugeTest {
         this.instance = injector.getInstance(InstrumentedWithGauge.class);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        registry.shutdown();
-    }
-
-
     @Test
     @SuppressWarnings("unchecked")
     public void aGaugeAnnotatedMethod() throws Exception {

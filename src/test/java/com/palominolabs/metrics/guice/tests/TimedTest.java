@@ -32,11 +32,6 @@ public class TimedTest {
         this.instance = injector.getInstance(InstrumentedWithTimed.class);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        registry.shutdown();
-    }
-
     @Test
     public void aTimedAnnotatedMethod() throws Exception {
 
