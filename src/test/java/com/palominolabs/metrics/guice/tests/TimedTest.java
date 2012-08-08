@@ -42,21 +42,21 @@ public class TimedTest {
 
         instance.doAThing();
 
-        final Metric metric = registry.getAllMetrics().get(new MetricName(InstrumentedWithTimed.class,
+        final Metric metric = registry.allMetrics().get(new MetricName(InstrumentedWithTimed.class,
                                                                        "things"));
 
         assertMetricSetup(metric);
 
         assertThat("Guice creates a timer which records invocation length",
-                   ((Timer) metric).getCount(),
+                   ((Timer) metric).count(),
                    is(1L));
 
         assertThat("Guice creates a timer with the given rate unit",
-                   ((Timer) metric).getRateUnit(),
+                   ((Timer) metric).rateUnit(),
                    is(TimeUnit.MINUTES));
 
         assertThat("Guice creates a timer with the given duration unit",
-                   ((Timer) metric).getDurationUnit(),
+                   ((Timer) metric).durationUnit(),
                    is(TimeUnit.MICROSECONDS));
     }
 
@@ -65,7 +65,7 @@ public class TimedTest {
 
         instance.doAThing();
 
-        final Metric metric = registry.getAllMetrics().get(new MetricName(InstrumentedWithTimed.class,
+        final Metric metric = registry.allMetrics().get(new MetricName(InstrumentedWithTimed.class,
                                                                        "doAThingWithDefaultScope"));
 
         assertMetricSetup(metric);
@@ -76,7 +76,7 @@ public class TimedTest {
 
         instance.doAThing();
 
-        final Metric metric = registry.getAllMetrics().get(new MetricName(InstrumentedWithTimed.class,
+        final Metric metric = registry.allMetrics().get(new MetricName(InstrumentedWithTimed.class,
                                                                        "doAThingWithProtectedScope"));
 
         assertMetricSetup(metric);
@@ -87,7 +87,7 @@ public class TimedTest {
 
         instance.doAThingWithCustomGroupTypeAndName();
 
-        final Metric metric = registry.getAllMetrics().get(new MetricName("g", "t", "n"));
+        final Metric metric = registry.allMetrics().get(new MetricName("g", "t", "n"));
 
         assertMetricSetup(metric);
     }
