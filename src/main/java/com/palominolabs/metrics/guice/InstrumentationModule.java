@@ -10,12 +10,14 @@ import com.yammer.metrics.core.MetricsRegistry;
 import com.yammer.metrics.reporting.JmxReporter;
 
 /**
- * A Guice module which instruments methods annotated with the {@link com.yammer.metrics.annotation.Metered} and {@link com.yammer.metrics.annotation.Timed}
- * annotations.
+ * A Guice module which instruments methods annotated with the {@link com.yammer.metrics.annotation.Metered}, {@link
+ * com.yammer.metrics.annotation.Timed}, {@link com.yammer.metrics.annotation.Gauge}, and {@link
+ * com.yammer.metrics.annotation.ExceptionMetered} annotations.
  *
  * @see com.yammer.metrics.annotation.Gauge
  * @see com.yammer.metrics.annotation.Metered
  * @see com.yammer.metrics.annotation.Timed
+ * @see com.yammer.metrics.annotation.ExceptionMetered
  * @see MeteredInterceptor
  * @see TimedInterceptor
  * @see GaugeInjectionListener
