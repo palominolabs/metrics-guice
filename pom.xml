@@ -80,12 +80,6 @@
         </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-servlet</artifactId>
-            <version>${metrics.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-servlets</artifactId>
             <version>${metrics.version}</version>
         </dependency>
