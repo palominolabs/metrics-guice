@@ -1,4 +1,4 @@
-package com.palominolabs.metrics.guice.tests;
+package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.annotation.Metered;
 

@@ -1,10 +1,9 @@
-package com.palominolabs.metrics.guice.tests;
+package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.palominolabs.metrics.guice.InstrumentationModule;
 
 import org.junit.Before;
 import org.junit.Test;
