@@ -1,11 +1,9 @@
 package com.palominolabs.metrics.guice.tests;
 
-import com.yammer.metrics.annotation.Metered;
-
-import java.util.concurrent.TimeUnit;
+import com.codahale.metrics.annotation.Metered;
 
 public class InstrumentedWithMetered {
-    @Metered(name = "things", eventType = "poops", rateUnit = TimeUnit.MINUTES)
+    @Metered(name = "things")
     public String doAThing() {
         return "poop";
     }
@@ -20,8 +18,14 @@ public class InstrumentedWithMetered {
         return "defaultProtected";
     }
 
-    @Metered(group="g", type="t", name="n")
-    protected String doAThingWithGroupTypeAndName() {
-        return "newGroupTypeAndName";
+    @Metered(name = "n")
+    protected String doAThingWithName() {
+        return "withName";
+    }
+
+
+    @Metered(name = "nameAbs", absolute = true)
+    protected String doAThingWithAbsoluteName() {
+        return "absoluteName";
     }
 }

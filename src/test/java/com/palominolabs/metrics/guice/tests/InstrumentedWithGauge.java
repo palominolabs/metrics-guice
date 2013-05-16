@@ -1,6 +1,6 @@
 package com.palominolabs.metrics.guice.tests;
 
-import com.yammer.metrics.annotation.Gauge;
+import com.codahale.metrics.annotation.Gauge;
 
 public class InstrumentedWithGauge {
     @Gauge(name = "things")
@@ -13,8 +13,8 @@ public class InstrumentedWithGauge {
         return "anotherThing";
     }
 
-    @Gauge(group="g", type="t", name="n")
-    public String doAThingWithGroupTypeAndName() {
-        return "anotherThingWithGroupTypeAndName";
+    @Gauge(name="absoluteName", absolute = true)
+    public String doAThingWithAbsoluteName() {
+        return "anotherThingWithAbsoluteName";
     }
 }

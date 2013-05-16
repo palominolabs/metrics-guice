@@ -1,9 +1,10 @@
 package com.palominolabs.metrics.guice.servlet;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.google.inject.name.Names;
+import com.codahale.metrics.servlets.AdminServlet;
 import com.google.inject.servlet.ServletModule;
-import com.yammer.metrics.servlet.AdminServlet;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A guice servlet module that registers the {@link AdminServlet} via guice and also configures all
@@ -20,7 +21,7 @@ import com.yammer.metrics.servlet.AdminServlet;
  * healthChecksBinder.addBinding().to(MyOtherCoolHealthCheck.class);
  * </code>
  * </pre>
- * The module offers the same overloaded constructors to specifiy a custom {@link JsonFactory} and the uris
+ * The module offers the same overloaded constructors to specifiy the uris
  * for the healthcheck, metrics, etc. E.g.
  * <pre>
  * <code>install(new AdminServletModule("/1.0/healthcheck", "/1.0/metrics", "/1.0/ping", "/1.0/threads"));
@@ -48,45 +49,38 @@ import com.yammer.metrics.servlet.AdminServlet;
  * </pre>
  */
 public class AdminServletModule extends ServletModule {
-    private final JsonFactory jsonFactory;
     private final String healthcheckUri;
     private final String metricsUri;
     private final String pingUri;
     private final String threadsUri;
+    private final String serviceName;
 
     public AdminServletModule() {
-        this(null, AdminServlet.DEFAULT_HEALTHCHECK_URI, AdminServlet.DEFAULT_METRICS_URI,
-             AdminServlet.DEFAULT_PING_URI, AdminServlet.DEFAULT_THREADS_URI);
+        this(AdminServlet.DEFAULT_HEALTHCHECK_URI, AdminServlet.DEFAULT_METRICS_URI,
+             AdminServlet.DEFAULT_PING_URI, AdminServlet.DEFAULT_THREADS_URI, null);
     }
 
-    public AdminServletModule(JsonFactory jsonFactory) {
-        this(jsonFactory, AdminServlet.DEFAULT_HEALTHCHECK_URI, AdminServlet.DEFAULT_METRICS_URI,
-             AdminServlet.DEFAULT_PING_URI, AdminServlet.DEFAULT_THREADS_URI);
-    }
-
-    public AdminServletModule(String healthcheckUri, String metricsUri, String pingUri, String threadsUri) {
-        this(null, healthcheckUri, metricsUri, pingUri, threadsUri);
-    }
-
-    public AdminServletModule(JsonFactory jsonFactory, String healthcheckUri, String metricsUri, String pingUri, String threadsUri) {
-        this.jsonFactory = jsonFactory;
+    public AdminServletModule(String healthcheckUri, String metricsUri, String pingUri, String threadsUri,
+        String serviceName) {
         this.healthcheckUri = healthcheckUri;
         this.metricsUri = metricsUri;
         this.pingUri = pingUri;
         this.threadsUri = threadsUri;
+        this.serviceName = serviceName;
     }
 
     @Override
     protected void configureServlets() {
-        if (jsonFactory != null) {
-            bind(JsonFactory.class).annotatedWith(Names.named("AdminServlet.JSON_FACTORY")).toInstance(jsonFactory);
-        }
-        bind(String.class).annotatedWith(Names.named("AdminServlet.HEALTHCHECK_URI")).toInstance(healthcheckUri);
-        bind(String.class).annotatedWith(Names.named("AdminServlet.METRICS_URI")).toInstance(metricsUri);
-        bind(String.class).annotatedWith(Names.named("AdminServlet.PING_URI")).toInstance(pingUri);
-        bind(String.class).annotatedWith(Names.named("AdminServlet.THREADS_URI")).toInstance(threadsUri);
-        bind(AdminServlet.class).toProvider(AdminServletProvider.class).asEagerSingleton();
+        bind(AdminServlet.class).asEagerSingleton();
 
-        serve(healthcheckUri, metricsUri, pingUri, threadsUri).with(AdminServlet.class);
+        Map<String, String> initParams = new HashMap<String, String>();
+        initParams.put("metrics-uri", metricsUri);
+        initParams.put("ping-uri", pingUri);
+        initParams.put("threads-uri", threadsUri);
+        initParams.put("healthcheck-uri", healthcheckUri);
+
+        initParams.put("service-name", serviceName);
+
+        serve(healthcheckUri, metricsUri, pingUri, threadsUri).with(AdminServlet.class, initParams);
     }
 }

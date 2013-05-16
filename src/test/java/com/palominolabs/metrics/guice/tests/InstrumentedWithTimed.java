@@ -1,11 +1,9 @@
 package com.palominolabs.metrics.guice.tests;
 
-import com.yammer.metrics.annotation.Timed;
-
-import java.util.concurrent.TimeUnit;
+import com.codahale.metrics.annotation.Timed;
 
 public class InstrumentedWithTimed {
-    @Timed(name = "things", rateUnit = TimeUnit.MINUTES, durationUnit = TimeUnit.MICROSECONDS)
+    @Timed(name = "things")
     public String doAThing() {
         return "poop";
     }
@@ -20,8 +18,8 @@ public class InstrumentedWithTimed {
         return "defaultProtected";
     }
 
-    @Timed(group="g", type="t", name="n")
-    protected String doAThingWithCustomGroupTypeAndName() {
+    @Timed(name="absoluteName", absolute = true)
+    protected String doAThingWithAbsoluteName() {
         return "defaultProtected";
     }
 }

@@ -1,10 +1,10 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import com.yammer.metrics.core.MetricsRegistry;
 import org.aopalliance.intercept.MethodInterceptor;
 
 import java.lang.reflect.Method;
@@ -13,10 +13,10 @@ import java.lang.reflect.Method;
  * A listener which adds method interceptors to timed methods.
  */
 class TimedListener implements TypeListener {
-    private final MetricsRegistry metricsRegistry;
+    private final MetricRegistry metricRegistry;
 
-    TimedListener(MetricsRegistry metricsRegistry) {
-        this.metricsRegistry = metricsRegistry;
+    TimedListener(MetricRegistry metricRegistry) {
+        this.metricRegistry = metricRegistry;
     }
 
     @Override
@@ -26,7 +26,7 @@ class TimedListener implements TypeListener {
 
         do {
             for (Method method : klass.getDeclaredMethods()) {
-                final MethodInterceptor interceptor = TimedInterceptor.forMethod(metricsRegistry,
+                final MethodInterceptor interceptor = TimedInterceptor.forMethod(metricRegistry,
                                                                                  klass, method);
                 if (interceptor != null) {
                     encounter.bindInterceptor(Matchers.only(method), interceptor);

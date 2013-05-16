@@ -1,10 +1,10 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import com.yammer.metrics.core.MetricsRegistry;
 import org.aopalliance.intercept.MethodInterceptor;
 
 import java.lang.reflect.Method;
@@ -13,10 +13,10 @@ import java.lang.reflect.Method;
  * A listener which adds method interceptors to methods that should be instrumented for exceptions
  */
 class ExceptionMeteredListener implements TypeListener {
-    private final MetricsRegistry metricsRegistry;
+    private final MetricRegistry metricRegistry;
 
-    ExceptionMeteredListener(MetricsRegistry metricsRegistry) {
-        this.metricsRegistry = metricsRegistry;
+    ExceptionMeteredListener(MetricRegistry metricRegistry) {
+        this.metricRegistry = metricRegistry;
     }
 
     @Override
@@ -25,7 +25,7 @@ class ExceptionMeteredListener implements TypeListener {
         final Class<?> klass = literal.getRawType();
         for (Method method : klass.getDeclaredMethods()) {
             final MethodInterceptor interceptor = ExceptionMeteredInterceptor.forMethod(
-                    metricsRegistry,
+                    metricRegistry,
                     klass,
                     method);
 

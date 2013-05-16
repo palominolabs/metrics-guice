@@ -1,10 +1,8 @@
 package com.palominolabs.metrics.guice.tests;
 
-import com.yammer.metrics.annotation.ExceptionMetered;
-import com.yammer.metrics.annotation.Metered;
-import com.yammer.metrics.annotation.Timed;
-
-import java.util.concurrent.TimeUnit;
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Metered;
+import com.codahale.metrics.annotation.Timed;
 
 public class InstrumentedWithExceptionMetered {
 
@@ -22,8 +20,13 @@ public class InstrumentedWithExceptionMetered {
         throw new RuntimeException("Boom!");
     }
     
-    @ExceptionMetered(group="g", type="t", name="n")
-    String explodeForMetricWithGroupTypeAndName() {
+    @ExceptionMetered(name="n")
+    String explodeForMetricWithName() {
+        throw new RuntimeException("Boom!");
+    }
+
+    @ExceptionMetered(name="absoluteName", absolute = true)
+    String explodeForMetricWithAbsoluteName() {
         throw new RuntimeException("Boom!");
     }
 
@@ -43,8 +46,6 @@ public class InstrumentedWithExceptionMetered {
     }
 
     @ExceptionMetered(name = "things",
-                      eventType = "poops",
-                      rateUnit = TimeUnit.MINUTES,
                       cause = ArrayIndexOutOfBoundsException.class)
     public Object causeAnOutOfBoundsException() {
         final Object[] arr = {};

@@ -1,31 +1,29 @@
 package com.palominolabs.metrics.guice.tests;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.yammer.metrics.core.*;
 import com.palominolabs.metrics.guice.InstrumentationModule;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.hamcrest.Matchers.instanceOf;
+import static com.codahale.metrics.MetricRegistry.name;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class TimedTest {
     private InstrumentedWithTimed instance;
-    private MetricsRegistry registry;
+    private MetricRegistry registry;
 
     @Before
     public void setup() {
-        this.registry = new MetricsRegistry();
+        this.registry = new MetricRegistry();
         final Injector injector = Guice.createInjector(new InstrumentationModule() {
             @Override
-            protected MetricsRegistry createMetricsRegistry() {
+            protected MetricRegistry createMetricRegistry() {
                 return registry;
             }
         });
@@ -37,30 +35,22 @@ public class TimedTest {
 
         instance.doAThing();
 
-        final Metric metric = registry.getAllMetrics().get(new MetricName(InstrumentedWithTimed.class,
-                                                                       "things"));
+        final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
+            "things"));
 
         assertMetricSetup(metric);
 
         assertThat("Guice creates a timer which records invocation length",
-                   ((Timer) metric).getCount(),
+                   metric.getCount(),
                    is(1L));
-
-        assertThat("Guice creates a timer with the given rate unit",
-                   ((Timer) metric).getRateUnit(),
-                   is(TimeUnit.MINUTES));
-
-        assertThat("Guice creates a timer with the given duration unit",
-                   ((Timer) metric).getDurationUnit(),
-                   is(TimeUnit.MICROSECONDS));
     }
 
     @Test
     public void aTimedAnnotatedMethodWithDefaultScope() throws Exception {
 
-        instance.doAThing();
+        instance.doAThingWithDefaultScope();
 
-        final Metric metric = registry.getAllMetrics().get(new MetricName(InstrumentedWithTimed.class,
+        final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
                                                                        "doAThingWithDefaultScope"));
 
         assertMetricSetup(metric);
@@ -69,31 +59,27 @@ public class TimedTest {
     @Test
     public void aTimedAnnotatedMethodWithProtectedScope() throws Exception {
 
-        instance.doAThing();
+        instance.doAThingWithProtectedScope();
 
-        final Metric metric = registry.getAllMetrics().get(new MetricName(InstrumentedWithTimed.class,
+        final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
                                                                        "doAThingWithProtectedScope"));
 
         assertMetricSetup(metric);
     }
 
     @Test
-    public void aTimedAnnotatedMethodWithCustomGroupTypeAndName() throws Exception {
+    public void aTimedAnnotatedMethodWithAbsoluteName() throws Exception {
 
-        instance.doAThingWithCustomGroupTypeAndName();
+        instance.doAThingWithAbsoluteName();
 
-        final Metric metric = registry.getAllMetrics().get(new MetricName("g", "t", "n"));
+        final Timer metric = registry.getTimers().get(name("absoluteName"));
 
         assertMetricSetup(metric);
     }
 
-    private void assertMetricSetup(final Metric metric) {
+    private void assertMetricSetup(final Timer metric) {
         assertThat("Guice creates a metric",
                    metric,
                    is(notNullValue()));
-
-        assertThat("Guice creates a timer",
-                   metric,
-                   is(instanceOf(Timer.class)));
     }
 }

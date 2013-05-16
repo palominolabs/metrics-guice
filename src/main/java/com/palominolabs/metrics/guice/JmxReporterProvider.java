@@ -1,28 +1,23 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.JmxReporter;
+import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import com.yammer.metrics.Metrics;
-import com.yammer.metrics.core.MetricsRegistry;
-import com.yammer.metrics.reporting.JmxReporter;
 
 @Singleton
 public class JmxReporterProvider implements Provider<JmxReporter> {
-    private final MetricsRegistry metricsRegistry;
+    private final MetricRegistry metricRegistry;
 
     @Inject
-    public JmxReporterProvider(MetricsRegistry metricsRegistry) {
-        this.metricsRegistry = metricsRegistry;
+    public JmxReporterProvider(MetricRegistry metricRegistry) {
+        this.metricRegistry = metricRegistry;
     }
 
     @Override
     public JmxReporter get() {
-        if (metricsRegistry == Metrics.defaultRegistry()) {
-            return JmxReporter.getDefault();
-        }
-
-        final JmxReporter reporter = new JmxReporter(metricsRegistry);
+        final JmxReporter reporter = JmxReporter.forRegistry(metricRegistry).build();
         reporter.start();
         return reporter;
     }

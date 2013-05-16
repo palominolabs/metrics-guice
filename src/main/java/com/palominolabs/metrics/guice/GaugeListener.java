@@ -1,11 +1,10 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.Gauge;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import com.yammer.metrics.annotation.Gauge;
-import com.yammer.metrics.core.MetricName;
-import com.yammer.metrics.core.MetricsRegistry;
 
 import java.lang.reflect.Method;
 
@@ -13,10 +12,10 @@ import java.lang.reflect.Method;
  * A listener which adds gauge injection listeners to classes with gauges.
  */
 class GaugeListener implements TypeListener {
-    private final MetricsRegistry metricsRegistry;
+    private final MetricRegistry metricRegistry;
 
-    GaugeListener(MetricsRegistry metricsRegistry) {
-        this.metricsRegistry = metricsRegistry;
+    GaugeListener(MetricRegistry metricRegistry) {
+        this.metricRegistry = metricRegistry;
     }
 
     @Override
@@ -26,16 +25,28 @@ class GaugeListener implements TypeListener {
             final Gauge annotation = method.getAnnotation(Gauge.class);
             if (annotation != null) {
                 if (method.getParameterTypes().length == 0) {
-                    final MetricName metricName = MetricName.forGaugeMethod(klass, method, annotation);
-                    encounter.register(new GaugeInjectionListener<I>(metricsRegistry,
-                                                                     metricName,
-                                                                     method));
+                    final String metricName = determineName(annotation, klass, method);
+                    encounter.register(new GaugeInjectionListener<I>(metricRegistry,
+                        metricName,
+                        method));
                 } else {
                     encounter.addError("Method %s is annotated with @Gauge but requires parameters.",
                                        method);
                 }
             }
         }
+    }
+
+    private static String determineName(Gauge annotation, Class<?> klass, Method method) {
+        if (annotation.absolute()) {
+            return annotation.name();
+        }
+
+        if (annotation.name().isEmpty()) {
+            return MetricRegistry.name(klass, method.getName());
+        }
+
+        return MetricRegistry.name(klass, annotation.name());
     }
 
 }

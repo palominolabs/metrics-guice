@@ -2,29 +2,28 @@ package com.palominolabs.metrics.guice;
 
 import java.lang.reflect.Method;
 
+import com.codahale.metrics.Gauge;
+import com.codahale.metrics.MetricRegistry;
 import com.google.inject.spi.InjectionListener;
-import com.yammer.metrics.core.Gauge;
-import com.yammer.metrics.core.MetricName;
-import com.yammer.metrics.core.MetricsRegistry;
 
 /**
  * An injection listener which creates a gauge for the declaring class with the given name (or the
  * method's name, if none was provided) which returns the value returned by the annotated method.
  */
 class GaugeInjectionListener<I> implements InjectionListener<I> {
-    private final MetricsRegistry metricsRegistry;
-    private final MetricName metricName;
+    private final MetricRegistry metricRegistry;
+    private final String metricName;
     private final Method method;
 
-    GaugeInjectionListener(MetricsRegistry metricsRegistry, MetricName metricName, Method method) {
-        this.metricsRegistry = metricsRegistry;
+    GaugeInjectionListener(MetricRegistry metricRegistry, String metricName, Method method) {
+        this.metricRegistry = metricRegistry;
         this.metricName = metricName;
         this.method = method;
     }
 
     @Override
     public void afterInjection(final I i) {
-        metricsRegistry.newGauge(metricName, new Gauge<Object>() {
+        metricRegistry.register(metricName, new Gauge<Object>() {
             @Override
             public Object getValue() {
                 try {

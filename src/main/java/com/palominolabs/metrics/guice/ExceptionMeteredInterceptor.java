@@ -1,9 +1,8 @@
 package com.palominolabs.metrics.guice;
 
-import com.yammer.metrics.annotation.ExceptionMetered;
-import com.yammer.metrics.core.Meter;
-import com.yammer.metrics.core.MetricName;
-import com.yammer.metrics.core.MetricsRegistry;
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.ExceptionMetered;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -15,16 +14,25 @@ import java.lang.reflect.Method;
  * throws exceptions of a given type.
  */
 class ExceptionMeteredInterceptor implements MethodInterceptor {
-    static MethodInterceptor forMethod(MetricsRegistry metricsRegistry, Class<?> klass, Method method) {
+    static MethodInterceptor forMethod(MetricRegistry metricRegistry, Class<?> klass, Method method) {
         final ExceptionMetered annotation = method.getAnnotation(ExceptionMetered.class);
         if (annotation != null) {
-            final MetricName metricName = MetricName.forExceptionMeteredMethod(klass, method, annotation);
-            final Meter meter = metricsRegistry.newMeter(metricName,
-                                                               annotation.eventType(),
-                                                               annotation.rateUnit());
+            final Meter meter = metricRegistry.meter(determineName(annotation, klass, method));
             return new ExceptionMeteredInterceptor(meter, annotation.cause());
         }
         return null;
+    }
+
+    private static String determineName(ExceptionMetered annotation, Class<?> klass, Method method) {
+        if (annotation.absolute()) {
+            return annotation.name();
+        }
+
+        if (annotation.name().isEmpty()) {
+            return MetricRegistry.name(klass, method.getName(), ExceptionMetered.DEFAULT_NAME_SUFFIX);
+        }
+
+        return MetricRegistry.name(klass, annotation.name());
     }
 
     private final Meter meter;

@@ -1,10 +1,10 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import com.yammer.metrics.core.MetricsRegistry;
 import org.aopalliance.intercept.MethodInterceptor;
 
 import java.lang.reflect.Method;
@@ -13,10 +13,10 @@ import java.lang.reflect.Method;
  * A listener which adds method interceptors to metered methods.
  */
 class MeteredListener implements TypeListener {
-    private final MetricsRegistry metricsRegistry;
+    private final MetricRegistry metricRegistry;
 
-    MeteredListener(MetricsRegistry metricsRegistry) {
-        this.metricsRegistry = metricsRegistry;
+    MeteredListener(MetricRegistry metricRegistry) {
+        this.metricRegistry = metricRegistry;
     }
 
     @Override
@@ -26,7 +26,7 @@ class MeteredListener implements TypeListener {
 
         do {
             for (Method method : klass.getDeclaredMethods()) {
-                final MethodInterceptor interceptor = MeteredInterceptor.forMethod(metricsRegistry,
+                final MethodInterceptor interceptor = MeteredInterceptor.forMethod(metricRegistry,
                                                                                    klass,
                                                                                    method);
                 if (interceptor != null) {

@@ -1,30 +1,31 @@
 package com.palominolabs.metrics.guice.tests;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.Metric;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.yammer.metrics.annotation.ExceptionMetered;
-import com.yammer.metrics.core.*;
 import com.palominolabs.metrics.guice.InstrumentationModule;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
+import static com.codahale.metrics.MetricRegistry.name;
+import static com.codahale.metrics.annotation.ExceptionMetered.DEFAULT_NAME_SUFFIX;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 public class ExceptionMeteredTest {
     private InstrumentedWithExceptionMetered instance;
-    private MetricsRegistry registry;
+    private MetricRegistry registry;
 
     @Before
     public void setup() {
-        this.registry = new MetricsRegistry();
+        this.registry = new MetricRegistry();
         final Injector injector = Guice.createInjector(new InstrumentationModule() {
             @Override
-            protected MetricsRegistry createMetricsRegistry() {
+            protected MetricRegistry createMetricRegistry() {
                 return registry;
             }
         });
@@ -34,13 +35,11 @@ public class ExceptionMeteredTest {
     @Test
     public void anExceptionMeteredAnnotatedMethodWithPublicScope() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
-                                                          "exceptionCounter"));
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class, "exceptionCounter"));
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
 
         try {
@@ -51,20 +50,19 @@ public class ExceptionMeteredTest {
         }
 
         assertThat("Metric is marked",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(1L));
     }
 
     @Test
     public void anExceptionMeteredAnnotatedMethod_WithNoMetricName() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
-                                                          "explodeForUnnamedMetric" + ExceptionMetered.DEFAULT_NAME_SUFFIX));
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
+                                                          "explodeForUnnamedMetric", DEFAULT_NAME_SUFFIX));
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
 
         try {
@@ -75,62 +73,83 @@ public class ExceptionMeteredTest {
         }
 
         assertThat("Metric is marked",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(1L));
     }
 
     @Test
-    public void anExceptionMeteredAnnotatedMethod_WithGroupTypeAndName() throws Exception {
+    public void anExceptionMeteredAnnotatedMethod_WithName() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName("g", "t", "n"));
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class, "n"));
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
 
         try {
-            instance.explodeForMetricWithGroupTypeAndName();
+            instance.explodeForMetricWithName();
             fail("Expected an exception to be thrown");
         } catch (RuntimeException e) {
             // Swallow the expected exception
         }
 
         assertThat("Metric is marked",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(1L));
     }
+
+
+    @Test
+    public void anExceptionMeteredAnnotatedMethod_WithAbsoluteName() throws Exception {
+
+        final Meter metric = registry.getMeters().get(name("absoluteName"));
+        assertMetricIsSetup(metric);
+
+        assertThat("Metric intialises to zero",
+            metric.getCount(),
+            is(0L));
+
+        try {
+            instance.explodeForMetricWithAbsoluteName();
+            fail("Expected an exception to be thrown");
+        } catch (RuntimeException e) {
+            // Swallow the expected exception
+        }
+
+        assertThat("Metric is marked",
+            metric.getCount(),
+            is(1L));
+    }
+
 
     @Test
     public void anExceptionMeteredAnnotatedMethod_WithPublicScopeButNoExceptionThrown() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
                                                           "exceptionCounter"));
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
 
         instance.explodeWithPublicScope(false);
 
         assertThat("Metric should remain at zero if no exception is thrown",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
     }
 
     @Test
     public void anExceptionMeteredAnnotatedMethod_WithDefaultScope() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
-                                                          "explodeWithDefaultScopeExceptions"));
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
+                                                          "explodeWithDefaultScope", DEFAULT_NAME_SUFFIX));
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
 
         try {
@@ -140,21 +159,20 @@ public class ExceptionMeteredTest {
         }
 
         assertThat("Metric is marked",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(1L));
     }
 
     @Test
     public void anExceptionMeteredAnnotatedMethod_WithProtectedScope() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
-                                                          "explodeWithProtectedScopeExceptions"));
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
+                                                          "explodeWithProtectedScope", DEFAULT_NAME_SUFFIX));
 
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
 
         try {
@@ -164,20 +182,19 @@ public class ExceptionMeteredTest {
         }
 
         assertThat("Metric is marked",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(1L));
     }
 
     @Test
     public void anExceptionMeteredAnnotatedMethod_WithPublicScope_AndSpecificTypeOfException() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
                                                           "failures"));
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
         try {
             instance.errorProneMethod(new MyException());
@@ -186,20 +203,19 @@ public class ExceptionMeteredTest {
         }
 
         assertThat("Metric should be marked when the specified exception type is thrown",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(1L));
     }
 
     @Test
     public void anExceptionMeteredAnnotatedMethod_WithPublicScope_AndSubclassesOfSpecifiedException() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
                                                           "failures"));
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
         try {
             instance.errorProneMethod(new MySpecialisedException());
@@ -209,20 +225,19 @@ public class ExceptionMeteredTest {
 
         assertThat(
                 "Metric should be marked when a subclass of the specified exception type is thrown",
-                ((Meter) metric).getCount(),
+                metric.getCount(),
                 is(1L));
     }
 
     @Test
     public void anExceptionMeteredAnnotatedMethod_WithPublicScope_ButDifferentTypeOfException() throws Exception {
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
                                                           "failures"));
         assertMetricIsSetup(metric);
 
         assertThat("Metric intialises to zero",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
         try {
             instance.errorProneMethod(new MyOtherException());
@@ -231,7 +246,7 @@ public class ExceptionMeteredTest {
         }
 
         assertThat("Metric should not be marked if the exception is a different type",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(0L));
     }
 
@@ -244,36 +259,25 @@ public class ExceptionMeteredTest {
 
         }
 
-        final Metric metric = registry.getAllMetrics()
-                                      .get(new MetricName(InstrumentedWithExceptionMetered.class,
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
                                                           "things"));
 
         assertMetricIsSetup(metric);
 
         assertThat("Guice creates a meter which gets marked",
-                   ((Meter) metric).getCount(),
+                   metric.getCount(),
                    is(1L));
-
-        assertThat("Guice creates a meter with the given event type",
-                   ((Meter) metric).getEventType(),
-                   is("poops"));
-
-        assertThat("Guice creates a meter with the given rate unit",
-                   ((Meter) metric).getRateUnit(),
-                   is(TimeUnit.MINUTES));
     }
 
 
     @Test
     public void aMethodAnnotatedWithBothATimerAndAnExceptionCounter() throws Exception {
 
-        final Metric timedMetric = registry.getAllMetrics()
-                                           .get(new MetricName(InstrumentedWithExceptionMetered.class,
+        final Timer timedMetric = registry.getTimers().get(name(InstrumentedWithExceptionMetered.class,
                                                                "timedAndException"));
 
-        final Metric errorMetric = registry.getAllMetrics()
-                                           .get(new MetricName(InstrumentedWithExceptionMetered.class,
-                                                               "timedAndExceptionExceptions"));
+        final Meter errorMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
+                                                               "timedAndException", DEFAULT_NAME_SUFFIX));
 
         assertThat("Guice creates a metric",
                    timedMetric,
@@ -293,23 +297,23 @@ public class ExceptionMeteredTest {
 
         // Counts should start at zero        
         assertThat("Timer Metric should be zero when initialised",
-                   ((Timer) timedMetric).getCount(),
+                   timedMetric.getCount(),
                    is(0L));
 
 
         assertThat("Error Metric should be zero when initialised",
-                   ((Meter) errorMetric).getCount(),
+                   errorMetric.getCount(),
                    is(0L));
 
         // Invoke, but don't throw an exception
         instance.timedAndException(null);
 
         assertThat("Expected the meter metric to be marked on invocation",
-                   ((Timer) timedMetric).getCount(),
+                   timedMetric.getCount(),
                    is(1L));
 
         assertThat("Expected the exception metric to be zero since no exceptions thrown",
-                   ((Meter) errorMetric).getCount(),
+                   errorMetric.getCount(),
                    is(0L));
 
         // Invoke and throw an exception
@@ -319,11 +323,11 @@ public class ExceptionMeteredTest {
         } catch (Exception e) {}
 
         assertThat("Expected a count of 2, one for each invocation",
-                   ((Timer) timedMetric).getCount(),
+                   timedMetric.getCount(),
                    is(2L));
 
         assertThat("Expected exception count to be 1 as one (of two) invocations threw an exception",
-                   ((Meter) errorMetric).getCount(),
+                   errorMetric.getCount(),
                    is(1L));
 
     }
@@ -331,13 +335,11 @@ public class ExceptionMeteredTest {
     @Test
     public void aMethodAnnotatedWithBothAMeteredAndAnExceptionCounter() throws Exception {
 
-        final Metric meteredMetric = registry.getAllMetrics()
-                                             .get(new MetricName(InstrumentedWithExceptionMetered.class,
+        final Metric meteredMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
                                                                  "meteredAndException"));
 
-        final Metric errorMetric = registry.getAllMetrics()
-                                           .get(new MetricName(InstrumentedWithExceptionMetered.class,
-                                                               "meteredAndExceptionExceptions"));
+        final Metric errorMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
+                                                               "meteredAndException", DEFAULT_NAME_SUFFIX));
 
         assertThat("Guice creates a metric",
                    meteredMetric,
@@ -392,14 +394,10 @@ public class ExceptionMeteredTest {
 
     }
 
-    private void assertMetricIsSetup(final Metric metric) {
+    private void assertMetricIsSetup(final Meter metric) {
         assertThat("Guice creates a metric",
                    metric,
                    is(notNullValue()));
-
-        assertThat("Guice creates a meter",
-                   metric,
-                   is(instanceOf(Meter.class)));
     }
 
     @SuppressWarnings("serial")

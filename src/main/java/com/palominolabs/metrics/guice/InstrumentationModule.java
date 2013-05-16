@@ -1,23 +1,21 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.JmxReporter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.matcher.Matchers;
-import com.yammer.metrics.HealthChecks;
-import com.yammer.metrics.Metrics;
-import com.yammer.metrics.core.HealthCheckRegistry;
-import com.yammer.metrics.core.MetricsRegistry;
-import com.yammer.metrics.reporting.JmxReporter;
 
 /**
- * A Guice module which instruments methods annotated with the {@link com.yammer.metrics.annotation.Metered}, {@link
- * com.yammer.metrics.annotation.Timed}, {@link com.yammer.metrics.annotation.Gauge}, and {@link
- * com.yammer.metrics.annotation.ExceptionMetered} annotations.
+ * A Guice module which instruments methods annotated with the {@link com.codahale.metrics.annotation.Metered}, {@link
+ * com.codahale.metrics.annotation.Timed}, {@link com.codahale.metrics.annotation.Gauge}, and {@link
+ * com.codahale.metrics.annotation.ExceptionMetered} annotations.
  *
- * @see com.yammer.metrics.annotation.Gauge
- * @see com.yammer.metrics.annotation.Metered
- * @see com.yammer.metrics.annotation.Timed
- * @see com.yammer.metrics.annotation.ExceptionMetered
+ * @see com.codahale.metrics.annotation.Gauge
+ * @see com.codahale.metrics.annotation.Metered
+ * @see com.codahale.metrics.annotation.Timed
+ * @see com.codahale.metrics.annotation.ExceptionMetered
  * @see MeteredInterceptor
  * @see TimedInterceptor
  * @see GaugeInjectionListener
@@ -25,14 +23,14 @@ import com.yammer.metrics.reporting.JmxReporter;
 public class InstrumentationModule extends AbstractModule {
     @Override
     protected void configure() {
-        final MetricsRegistry metricsRegistry = createMetricsRegistry();
-        bind(MetricsRegistry.class).toInstance(metricsRegistry);
+        final MetricRegistry metricRegistry = createMetricRegistry();
+        bind(MetricRegistry.class).toInstance(metricRegistry);
         bind(HealthCheckRegistry.class).toInstance(createHealthCheckRegistry());
         bindJmxReporter();
-        bindListener(Matchers.any(), new MeteredListener(metricsRegistry));
-        bindListener(Matchers.any(), new TimedListener(metricsRegistry));
-        bindListener(Matchers.any(), new GaugeListener(metricsRegistry));
-        bindListener(Matchers.any(), new ExceptionMeteredListener(metricsRegistry));
+        bindListener(Matchers.any(), new MeteredListener(metricRegistry));
+        bindListener(Matchers.any(), new TimedListener(metricRegistry));
+        bindListener(Matchers.any(), new GaugeListener(metricRegistry));
+        bindListener(Matchers.any(), new ExceptionMeteredListener(metricRegistry));
     }
 
     /**
@@ -46,13 +44,13 @@ public class InstrumentationModule extends AbstractModule {
      * Override to provide a custom {@link HealthCheckRegistry}
      */
     protected HealthCheckRegistry createHealthCheckRegistry() {
-        return HealthChecks.defaultRegistry();
+        return new HealthCheckRegistry();
     }
 
     /**
-     * Override to provide a custom {@link MetricsRegistry}
+     * Override to provide a custom {@link MetricRegistry}
      */
-    protected MetricsRegistry createMetricsRegistry() {
-        return Metrics.defaultRegistry();
+    protected MetricRegistry createMetricRegistry() {
+        return new MetricRegistry();
     }
 }
