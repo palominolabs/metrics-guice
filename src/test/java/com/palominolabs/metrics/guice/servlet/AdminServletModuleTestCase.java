@@ -4,7 +4,6 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import com.codahale.metrics.servlets.AdminServlet;
 import com.codahale.metrics.servlets.HealthCheckServlet;
 import com.codahale.metrics.servlets.MetricsServlet;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.Module;
 import com.google.inject.Stage;
 import com.google.inject.servlet.GuiceFilter;
 import com.ning.http.client.AsyncCompletionHandler;
@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class AdminServletModuleTest {
+public abstract class AdminServletModuleTestCase {
 
     private static final String HOST = "127.0.0.1";
     private AsyncHttpClient httpClient = new AsyncHttpClient();
@@ -56,7 +56,7 @@ public class AdminServletModuleTest {
     @Before
     public void setUp() throws Exception {
 
-        Guice.createInjector(Stage.PRODUCTION, new AdminServletModule()).injectMembers(this);
+        Guice.createInjector(Stage.PRODUCTION, getAdminServletModule()).injectMembers(this);
 
         // set up some metrics
         metricRegistry.timer("timer1");
@@ -115,7 +115,7 @@ public class AdminServletModuleTest {
 
     @Test
     public void testDefaultPathMetrics() throws InterruptedException, ExecutionException, IOException {
-        Response response = get(AdminServlet.DEFAULT_METRICS_URI);
+        Response response = get(getMetricsPath());
 
         assertEquals(200, response.getStatusCode());
 
@@ -127,7 +127,7 @@ public class AdminServletModuleTest {
 
     @Test
     public void testDefaultPathPing() throws IOException, ExecutionException, InterruptedException {
-        Response response = get(AdminServlet.DEFAULT_PING_URI);
+        Response response = get(getPingPath());
 
         assertEquals(200, response.getStatusCode());
         assertEquals("pong\n", response.getResponseBody());
@@ -135,7 +135,7 @@ public class AdminServletModuleTest {
 
     @Test
     public void testDefaultPathThreads() throws InterruptedException, ExecutionException, IOException {
-        Response response = get(AdminServlet.DEFAULT_THREADS_URI);
+        Response response = get(getThreadsPath());
 
         assertEquals(200, response.getStatusCode());
 
@@ -145,7 +145,7 @@ public class AdminServletModuleTest {
 
     @Test
     public void testDefaultPathHealthCheck() throws InterruptedException, ExecutionException, IOException {
-        Response response = get(AdminServlet.DEFAULT_HEALTHCHECK_URI);
+        Response response = get(getHealthCheckPath());
 
         assertEquals(200, response.getStatusCode());
 
@@ -155,6 +155,16 @@ public class AdminServletModuleTest {
 
         assertEquals(expected, actual);
     }
+
+    protected abstract Module getAdminServletModule();
+
+    protected abstract String getMetricsPath();
+
+    protected abstract String getPingPath();
+
+    protected abstract String getThreadsPath();
+
+    protected abstract String getHealthCheckPath();
 
     private Response get(String path) throws InterruptedException, ExecutionException, IOException {
         return httpClient.prepareGet("http://" + HOST + ":" + serverPort + path)
