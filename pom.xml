@@ -60,6 +60,8 @@
         <slf4j.version>1.7.5</slf4j.version>
         <guice.version>3.0</guice.version>
         <servlet.version>2.5</servlet.version>
+        <jetty.version>9.0.3.v20130506</jetty.version>
+        <jetty.servlet.version>3.0.0.v201112011016</jetty.servlet.version>
     </properties>
 
     <dependencies>
@@ -90,9 +92,9 @@
         </dependency>
         <!-- dependencies for Guice/Servlet integration -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>${servlet.version}</version>
+            <groupId>org.eclipse.jetty.orbit</groupId>
+            <artifactId>javax.servlet</artifactId>
+            <version>3.0.0.v201112011016</version>
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
@@ -119,6 +121,24 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <version>1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ning</groupId>
+            <artifactId>async-http-client</artifactId>
+            <version>1.7.15</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
