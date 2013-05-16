@@ -53,20 +53,17 @@ public class AdminServletModule extends ServletModule {
     private final String metricsUri;
     private final String pingUri;
     private final String threadsUri;
-    private final String serviceName;
 
     public AdminServletModule() {
         this(AdminServlet.DEFAULT_HEALTHCHECK_URI, AdminServlet.DEFAULT_METRICS_URI,
-             AdminServlet.DEFAULT_PING_URI, AdminServlet.DEFAULT_THREADS_URI, null);
+             AdminServlet.DEFAULT_PING_URI, AdminServlet.DEFAULT_THREADS_URI);
     }
 
-    public AdminServletModule(String healthcheckUri, String metricsUri, String pingUri, String threadsUri,
-        String serviceName) {
+    public AdminServletModule(String healthcheckUri, String metricsUri, String pingUri, String threadsUri) {
         this.healthcheckUri = healthcheckUri;
         this.metricsUri = metricsUri;
         this.pingUri = pingUri;
         this.threadsUri = threadsUri;
-        this.serviceName = serviceName;
     }
 
     @Override
@@ -78,8 +75,6 @@ public class AdminServletModule extends ServletModule {
         initParams.put("ping-uri", pingUri);
         initParams.put("threads-uri", threadsUri);
         initParams.put("healthcheck-uri", healthcheckUri);
-
-        initParams.put("service-name", serviceName);
 
         serve(healthcheckUri, metricsUri, pingUri, threadsUri).with(AdminServlet.class, initParams);
     }
