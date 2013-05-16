@@ -11,7 +11,9 @@ import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
 import static com.codahale.metrics.annotation.ExceptionMetered.DEFAULT_NAME_SUFFIX;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
