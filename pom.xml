@@ -4,7 +4,7 @@
 
     <groupId>com.palominolabs.metrics</groupId>
     <artifactId>metrics-guice</artifactId>
-    <version>3.0.0-BETA2-SNAPSHOT</version>
+    <version>3.0.0</version>
     <name>Metrics Guice Support</name>
     <packaging>bundle</packaging>
 
@@ -54,10 +54,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <metrics.version>3.0.0-BETA3</metrics.version>
+        <metrics.version>3.0.0</metrics.version>
         <slf4j.version>1.7.5</slf4j.version>
         <guice.version>3.0</guice.version>
-        <jetty.version>9.0.3.v20130506</jetty.version>
+        <jetty.version>9.0.5.v20130815</jetty.version>
         <jetty.servlet.version>3.0.0.v201112011016</jetty.servlet.version>
     </properties>
 
@@ -135,7 +135,7 @@
         <dependency>
             <groupId>com.ning</groupId>
             <artifactId>async-http-client</artifactId>
-            <version>1.7.15</version>
+            <version>1.7.19</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
