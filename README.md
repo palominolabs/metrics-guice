@@ -5,6 +5,6 @@ You can use the following dependency:
 <dependency>
   <groupId>com.palominolabs.metrics</groupId>
   <artifactId>metrics-guice</artifactId>
-  <version>2.1.3</version>
+  <version>3.0.1</version>
 </dependency>
 ```

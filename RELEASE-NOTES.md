@@ -1,2 +1,4 @@
 - 3.0.0
     - Update to Jackson 2.0.2
+-3.0.1
+    - Update to Metrics 3.0.1
