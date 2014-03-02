@@ -4,7 +4,7 @@
 
     <groupId>com.palominolabs.metrics</groupId>
     <artifactId>metrics-guice</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.0.2</version>
     <name>Metrics Guice Support</name>
     <packaging>bundle</packaging>
 
