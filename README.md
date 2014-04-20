@@ -1,6 +1,6 @@
 # Quick Start
 
-## Get the artifacts
+### Get the artifacts
 
 Maven:
 
@@ -18,14 +18,14 @@ Gradle:
 compile 'com.palominolabs.metrics:metrics-guice:3.0.2'
 ```
 
-## Install the Guice module
+### Install the Guice module
 
 ```java
 // somewhere in your Guice module setup
 install(new MetricsInstrumentationModule(yourFavoriteMetricRegistry));
 ```
 
-## Use it
+### Use it
 
 If you have a method like this:
 
