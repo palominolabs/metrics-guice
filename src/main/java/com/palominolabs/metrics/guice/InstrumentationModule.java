@@ -7,9 +7,7 @@ import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
-import com.google.inject.matcher.Matchers;
 
 /**
  * A Guice module which instruments methods annotated with the {@link Metered}, {@link Timed}, {@link Gauge}, and {@link
@@ -23,17 +21,15 @@ import com.google.inject.matcher.Matchers;
  * @see TimedInterceptor
  * @see GaugeInjectionListener
  */
-public class InstrumentationModule extends AbstractModule {
+public class InstrumentationModule extends BaseInstrumentationModule {
+
     @Override
     protected void configure() {
         final MetricRegistry metricRegistry = createMetricRegistry();
         bind(MetricRegistry.class).toInstance(metricRegistry);
         bind(HealthCheckRegistry.class).toInstance(createHealthCheckRegistry());
         bindJmxReporter();
-        bindListener(Matchers.any(), new MeteredListener(metricRegistry));
-        bindListener(Matchers.any(), new TimedListener(metricRegistry));
-        bindListener(Matchers.any(), new GaugeListener(metricRegistry));
-        bindListener(Matchers.any(), new ExceptionMeteredListener(metricRegistry));
+        bindMetricsListeners(metricRegistry);
     }
 
     /**
