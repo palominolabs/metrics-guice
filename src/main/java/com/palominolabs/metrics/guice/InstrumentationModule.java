@@ -12,8 +12,8 @@ import com.google.inject.Scopes;
 import com.google.inject.matcher.Matchers;
 
 /**
- * A Guice module which instruments methods annotated with the {@link Metered}, {@link Timed}, {@link Gauge}, and
- * {@link ExceptionMetered} annotations.
+ * A Guice module which instruments methods annotated with the {@link Metered}, {@link Timed}, {@link Gauge}, and {@link
+ * ExceptionMetered} annotations.
  *
  * @see Gauge
  * @see Metered
@@ -45,6 +45,8 @@ public class InstrumentationModule extends AbstractModule {
 
     /**
      * Override to provide a custom {@link HealthCheckRegistry}
+     *
+     * @return HealthCheckRegistry instance t6 bind
      */
     protected HealthCheckRegistry createHealthCheckRegistry() {
         return new HealthCheckRegistry();
@@ -52,6 +54,8 @@ public class InstrumentationModule extends AbstractModule {
 
     /**
      * Override to provide a custom {@link MetricRegistry}
+     *
+     * @return MetricRegistry instance to bind
      */
     protected MetricRegistry createMetricRegistry() {
         return new MetricRegistry();
