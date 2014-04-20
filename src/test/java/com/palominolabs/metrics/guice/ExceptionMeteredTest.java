@@ -24,12 +24,7 @@ public class ExceptionMeteredTest {
     @Before
     public void setup() {
         this.registry = new MetricRegistry();
-        final Injector injector = Guice.createInjector(new InstrumentationModule() {
-            @Override
-            protected MetricRegistry createMetricRegistry() {
-                return registry;
-            }
-        });
+        final Injector injector = Guice.createInjector(new InstrumentationModule(registry));
         this.instance = injector.getInstance(InstrumentedWithExceptionMetered.class);
     }
 

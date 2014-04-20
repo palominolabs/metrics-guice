@@ -5,7 +5,6 @@ import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
-import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matchers;
 
@@ -22,32 +21,21 @@ import com.google.inject.matcher.Matchers;
  * @see GaugeInjectionListener
  */
 public class InstrumentationModule extends AbstractModule {
+
+    private final MetricRegistry metricRegistry;
+
+    /**
+     * @param metricRegistry The registry to use when creating meters, etc. for annotated methods.
+     */
+    public InstrumentationModule(MetricRegistry metricRegistry) {
+        this.metricRegistry = metricRegistry;
+    }
+
     @Override
     protected void configure() {
-        final MetricRegistry metricRegistry = createMetricRegistry();
-        bind(MetricRegistry.class).toInstance(metricRegistry);
-        bind(HealthCheckRegistry.class).toInstance(createHealthCheckRegistry());
         bindListener(Matchers.any(), new MeteredListener(metricRegistry));
         bindListener(Matchers.any(), new TimedListener(metricRegistry));
         bindListener(Matchers.any(), new GaugeListener(metricRegistry));
         bindListener(Matchers.any(), new ExceptionMeteredListener(metricRegistry));
-    }
-
-    /**
-     * Override to provide a custom {@link HealthCheckRegistry}
-     *
-     * @return HealthCheckRegistry instance t6 bind
-     */
-    protected HealthCheckRegistry createHealthCheckRegistry() {
-        return new HealthCheckRegistry();
-    }
-
-    /**
-     * Override to provide a custom {@link MetricRegistry}
-     *
-     * @return MetricRegistry instance to bind
-     */
-    protected MetricRegistry createMetricRegistry() {
-        return new MetricRegistry();
     }
 }
