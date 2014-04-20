@@ -20,14 +20,14 @@ import com.google.inject.matcher.Matchers;
  * @see TimedInterceptor
  * @see GaugeInjectionListener
  */
-public class InstrumentationModule extends AbstractModule {
+public class MetricsInstrumentationModule extends AbstractModule {
 
     private final MetricRegistry metricRegistry;
 
     /**
      * @param metricRegistry The registry to use when creating meters, etc. for annotated methods.
      */
-    public InstrumentationModule(MetricRegistry metricRegistry) {
+    public MetricsInstrumentationModule(MetricRegistry metricRegistry) {
         this.metricRegistry = metricRegistry;
     }
 

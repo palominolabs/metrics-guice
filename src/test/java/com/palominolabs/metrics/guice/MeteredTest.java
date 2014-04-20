@@ -19,7 +19,7 @@ public class MeteredTest {
     @Before
     public void setup() {
         this.registry = new MetricRegistry();
-        final Injector injector = Guice.createInjector(new InstrumentationModule(registry));
+        final Injector injector = Guice.createInjector(new MetricsInstrumentationModule(registry));
         this.instance = injector.getInstance(InstrumentedWithMetered.class);
     }
 
