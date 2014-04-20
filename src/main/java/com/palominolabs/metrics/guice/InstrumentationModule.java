@@ -2,20 +2,23 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Gauge;
+import com.codahale.metrics.annotation.Metered;
+import com.codahale.metrics.annotation.Timed;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.matcher.Matchers;
 
 /**
- * A Guice module which instruments methods annotated with the {@link com.codahale.metrics.annotation.Metered}, {@link
- * com.codahale.metrics.annotation.Timed}, {@link com.codahale.metrics.annotation.Gauge}, and {@link
- * com.codahale.metrics.annotation.ExceptionMetered} annotations.
+ * A Guice module which instruments methods annotated with the {@link Metered}, {@link Timed}, {@link Gauge}, and
+ * {@link ExceptionMetered} annotations.
  *
- * @see com.codahale.metrics.annotation.Gauge
- * @see com.codahale.metrics.annotation.Metered
- * @see com.codahale.metrics.annotation.Timed
- * @see com.codahale.metrics.annotation.ExceptionMetered
+ * @see Gauge
+ * @see Metered
+ * @see Timed
+ * @see ExceptionMetered
  * @see MeteredInterceptor
  * @see TimedInterceptor
  * @see GaugeInjectionListener
