@@ -26,11 +26,13 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import javax.servlet.DispatcherType;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.LogManager;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
@@ -55,6 +57,8 @@ public abstract class AdminServletModuleTestCase {
 
     @Before
     public void setUp() throws Exception {
+        LogManager.getLogManager().reset();
+        SLF4JBridgeHandler.install();
 
         Guice.createInjector(Stage.PRODUCTION, getAdminServletModule()).injectMembers(this);
 
