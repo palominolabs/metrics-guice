@@ -1,6 +1,5 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Gauge;
@@ -8,7 +7,6 @@ import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
 import com.google.inject.matcher.Matchers;
 
 /**
@@ -29,18 +27,10 @@ public class InstrumentationModule extends AbstractModule {
         final MetricRegistry metricRegistry = createMetricRegistry();
         bind(MetricRegistry.class).toInstance(metricRegistry);
         bind(HealthCheckRegistry.class).toInstance(createHealthCheckRegistry());
-        bindJmxReporter();
         bindListener(Matchers.any(), new MeteredListener(metricRegistry));
         bindListener(Matchers.any(), new TimedListener(metricRegistry));
         bindListener(Matchers.any(), new GaugeListener(metricRegistry));
         bindListener(Matchers.any(), new ExceptionMeteredListener(metricRegistry));
-    }
-
-    /**
-     * Override to provide a custom binding for {@link JmxReporter}
-     */
-    protected void bindJmxReporter() {
-        bind(JmxReporter.class).toProvider(JmxReporterProvider.class).in(Scopes.SINGLETON);
     }
 
     /**
