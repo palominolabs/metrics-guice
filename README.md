@@ -27,6 +27,12 @@ install(new MetricsInstrumentationModule(yourFavoriteMetricRegistry));
 
 ### Use it
 
+The `MetricsInstrumentationModule` you installed above will create and appropriately invoke a [Timer](http://metrics.codahale.com/manual/core/#timers) for `@Timed` methods, a [Meter](http://metrics.codahale.com/manual/core/#meters) for `@Metered` methods, and a [Gauge](http://metrics.codahale.com/manual/core/#gauges) for `@Gauge` methods. `@ExcptionMetered` is also supported; this creates a `Meter` that measures how often a method throws exceptions.
+
+The annotations have some configuration options available for metric name, etc.
+
+#### Example
+
 If you have a method like this:
 
 ```java
@@ -59,10 +65,6 @@ public void doSomethingImportant() {
     // critical business logic
 }
 ```
-
-The `MetricsInstrumentationModule` you installed above will create and appropriately invoke a [Timer]() for `@Timed` methods, a [Meter]() for `@Metered` methods, and a [Gauge]() for `@Gauge` methods. `@ExcptionMetered` is also supported; this creats a `Meter` that measures how often a method throws exceptions.
-
-The annotations have some configurability for name, etc, so check the Javadoc for more.
 
 # History
 
