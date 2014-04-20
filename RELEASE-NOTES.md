@@ -1,3 +1,7 @@
+- 4.0.0
+    - Update to SLF4J
+- 3.0.2
+    - Update to Metrics 3.0.2
 - 3.0.1
     - Update to Jackson 2.0.2
     - Update to Metrics 3.0.1
