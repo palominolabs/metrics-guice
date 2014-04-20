@@ -118,7 +118,7 @@ public abstract class AdminServletModuleTestCase {
     }
 
     @Test
-    public void testDefaultPathMetrics() throws InterruptedException, ExecutionException, IOException {
+    public void testGetMetrics() throws InterruptedException, ExecutionException, IOException {
         Response response = get(getMetricsPath());
 
         assertEquals(200, response.getStatusCode());
@@ -130,7 +130,7 @@ public abstract class AdminServletModuleTestCase {
     }
 
     @Test
-    public void testDefaultPathPing() throws IOException, ExecutionException, InterruptedException {
+    public void testGetPing() throws IOException, ExecutionException, InterruptedException {
         Response response = get(getPingPath());
 
         assertEquals(200, response.getStatusCode());
@@ -138,7 +138,7 @@ public abstract class AdminServletModuleTestCase {
     }
 
     @Test
-    public void testDefaultPathThreads() throws InterruptedException, ExecutionException, IOException {
+    public void testGetThreads() throws InterruptedException, ExecutionException, IOException {
         Response response = get(getThreadsPath());
 
         assertEquals(200, response.getStatusCode());
@@ -148,7 +148,7 @@ public abstract class AdminServletModuleTestCase {
     }
 
     @Test
-    public void testDefaultPathHealthCheck() throws InterruptedException, ExecutionException, IOException {
+    public void testGetHealthCheck() throws InterruptedException, ExecutionException, IOException {
         Response response = get(getHealthCheckPath());
 
         assertEquals(200, response.getStatusCode());
