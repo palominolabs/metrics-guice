@@ -1,4 +1,6 @@
 - 4.0.0
+    - Don't create MetricRegistry, HealthCheckRegistry, or JmxReporter for the user. This makes it easier to integrate with existing systems that already have instances that should be used.
+    - Rename InstrumentationModule to MetricsInstrumentationModule
     - Update to SLF4J
 - 3.0.2
     - Update to Metrics 3.0.2

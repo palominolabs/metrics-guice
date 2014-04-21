@@ -20,12 +20,7 @@ public class GaugeTest {
     @Before
     public void setup() {
         this.registry = new MetricRegistry();
-        final Injector injector = Guice.createInjector(new InstrumentationModule() {
-            @Override
-            protected MetricRegistry createMetricRegistry() {
-                return registry;
-            }
-        });
+        final Injector injector = Guice.createInjector(new MetricsInstrumentationModule(registry));
         this.instance = injector.getInstance(InstrumentedWithGauge.class);
     }
 
@@ -66,10 +61,6 @@ public class GaugeTest {
     @Test
     @SuppressWarnings("unchecked")
     public void aGaugeAnnotatedMethodWithAbsoluteName() throws Exception {
-        final Injector injector = Guice.createInjector(new InstrumentationModule());
-        final InstrumentedWithGauge instance = injector.getInstance(InstrumentedWithGauge.class);
-        final MetricRegistry registry = injector.getInstance(MetricRegistry.class);
-
         instance.doAThingWithAbsoluteName();
 
         final Gauge metric = registry.getGauges().get(name("absoluteName"));
