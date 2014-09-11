@@ -4,3 +4,10 @@
 .settings
 .DS_Store
 target
+.idea
+*.iml
+*.ipr
+*.iws
+.directory
+./out
+.~lock.*.od*#
