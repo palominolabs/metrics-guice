@@ -6,9 +6,12 @@ import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Named;
 
 /**
  * A Guice module which instruments methods annotated with the {@link Metered}, {@link Timed}, {@link Gauge}, and {@link
@@ -22,8 +25,10 @@ import com.google.inject.matcher.Matchers;
  * @see TimedInterceptor
  * @see GaugeInjectionListener
  */
-public class MetricsInstrumentationModule extends AbstractModule {
-    private final MetricRegistry metricRegistry;
+public class MetricsInstrumentationModule extends AbstractModule 
+{
+	public static final String NAMED_REGISTRY = "MetricsInstrumentationModule.MetricRegistry";
+    protected final MetricRegistry metricRegistry;
     private final Matcher<? super TypeLiteral<?>> matcher;
 
     /**
@@ -49,5 +54,13 @@ public class MetricsInstrumentationModule extends AbstractModule {
         bindListener(matcher, new TimedListener(metricRegistry));
         bindListener(matcher, new GaugeListener(metricRegistry));
         bindListener(matcher, new ExceptionMeteredListener(metricRegistry));
+    }
+    
+    @Provides
+    @Named(NAMED_REGISTRY)
+    @Singleton
+    public MetricRegistry providesRegistry()
+    {
+    	return this.metricRegistry;
     }
 }
