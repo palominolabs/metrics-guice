@@ -27,7 +27,7 @@ import com.google.inject.name.Named;
  */
 public class MetricsInstrumentationModule extends AbstractModule 
 {
-	public static final String NAMED_REGISTRY = "MetricsInstrumentationModule.MetricRegistry";
+    public static final String NAMED_REGISTRY = "MetricsInstrumentationModule.MetricRegistry";
     protected final MetricRegistry metricRegistry;
     private final Matcher<? super TypeLiteral<?>> matcher;
 
@@ -61,6 +61,6 @@ public class MetricsInstrumentationModule extends AbstractModule
     @Singleton
     public MetricRegistry providesRegistry()
     {
-    	return this.metricRegistry;
+        return this.metricRegistry;
     }
 }
