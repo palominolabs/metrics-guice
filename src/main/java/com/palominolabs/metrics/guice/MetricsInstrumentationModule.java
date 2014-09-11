@@ -54,6 +54,7 @@ public class MetricsInstrumentationModule extends AbstractModule
         bindListener(matcher, new TimedListener(metricRegistry));
         bindListener(matcher, new GaugeListener(metricRegistry));
         bindListener(matcher, new ExceptionMeteredListener(metricRegistry));
+        bindListener(matcher, new CountedListener(metricRegistry));
     }
     
     @Provides

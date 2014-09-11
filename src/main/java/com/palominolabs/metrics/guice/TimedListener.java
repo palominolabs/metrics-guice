@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /**
  * A listener which adds method interceptors to timed methods.
  */
-class TimedListener implements TypeListener {
+public class TimedListener implements TypeListener {
     private final MetricRegistry metricRegistry;
 
     TimedListener(MetricRegistry metricRegistry) {

@@ -1,21 +1,23 @@
 package com.palominolabs.metrics.guice;
 
+import java.lang.reflect.Method;
+
+import org.aopalliance.intercept.MethodInterceptor;
+
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import org.aopalliance.intercept.MethodInterceptor;
-
-import java.lang.reflect.Method;
 
 /**
- * A listener which adds method interceptors to metered methods.
+ * A listener which adds method interceptors to counted methods.
  */
-public class MeteredListener implements TypeListener {
+public class CountedListener implements TypeListener 
+{
     private final MetricRegistry metricRegistry;
 
-    MeteredListener(MetricRegistry metricRegistry) {
+    CountedListener(MetricRegistry metricRegistry) {
         this.metricRegistry = metricRegistry;
     }
 
@@ -26,9 +28,8 @@ public class MeteredListener implements TypeListener {
 
         do {
             for (Method method : klass.getDeclaredMethods()) {
-                final MethodInterceptor interceptor = MeteredInterceptor.forMethod(metricRegistry,
-                                                                                   klass,
-                                                                                   method);
+                final MethodInterceptor interceptor = CountedInterceptor.forMethod(metricRegistry,
+                                                                                 klass, method);
                 if (interceptor != null) {
                     encounter.bindInterceptor(Matchers.only(method), interceptor);
                 }
