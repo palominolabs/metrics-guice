@@ -13,6 +13,12 @@ public class InstrumentedWithCounter {
         return "anotherThing";
     }
     
+    @Counted(monotonic=true)
+    public String doYetAnotherThing() {
+        return "anotherThing";
+    }
+    
+    
     @Counted(name="absoluteName", absolute = true)
     public String doAThingWithAbsoluteName() {
         return "anotherThingWithAbsoluteName";
