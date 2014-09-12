@@ -26,9 +26,9 @@ class CountedInterceptor implements MethodInterceptor {
 
         if (annotation.name().isEmpty()) {
         	if(annotation.monotonic())
-        		return MetricRegistry.name(klass, method.getName(), annotation.name() + "Current");
+        		return MetricRegistry.name(klass, method.getName(), Counted.class.getSimpleName() + "Monotonic");
         	else
-        		return MetricRegistry.name(klass, method.getName(), annotation.name());
+        		return MetricRegistry.name(klass, method.getName(), Counted.class.getSimpleName());
 
         }
 

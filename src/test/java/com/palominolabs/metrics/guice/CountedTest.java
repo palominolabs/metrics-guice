@@ -2,6 +2,7 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.Counted;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -45,7 +46,7 @@ public class CountedTest {
         instance.doAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doAnotherThing"));
+                                                                       "doAnotherThing", Counted.class.getSimpleName()));
 
         assertThat("Guice creates a metric",
                    metric,
@@ -61,7 +62,7 @@ public class CountedTest {
         instance.doAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doYetAnotherThing.Current"));
+                                                                       "doYetAnotherThing", Counted.class.getSimpleName() + "Monotonic"));
 
         assertThat("Guice creates a metric",
                    metric,
