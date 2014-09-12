@@ -24,7 +24,6 @@ import com.google.inject.matcher.Matchers;
  */
 public class MetricsInstrumentationModule extends AbstractModule 
 {
-    public static final String NAMED_REGISTRY = "MetricsInstrumentationModule.MetricRegistry";
     protected MetricRegistry metricRegistry;
     private final Matcher<? super TypeLiteral<?>> matcher;
 
