@@ -2,6 +2,7 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -45,7 +46,7 @@ public class TimedTest {
         instance.doAThingWithDefaultScope();
 
         final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
-                                                                       "doAThingWithDefaultScope"));
+                                                                       "doAThingWithDefaultScope", Timed.class.getSimpleName()));
 
         assertMetricSetup(metric);
     }
@@ -56,7 +57,7 @@ public class TimedTest {
         instance.doAThingWithProtectedScope();
 
         final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
-                                                                       "doAThingWithProtectedScope"));
+                                                                       "doAThingWithProtectedScope", Timed.class.getSimpleName()));
 
         assertMetricSetup(metric);
     }

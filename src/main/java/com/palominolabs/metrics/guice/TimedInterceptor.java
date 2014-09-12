@@ -26,9 +26,9 @@ class TimedInterceptor implements MethodInterceptor {
         if (annotation.absolute()) {
             return annotation.name();
         }
-
+        
         if (annotation.name().isEmpty()) {
-            return MetricRegistry.name(klass, method.getName(), annotation.name());
+            return MetricRegistry.name(klass, method.getName(), Timed.class.getSimpleName());
         }
 
         return MetricRegistry.name(klass, annotation.name());
