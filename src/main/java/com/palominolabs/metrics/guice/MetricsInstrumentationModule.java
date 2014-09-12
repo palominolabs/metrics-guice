@@ -24,7 +24,7 @@ import com.google.inject.matcher.Matchers;
  */
 public class MetricsInstrumentationModule extends AbstractModule 
 {
-    protected MetricRegistry metricRegistry;
+    private MetricRegistry metricRegistry;
     private final Matcher<? super TypeLiteral<?>> matcher;
 
     /**
