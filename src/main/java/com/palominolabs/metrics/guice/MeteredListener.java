@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /**
  * A listener which adds method interceptors to metered methods.
  */
-class MeteredListener implements TypeListener {
+public class MeteredListener implements TypeListener {
     private final MetricRegistry metricRegistry;
 
     MeteredListener(MetricRegistry metricRegistry) {
