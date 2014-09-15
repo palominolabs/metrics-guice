@@ -12,10 +12,10 @@ import java.lang.reflect.Method;
 /**
  * A listener which adds method interceptors to methods that should be instrumented for exceptions
  */
-class ExceptionMeteredListener implements TypeListener {
+public class ExceptionMeteredListener implements TypeListener {
     private final MetricRegistry metricRegistry;
 
-    ExceptionMeteredListener(MetricRegistry metricRegistry) {
+    public ExceptionMeteredListener(MetricRegistry metricRegistry) {
         this.metricRegistry = metricRegistry;
     }
 

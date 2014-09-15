@@ -10,12 +10,12 @@ import com.google.inject.spi.InjectionListener;
  * An injection listener which creates a gauge for the declaring class with the given name (or the
  * method's name, if none was provided) which returns the value returned by the annotated method.
  */
-class GaugeInjectionListener<I> implements InjectionListener<I> {
+public class GaugeInjectionListener<I> implements InjectionListener<I> {
     private final MetricRegistry metricRegistry;
     private final String metricName;
     private final Method method;
 
-    GaugeInjectionListener(MetricRegistry metricRegistry, String metricName, Method method) {
+    public GaugeInjectionListener(MetricRegistry metricRegistry, String metricName, Method method) {
         this.metricRegistry = metricRegistry;
         this.metricName = metricName;
         this.method = method;
