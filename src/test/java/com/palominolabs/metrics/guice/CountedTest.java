@@ -61,14 +61,14 @@ public class CountedTest {
         instance.doAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doYetAnotherThing.Current"));
+                                                                       "doYetAnotherThing", "current"));
 
         assertThat("Guice creates a metric",
                    metric,
                    is(notNullValue()));
 
         assertThat("Guice creates a counter with the given value",
-                   ((Counter) metric).getCount(),
+                   metric.getCount(),
                    is((long)0));
     }
 
