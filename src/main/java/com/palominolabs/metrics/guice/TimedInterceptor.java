@@ -13,6 +13,9 @@ import java.lang.reflect.Method;
  * method's name, if none was provided), and which times the execution of the annotated method.
  */
 class TimedInterceptor implements MethodInterceptor {
+
+    static final String TIMED_SUFFIX = "timer";
+
     static MethodInterceptor forMethod(MetricRegistry metricRegistry, Class<?> klass, Method method) {
         final Timed annotation = method.getAnnotation(Timed.class);
         if (annotation != null) {
@@ -28,7 +31,7 @@ class TimedInterceptor implements MethodInterceptor {
         }
         
         if (annotation.name().isEmpty()) {
-            return MetricRegistry.name(klass, method.getName(), Timed.class.getSimpleName());
+            return MetricRegistry.name(klass, method.getName(), TIMED_SUFFIX);
         }
 
         return MetricRegistry.name(klass, annotation.name());

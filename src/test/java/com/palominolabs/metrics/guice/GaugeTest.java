@@ -1,17 +1,16 @@
 package com.palominolabs.metrics.guice;
 
-import static com.codahale.metrics.MetricRegistry.name;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.junit.Before;
+import org.junit.Test;
+
+import static com.codahale.metrics.MetricRegistry.name;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class GaugeTest {
     private InstrumentedWithGauge instance;
@@ -47,7 +46,7 @@ public class GaugeTest {
         instance.doAnotherThing();
 
         final Gauge metric = registry.getGauges().get(name(InstrumentedWithGauge.class,
-                                                                       "doAnotherThing", Gauge.class.getSimpleName()));
+                                                                       "doAnotherThing", GaugeListener.GAUGE_SUFFIX));
 
         assertThat("Guice creates a metric",
                    metric,

@@ -14,6 +14,9 @@ import java.lang.reflect.Method;
  * is invoked.
  */
 class MeteredInterceptor implements MethodInterceptor {
+
+    static final String METERED_SUFFIX = "meter";
+
     static MethodInterceptor forMethod(MetricRegistry metricRegistry, Class<?> klass, Method method) {
         final Metered annotation = method.getAnnotation(Metered.class);
         if (annotation != null) {
@@ -29,7 +32,7 @@ class MeteredInterceptor implements MethodInterceptor {
         }
 
         if (annotation.name().isEmpty()) {
-            return MetricRegistry.name(klass, method.getName(), Metered.class.getSimpleName());
+            return MetricRegistry.name(klass, method.getName(), METERED_SUFFIX);
         }
 
         return MetricRegistry.name(klass, annotation.name());

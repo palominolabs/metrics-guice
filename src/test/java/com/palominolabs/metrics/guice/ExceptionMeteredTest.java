@@ -273,10 +273,10 @@ public class ExceptionMeteredTest {
     public void aMethodAnnotatedWithBothATimerAndAnExceptionCounter() throws Exception {
 
         final Timer timedMetric = registry.getTimers().get(name(InstrumentedWithExceptionMetered.class,
-                                                               "timedAndException", Timed.class.getSimpleName()));
+            "timedAndException", TimedInterceptor.TIMED_SUFFIX));
 
         final Meter errorMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
-                                                               "timedAndException", DEFAULT_NAME_SUFFIX));
+            "timedAndException", DEFAULT_NAME_SUFFIX));
 
         assertThat("Guice creates a metric",
                    timedMetric,
@@ -335,62 +335,61 @@ public class ExceptionMeteredTest {
     public void aMethodAnnotatedWithBothAMeteredAndAnExceptionCounter() throws Exception {
 
         final Metric meteredMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
-                                                                 "meteredAndException", Metered.class.getSimpleName()));
+            "meteredAndException", MeteredInterceptor.METERED_SUFFIX));
 
         final Metric errorMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
-                                                               "meteredAndException", DEFAULT_NAME_SUFFIX));
+            "meteredAndException", DEFAULT_NAME_SUFFIX));
 
         assertThat("Guice creates a metric",
-                   meteredMetric,
-                   is(notNullValue()));
+            meteredMetric,
+            is(notNullValue()));
 
         assertThat("Guice creates a meter",
-                   meteredMetric,
-                   is(instanceOf(Meter.class)));
+            meteredMetric,
+            is(instanceOf(Meter.class)));
 
         assertThat("Guice creates a metric",
-                   errorMetric,
-                   is(notNullValue()));
+            errorMetric,
+            is(notNullValue()));
 
         assertThat("Guice creates an exception meter",
-                   errorMetric,
-                   is(instanceOf(Meter.class)));
+            errorMetric,
+            is(instanceOf(Meter.class)));
 
         // Counts should start at zero        
         assertThat("Meter Metric should be zero when initialised",
-                   ((Meter) meteredMetric).getCount(),
-                   is(0L));
-
+            ((Meter) meteredMetric).getCount(),
+            is(0L));
 
         assertThat("Error Metric should be zero when initialised",
-                   ((Meter) errorMetric).getCount(),
-                   is(0L));
+            ((Meter) errorMetric).getCount(),
+            is(0L));
 
         // Invoke, but don't throw an exception
         instance.meteredAndException(null);
 
         assertThat("Expected the meter metric to be marked on invocation",
-                   ((Meter) meteredMetric).getCount(),
-                   is(1L));
+            ((Meter) meteredMetric).getCount(),
+            is(1L));
 
         assertThat("Expected the exception metric to be zero since no exceptions thrown",
-                   ((Meter) errorMetric).getCount(),
-                   is(0L));
+            ((Meter) errorMetric).getCount(),
+            is(0L));
 
         // Invoke and throw an exception
         try {
             instance.meteredAndException(new RuntimeException());
             fail("Should have thrown an exception");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         assertThat("Expected a count of 2, one for each invocation",
-                   ((Meter) meteredMetric).getCount(),
-                   is(2L));
+            ((Meter) meteredMetric).getCount(),
+            is(2L));
 
         assertThat("Expected exception count to be 1 as one (of two) invocations threw an exception",
-                   ((Meter) errorMetric).getCount(),
-                   is(1L));
-
+            ((Meter) errorMetric).getCount(),
+            is(1L));
     }
 
     private void assertMetricIsSetup(final Meter metric) {

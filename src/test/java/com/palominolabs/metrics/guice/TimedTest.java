@@ -2,10 +2,8 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,8 +34,8 @@ public class TimedTest {
         assertMetricSetup(metric);
 
         assertThat("Guice creates a timer which records invocation length",
-                   metric.getCount(),
-                   is(1L));
+            metric.getCount(),
+            is(1L));
     }
 
     @Test
@@ -46,7 +44,7 @@ public class TimedTest {
         instance.doAThingWithDefaultScope();
 
         final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
-                                                                       "doAThingWithDefaultScope", Timed.class.getSimpleName()));
+            "doAThingWithDefaultScope", TimedInterceptor.TIMED_SUFFIX));
 
         assertMetricSetup(metric);
     }
@@ -57,7 +55,7 @@ public class TimedTest {
         instance.doAThingWithProtectedScope();
 
         final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
-                                                                       "doAThingWithProtectedScope", Timed.class.getSimpleName()));
+            "doAThingWithProtectedScope", TimedInterceptor.TIMED_SUFFIX));
 
         assertMetricSetup(metric);
     }
@@ -74,7 +72,7 @@ public class TimedTest {
 
     private void assertMetricSetup(final Timer metric) {
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
     }
 }

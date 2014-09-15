@@ -2,10 +2,8 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.annotation.Metered;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +40,8 @@ public class MeteredTest {
     @Test
     public void aMeteredAnnotatedMethodWithDefaultScope() throws Exception {
 
-        final Meter metric = registry.getMeters().get(name(InstrumentedWithMetered.class, "doAThingWithDefaultScope", Metered.class.getSimpleName()));
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithMetered.class, "doAThingWithDefaultScope",
+            MeteredInterceptor.METERED_SUFFIX));
         assertMetricIsSetup(metric);
 
         assertThat("Metric initialises to zero",
@@ -59,7 +58,8 @@ public class MeteredTest {
     @Test
     public void aMeteredAnnotatedMethodWithProtectedScope() throws Exception {
 
-        final Meter metric = registry.getMeters().get(name(InstrumentedWithMetered.class, "doAThingWithProtectedScope", Metered.class.getSimpleName()));
+        final Meter metric = registry.getMeters().get(name(InstrumentedWithMetered.class, "doAThingWithProtectedScope",
+            MeteredInterceptor.METERED_SUFFIX));
 
         assertMetricIsSetup(metric);
 
