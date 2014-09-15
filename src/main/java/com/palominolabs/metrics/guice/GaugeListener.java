@@ -43,7 +43,7 @@ class GaugeListener implements TypeListener {
         }
 
         if (annotation.name().isEmpty()) {
-            return MetricRegistry.name(klass, method.getName());
+            return MetricRegistry.name(klass, method.getName(), Gauge.class.getSimpleName());
         }
 
         return MetricRegistry.name(klass, annotation.name());

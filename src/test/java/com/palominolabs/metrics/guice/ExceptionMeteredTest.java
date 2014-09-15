@@ -4,8 +4,11 @@ import com.codahale.metrics.Meter;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.codahale.metrics.annotation.Metered;
+import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -270,7 +273,7 @@ public class ExceptionMeteredTest {
     public void aMethodAnnotatedWithBothATimerAndAnExceptionCounter() throws Exception {
 
         final Timer timedMetric = registry.getTimers().get(name(InstrumentedWithExceptionMetered.class,
-                                                               "timedAndException"));
+                                                               "timedAndException", Timed.class.getSimpleName()));
 
         final Meter errorMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
                                                                "timedAndException", DEFAULT_NAME_SUFFIX));
@@ -332,7 +335,7 @@ public class ExceptionMeteredTest {
     public void aMethodAnnotatedWithBothAMeteredAndAnExceptionCounter() throws Exception {
 
         final Metric meteredMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
-                                                                 "meteredAndException"));
+                                                                 "meteredAndException", Metered.class.getSimpleName()));
 
         final Metric errorMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
                                                                "meteredAndException", DEFAULT_NAME_SUFFIX));

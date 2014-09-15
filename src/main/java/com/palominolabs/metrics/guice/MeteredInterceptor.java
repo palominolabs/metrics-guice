@@ -29,7 +29,7 @@ class MeteredInterceptor implements MethodInterceptor {
         }
 
         if (annotation.name().isEmpty()) {
-            return MetricRegistry.name(klass, method.getName());
+            return MetricRegistry.name(klass, method.getName(), Metered.class.getSimpleName());
         }
 
         return MetricRegistry.name(klass, annotation.name());
