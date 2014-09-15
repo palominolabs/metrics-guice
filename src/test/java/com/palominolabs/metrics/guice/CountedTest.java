@@ -35,7 +35,7 @@ public class CountedTest {
                    is(notNullValue()));
 
         assertThat("Guice creates a counter with the given value",
-                   ((Counter) metric).getCount(),
+                   metric.getCount(),
                    is((long)1));
     }
 
@@ -45,14 +45,14 @@ public class CountedTest {
         instance.doAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doAnotherThing"));
+                                                                       "doAnotherThing", "counter"));
 
         assertThat("Guice creates a metric",
                    metric,
                    is(notNullValue()));
 
         assertThat("Guice creates a counter with the given value",
-                   ((Counter) metric).getCount(),
+                   metric.getCount(),
                    is((long)1));
     }
 
@@ -67,7 +67,7 @@ public class CountedTest {
                    is(notNullValue()));
 
         assertThat("Guice creates a counter with the given value",
-                   ((Counter) metric).getCount(),
+                   metric.getCount(),
                    is((long)1));
     }
 
