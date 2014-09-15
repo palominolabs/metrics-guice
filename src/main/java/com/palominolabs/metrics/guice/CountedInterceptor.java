@@ -9,7 +9,11 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Counted;
 
+import javax.annotation.Nullable;
+
 class CountedInterceptor implements MethodInterceptor {
+
+    @Nullable
     static MethodInterceptor forMethod(MetricRegistry metricRegistry, Class<?> klass, Method method) {
         final Counted annotation = method.getAnnotation(Counted.class);
         if (annotation != null) {
@@ -25,18 +29,18 @@ class CountedInterceptor implements MethodInterceptor {
         }
 
         if (annotation.name().isEmpty()) {
-        	if(annotation.monotonic())
-        		return MetricRegistry.name(klass, method.getName(), annotation.name() + "Current");
-        	else
-        		return MetricRegistry.name(klass, method.getName(), annotation.name());
-
+            if (annotation.monotonic()) {
+                return MetricRegistry.name(klass, method.getName(), "Current");
+            } else {
+                return MetricRegistry.name(klass, method.getName(), "Counter");
+            }
         }
 
         return MetricRegistry.name(klass, annotation.name());
     }
 
     private final Counter counter;
-	private final Counted annotation;
+    private final Counted annotation;
 
     private CountedInterceptor(Counter counter, Counted annotation) {
         this.counter = counter;
@@ -49,8 +53,9 @@ class CountedInterceptor implements MethodInterceptor {
         try {
             return invocation.proceed();
         } finally {
-        	if(annotation.monotonic())
-        		counter.dec();
+            if (annotation.monotonic()) {
+                counter.dec();
+            }
         }
     }
 }
