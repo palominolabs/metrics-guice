@@ -4,11 +4,8 @@ import com.codahale.metrics.Meter;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.codahale.metrics.annotation.Metered;
-import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -154,7 +151,7 @@ public class ExceptionMeteredTest {
         try {
             instance.explodeWithDefaultScope();
             fail("Expected an exception to be thrown");
-        } catch (RuntimeException e) {
+        } catch (RuntimeException ignored) {
         }
 
         assertThat("Metric is marked",
@@ -177,7 +174,7 @@ public class ExceptionMeteredTest {
         try {
             instance.explodeWithProtectedScope();
             fail("Expected an exception to be thrown");
-        } catch (RuntimeException e) {
+        } catch (RuntimeException ignored) {
         }
 
         assertThat("Metric is marked",
@@ -198,7 +195,7 @@ public class ExceptionMeteredTest {
         try {
             instance.errorProneMethod(new MyException());
             fail("Expected an exception to be thrown");
-        } catch (MyException e) {
+        } catch (MyException ignored) {
         }
 
         assertThat("Metric should be marked when the specified exception type is thrown",
@@ -219,7 +216,7 @@ public class ExceptionMeteredTest {
         try {
             instance.errorProneMethod(new MySpecialisedException());
             fail("Expected an exception to be thrown");
-        } catch (MyException e) {
+        } catch (MyException ignored) {
         }
 
         assertThat(
@@ -241,7 +238,7 @@ public class ExceptionMeteredTest {
         try {
             instance.errorProneMethod(new MyOtherException());
             fail("Expected an exception to be thrown");
-        } catch (MyOtherException e) {
+        } catch (MyOtherException ignored) {
         }
 
         assertThat("Metric should not be marked if the exception is a different type",
@@ -254,7 +251,7 @@ public class ExceptionMeteredTest {
 
         try {
             instance.causeAnOutOfBoundsException();
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException ignored) {
 
         }
 
@@ -319,7 +316,7 @@ public class ExceptionMeteredTest {
         try {
             instance.timedAndException(new RuntimeException());
             fail("Should have thrown an exception");
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
 
         assertThat("Expected a count of 2, one for each invocation",
                    timedMetric.getCount(),
@@ -380,7 +377,7 @@ public class ExceptionMeteredTest {
         try {
             instance.meteredAndException(new RuntimeException());
             fail("Should have thrown an exception");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         assertThat("Expected a count of 2, one for each invocation",
