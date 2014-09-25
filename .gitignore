@@ -1,9 +1,13 @@
+.classpath
+.gitignore
+.project
+.settings
 .DS_Store
+target
 .idea
 *.iml
 *.ipr
 *.iws
 .directory
 ./out
-target
 .~lock.*.od*#

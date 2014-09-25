@@ -22,16 +22,27 @@ import com.google.inject.matcher.Matchers;
  * @see TimedInterceptor
  * @see GaugeInjectionListener
  */
-public class MetricsInstrumentationModule extends AbstractModule {
-    private final MetricRegistry metricRegistry;
+public class MetricsInstrumentationModule extends AbstractModule 
+{
+    private MetricRegistry metricRegistry;
     private final Matcher<? super TypeLiteral<?>> matcher;
 
     /**
      * @param metricRegistry The registry to use when creating meters, etc. for annotated methods.
      */
     public MetricsInstrumentationModule(MetricRegistry metricRegistry) {
-        this.metricRegistry = metricRegistry;
+        this();
+        setRegistry(metricRegistry);
+    }
+    
+    protected MetricsInstrumentationModule()
+    {
         this.matcher = Matchers.any();
+    }
+    
+    protected void setRegistry(MetricRegistry metricRegistry)
+    {
+        this.metricRegistry = metricRegistry;
     }
 
     /**
@@ -49,5 +60,6 @@ public class MetricsInstrumentationModule extends AbstractModule {
         bindListener(matcher, new TimedListener(metricRegistry));
         bindListener(matcher, new GaugeListener(metricRegistry));
         bindListener(matcher, new ExceptionMeteredListener(metricRegistry));
-    }
+        bindListener(matcher, new CountedListener(metricRegistry));
+    }    
 }
