@@ -4,13 +4,12 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
-import static com.palominolabs.metrics.guice.CountedInterceptor.COUNTER_SUFFIX;
-import static com.palominolabs.metrics.guice.CountedInterceptor.COUNTER_SUFFIX_MONOTONIC;
+import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX;
+import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX_MONOTONIC;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
