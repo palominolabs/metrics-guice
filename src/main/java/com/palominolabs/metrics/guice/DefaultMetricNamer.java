@@ -19,6 +19,7 @@ public class DefaultMetricNamer implements MetricNamer {
     static final String COUNTER_SUFFIX_MONOTONIC = "current";
     static final String GAUGE_SUFFIX = "gauge";
     static final String METERED_SUFFIX = "meter";
+    static final String TIMED_SUFFIX = "timer";
 
     @Nonnull
     @Override
@@ -84,6 +85,13 @@ public class DefaultMetricNamer implements MetricNamer {
     @Nonnull
     @Override
     public String getNameForTimed(@Nonnull Method method, @Nonnull Timed timed) {
-        return null;  // TODO
-    }
+        if (timed.absolute()) {
+            return timed.name();
+        }
+
+        if (timed.name().isEmpty()) {
+            return name(method.getDeclaringClass(), method.getName(), TIMED_SUFFIX);
+        }
+
+        return name(method.getDeclaringClass(), timed.name());    }
 }

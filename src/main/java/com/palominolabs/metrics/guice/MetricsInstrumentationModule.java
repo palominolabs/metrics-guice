@@ -57,7 +57,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
     @Override
     protected void configure() {
         bindListener(matcher, new MeteredListener(metricRegistry, metricNamer));
-        bindListener(matcher, new TimedListener(metricRegistry));
+        bindListener(matcher, new TimedListener(metricRegistry, metricNamer));
         bindListener(matcher, new GaugeListener(metricRegistry, metricNamer));
         bindListener(matcher, new ExceptionMeteredListener(metricRegistry, metricNamer));
         bindListener(matcher, new CountedListener(metricRegistry, metricNamer));

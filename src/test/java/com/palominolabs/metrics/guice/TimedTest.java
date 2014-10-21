@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
+import static com.palominolabs.metrics.guice.DefaultMetricNamer.TIMED_SUFFIX;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -44,7 +45,7 @@ public class TimedTest {
         instance.doAThingWithDefaultScope();
 
         final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
-            "doAThingWithDefaultScope", TimedInterceptor.TIMED_SUFFIX));
+            "doAThingWithDefaultScope", TIMED_SUFFIX));
 
         assertMetricSetup(metric);
     }
@@ -55,7 +56,7 @@ public class TimedTest {
         instance.doAThingWithProtectedScope();
 
         final Timer metric = registry.getTimers().get(name(InstrumentedWithTimed.class,
-            "doAThingWithProtectedScope", TimedInterceptor.TIMED_SUFFIX));
+            "doAThingWithProtectedScope", TIMED_SUFFIX));
 
         assertMetricSetup(metric);
     }

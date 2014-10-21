@@ -12,6 +12,7 @@ import org.junit.Test;
 import static com.codahale.metrics.MetricRegistry.name;
 import static com.codahale.metrics.annotation.ExceptionMetered.DEFAULT_NAME_SUFFIX;
 import static com.palominolabs.metrics.guice.DefaultMetricNamer.METERED_SUFFIX;
+import static com.palominolabs.metrics.guice.DefaultMetricNamer.TIMED_SUFFIX;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -271,7 +272,7 @@ public class ExceptionMeteredTest {
     public void aMethodAnnotatedWithBothATimerAndAnExceptionCounter() throws Exception {
 
         final Timer timedMetric = registry.getTimers().get(name(InstrumentedWithExceptionMetered.class,
-            "timedAndException", TimedInterceptor.TIMED_SUFFIX));
+            "timedAndException", TIMED_SUFFIX));
 
         final Meter errorMetric = registry.getMeters().get(name(InstrumentedWithExceptionMetered.class,
             "timedAndException", DEFAULT_NAME_SUFFIX));
