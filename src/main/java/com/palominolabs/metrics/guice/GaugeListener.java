@@ -12,11 +12,12 @@ import java.lang.reflect.Method;
  * A listener which adds gauge injection listeners to classes with gauges.
  */
 public class GaugeListener implements TypeListener {
-    static final String GAUGE_SUFFIX = "gauge";
     private final MetricRegistry metricRegistry;
+    private final MetricNamer metricNamer;
 
-    public GaugeListener(MetricRegistry metricRegistry) {
+    public GaugeListener(MetricRegistry metricRegistry, MetricNamer metricNamer) {
         this.metricRegistry = metricRegistry;
+        this.metricNamer = metricNamer;
     }
 
     @Override
@@ -26,7 +27,7 @@ public class GaugeListener implements TypeListener {
             final Gauge annotation = method.getAnnotation(Gauge.class);
             if (annotation != null) {
                 if (method.getParameterTypes().length == 0) {
-                    final String metricName = determineName(annotation, klass, method);
+                    final String metricName = metricNamer.getNameForGauge(method, annotation);
                     encounter.register(new GaugeInjectionListener<I>(metricRegistry,
                         metricName,
                         method));
@@ -38,16 +39,5 @@ public class GaugeListener implements TypeListener {
         }
     }
 
-    private static String determineName(Gauge annotation, Class<?> klass, Method method) {
-        if (annotation.absolute()) {
-            return annotation.name();
-        }
-
-        if (annotation.name().isEmpty()) {
-            return MetricRegistry.name(klass, method.getName(), GAUGE_SUFFIX);
-        }
-
-        return MetricRegistry.name(klass, annotation.name());
-    }
 
 }

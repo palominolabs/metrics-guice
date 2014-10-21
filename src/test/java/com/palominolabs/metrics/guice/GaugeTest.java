@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
+import static com.palominolabs.metrics.guice.DefaultMetricNamer.GAUGE_SUFFIX;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -46,7 +47,7 @@ public class GaugeTest {
         instance.doAnotherThing();
 
         final Gauge metric = registry.getGauges().get(name(InstrumentedWithGauge.class,
-                                                                       "doAnotherThing", GaugeListener.GAUGE_SUFFIX));
+                                                                       "doAnotherThing", GAUGE_SUFFIX));
 
         assertThat("Guice creates a metric",
                    metric,

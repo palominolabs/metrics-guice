@@ -17,6 +17,7 @@ import static com.codahale.metrics.MetricRegistry.name;
 public class DefaultMetricNamer implements MetricNamer {
     static final String COUNTER_SUFFIX = "counter";
     static final String COUNTER_SUFFIX_MONOTONIC = "current";
+    static final String GAUGE_SUFFIX = "gauge";
 
     @Nonnull
     @Override
@@ -38,34 +39,41 @@ public class DefaultMetricNamer implements MetricNamer {
 
     @Nonnull
     @Override
-    public String getNameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered counted) {
-        if (counted.absolute()) {
-            return counted.name();
+    public String getNameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered exceptionMetered) {
+        if (exceptionMetered.absolute()) {
+            return exceptionMetered.name();
         }
 
-        if (counted.name().isEmpty()) {
+        if (exceptionMetered.name().isEmpty()) {
             return
                 name(method.getDeclaringClass(), method.getName(), ExceptionMetered.DEFAULT_NAME_SUFFIX);
         }
 
-        return name(method.getDeclaringClass(), counted.name());
+        return name(method.getDeclaringClass(), exceptionMetered.name());
     }
 
     @Nonnull
     @Override
-    public String getNameForGauge(@Nonnull Method method, @Nonnull Gauge counted) {
+    public String getNameForGauge(@Nonnull Method method, @Nonnull Gauge gauge) {
+        if (gauge.absolute()) {
+            return gauge.name();
+        }
+
+        if (gauge.name().isEmpty()) {
+            return name(method.getDeclaringClass(), method.getName(), GAUGE_SUFFIX);
+        }
+
+        return name(method.getDeclaringClass(), gauge.name());    }
+
+    @Nonnull
+    @Override
+    public String getNameForMetered(@Nonnull Method method, @Nonnull Metered metered) {
         return null;  // TODO
     }
 
     @Nonnull
     @Override
-    public String getNameForMetered(@Nonnull Method method, @Nonnull Metered counted) {
-        return null;  // TODO
-    }
-
-    @Nonnull
-    @Override
-    public String getNameForTimed(@Nonnull Method method, @Nonnull Timed counted) {
+    public String getNameForTimed(@Nonnull Method method, @Nonnull Timed timed) {
         return null;  // TODO
     }
 }

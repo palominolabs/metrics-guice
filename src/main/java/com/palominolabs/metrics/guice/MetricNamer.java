@@ -15,14 +15,14 @@ public interface MetricNamer {
     String getNameForCounted(@Nonnull Method method, @Nonnull Counted counted);
 
     @Nonnull
-    String getNameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered counted);
+    String getNameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered exceptionMetered);
 
     @Nonnull
-    String getNameForGauge(@Nonnull Method method, @Nonnull Gauge counted);
+    String getNameForGauge(@Nonnull Method method, @Nonnull Gauge gauge);
 
     @Nonnull
-    String getNameForMetered(@Nonnull Method method, @Nonnull Metered counted);
+    String getNameForMetered(@Nonnull Method method, @Nonnull Metered metered);
 
     @Nonnull
-    String getNameForTimed(@Nonnull Method method, @Nonnull Timed counted);
+    String getNameForTimed(@Nonnull Method method, @Nonnull Timed timed);
 }
