@@ -18,6 +18,7 @@ public class DefaultMetricNamer implements MetricNamer {
     static final String COUNTER_SUFFIX = "counter";
     static final String COUNTER_SUFFIX_MONOTONIC = "current";
     static final String GAUGE_SUFFIX = "gauge";
+    static final String METERED_SUFFIX = "meter";
 
     @Nonnull
     @Override
@@ -63,12 +64,21 @@ public class DefaultMetricNamer implements MetricNamer {
             return name(method.getDeclaringClass(), method.getName(), GAUGE_SUFFIX);
         }
 
-        return name(method.getDeclaringClass(), gauge.name());    }
+        return name(method.getDeclaringClass(), gauge.name());
+    }
 
     @Nonnull
     @Override
     public String getNameForMetered(@Nonnull Method method, @Nonnull Metered metered) {
-        return null;  // TODO
+        if (metered.absolute()) {
+            return metered.name();
+        }
+
+        if (metered.name().isEmpty()) {
+            return name(method.getDeclaringClass(), method.getName(), METERED_SUFFIX);
+        }
+
+        return name(method.getDeclaringClass(), metered.name());
     }
 
     @Nonnull

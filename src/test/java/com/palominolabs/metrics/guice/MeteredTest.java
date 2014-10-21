@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
+import static com.palominolabs.metrics.guice.DefaultMetricNamer.METERED_SUFFIX;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -41,7 +42,7 @@ public class MeteredTest {
     public void aMeteredAnnotatedMethodWithDefaultScope() throws Exception {
 
         final Meter metric = registry.getMeters().get(name(InstrumentedWithMetered.class, "doAThingWithDefaultScope",
-            MeteredInterceptor.METERED_SUFFIX));
+            METERED_SUFFIX));
         assertMetricIsSetup(metric);
 
         assertThat("Metric initialises to zero",
@@ -59,7 +60,7 @@ public class MeteredTest {
     public void aMeteredAnnotatedMethodWithProtectedScope() throws Exception {
 
         final Meter metric = registry.getMeters().get(name(InstrumentedWithMetered.class, "doAThingWithProtectedScope",
-            MeteredInterceptor.METERED_SUFFIX));
+            METERED_SUFFIX));
 
         assertMetricIsSetup(metric);
 
