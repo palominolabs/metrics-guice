@@ -33,7 +33,7 @@ public class CountedListener implements TypeListener {
 
         do {
             for (Method method : klass.getDeclaredMethods()) {
-                final MethodInterceptor interceptor = forMethod(metricRegistry, method);
+                final MethodInterceptor interceptor = getInterceptor(metricRegistry, method);
                 if (interceptor != null) {
                     encounter.bindInterceptor(Matchers.only(method), interceptor);
                 }
@@ -42,10 +42,10 @@ public class CountedListener implements TypeListener {
     }
 
     @Nullable
-    private MethodInterceptor forMethod(MetricRegistry metricRegistry, Method method) {
+    private MethodInterceptor getInterceptor(MetricRegistry metricRegistry, Method method) {
         final Counted annotation = method.getAnnotation(Counted.class);
         if (annotation != null) {
-            final Counter counter = metricRegistry.counter(metricNamer.nameForCounted(method, annotation));
+            final Counter counter = metricRegistry.counter(metricNamer.getNameForCounted(method, annotation));
             return new CountedInterceptor(counter, annotation);
         }
         return null;

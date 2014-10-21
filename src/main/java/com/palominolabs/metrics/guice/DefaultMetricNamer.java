@@ -1,6 +1,5 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Counted;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Gauge;
@@ -21,7 +20,7 @@ public class DefaultMetricNamer implements MetricNamer {
 
     @Nonnull
     @Override
-    public String nameForCounted(@Nonnull Method method, @Nonnull Counted counted) {
+    public String getNameForCounted(@Nonnull Method method, @Nonnull Counted counted) {
         if (counted.absolute()) {
             return counted.name();
         }
@@ -39,25 +38,34 @@ public class DefaultMetricNamer implements MetricNamer {
 
     @Nonnull
     @Override
-    public String nameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered counted) {
+    public String getNameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered counted) {
+        if (counted.absolute()) {
+            return counted.name();
+        }
+
+        if (counted.name().isEmpty()) {
+            return
+                name(method.getDeclaringClass(), method.getName(), ExceptionMetered.DEFAULT_NAME_SUFFIX);
+        }
+
+        return name(method.getDeclaringClass(), counted.name());
+    }
+
+    @Nonnull
+    @Override
+    public String getNameForGauge(@Nonnull Method method, @Nonnull Gauge counted) {
         return null;  // TODO
     }
 
     @Nonnull
     @Override
-    public String nameForGauge(@Nonnull Method method, @Nonnull Gauge counted) {
+    public String getNameForMetered(@Nonnull Method method, @Nonnull Metered counted) {
         return null;  // TODO
     }
 
     @Nonnull
     @Override
-    public String nameForMetered(@Nonnull Method method, @Nonnull Metered counted) {
-        return null;  // TODO
-    }
-
-    @Nonnull
-    @Override
-    public String nameForTimed(@Nonnull Method method, @Nonnull Timed counted) {
+    public String getNameForTimed(@Nonnull Method method, @Nonnull Timed counted) {
         return null;  // TODO
     }
 }

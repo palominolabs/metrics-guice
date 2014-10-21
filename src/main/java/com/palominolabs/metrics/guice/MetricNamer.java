@@ -12,17 +12,17 @@ import java.lang.reflect.Method;
 public interface MetricNamer {
 
     @Nonnull
-    String nameForCounted(@Nonnull Method method, @Nonnull Counted counted);
+    String getNameForCounted(@Nonnull Method method, @Nonnull Counted counted);
 
     @Nonnull
-    String nameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered counted);
+    String getNameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered counted);
 
     @Nonnull
-    String nameForGauge(@Nonnull Method method, @Nonnull Gauge counted);
+    String getNameForGauge(@Nonnull Method method, @Nonnull Gauge counted);
 
     @Nonnull
-    String nameForMetered(@Nonnull Method method, @Nonnull Metered counted);
+    String getNameForMetered(@Nonnull Method method, @Nonnull Metered counted);
 
     @Nonnull
-    String nameForTimed(@Nonnull Method method, @Nonnull Timed counted);
+    String getNameForTimed(@Nonnull Method method, @Nonnull Timed counted);
 }
