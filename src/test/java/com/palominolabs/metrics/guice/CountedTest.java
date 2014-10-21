@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
+import static com.palominolabs.metrics.guice.CountedInterceptor.COUNTER_SUFFIX;
+import static com.palominolabs.metrics.guice.CountedInterceptor.COUNTER_SUFFIX_MONOTONIC;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -45,7 +47,7 @@ public class CountedTest {
         instance.doAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doAnotherThing", "counter"));
+                                                                       "doAnotherThing", COUNTER_SUFFIX));
 
         assertThat("Guice creates a metric",
                    metric,
@@ -58,15 +60,16 @@ public class CountedTest {
     
     @Test
     public void aCounterAnnotatedMethodWithDefaultNameAndMonotonic() throws Exception {
-        instance.doAnotherThing();
+        instance.doYetAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doYetAnotherThing", "current"));
+                                                                       "doYetAnotherThing", COUNTER_SUFFIX_MONOTONIC));
 
         assertThat("Guice creates a metric",
                    metric,
                    is(notNullValue()));
 
+        // if things are working well then this should still be zero...
         assertThat("Guice creates a counter with the given value",
                    metric.getCount(),
                    is((long)0));

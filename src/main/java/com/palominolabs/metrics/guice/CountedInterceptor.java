@@ -13,6 +13,9 @@ import javax.annotation.Nullable;
 
 class CountedInterceptor implements MethodInterceptor {
 
+    static final String COUNTER_SUFFIX = "counter";
+    static final String COUNTER_SUFFIX_MONOTONIC = "current";
+
     @Nullable
     static MethodInterceptor forMethod(MetricRegistry metricRegistry, Class<?> klass, Method method) {
         final Counted annotation = method.getAnnotation(Counted.class);
@@ -30,9 +33,9 @@ class CountedInterceptor implements MethodInterceptor {
 
         if (annotation.name().isEmpty()) {
             if (annotation.monotonic()) {
-                return MetricRegistry.name(klass, method.getName(), "current");
+                return MetricRegistry.name(klass, method.getName(), COUNTER_SUFFIX_MONOTONIC);
             } else {
-                return MetricRegistry.name(klass, method.getName(), "counter");
+                return MetricRegistry.name(klass, method.getName(), COUNTER_SUFFIX);
             }
         }
 
