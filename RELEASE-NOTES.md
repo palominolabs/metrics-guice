@@ -1,3 +1,12 @@
+- TBD
+    - Add support for `@Counted`
+    - Move metric name creation into `MetricNamer` for easy customization
+- 3.1.2
+    - Make injection listeners public
+    - Depend on Metrics 3.1.0
+    - Tweak metric naming to avoid duplicate names for different metrics
+- 3.1.1
+    - Allow specifying a custom matcher
 - 3.1.0
     - Don't create MetricRegistry, HealthCheckRegistry, or JmxReporter for the user. This makes it easier to integrate with existing systems that already have instances that should be used.
     - Rename InstrumentationModule to MetricsInstrumentationModule
