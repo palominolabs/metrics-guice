@@ -9,7 +9,11 @@ import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
 import static com.palominolabs.metrics.guice.DefaultMetricNamer.TIMED_SUFFIX;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -37,6 +41,14 @@ public class TimedTest {
         assertThat("Guice creates a timer which records invocation length",
             metric.getCount(),
             is(1L));
+
+        assertThat("Guice creates a timer which records invocation duration without underestimating too much",
+            metric.getSnapshot().getMax(),
+            is(greaterThan(NANOSECONDS.convert(5, MILLISECONDS))));
+
+        assertThat("Guice creates a timer which records invocation duration without overestimating too much",
+            metric.getSnapshot().getMax(),
+            is(lessThan(NANOSECONDS.convert(15, MILLISECONDS))));
     }
 
     @Test

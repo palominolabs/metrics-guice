@@ -4,7 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 
 public class InstrumentedWithTimed {
     @Timed(name = "things")
-    public String doAThing() {
+    public String doAThing() throws InterruptedException {
+        Thread.sleep(10);
         return "poop";
     }
 
