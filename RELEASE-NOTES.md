@@ -1,6 +1,7 @@
 - TBD
     - Add support for `@Counted`
     - Move metric name creation into `MetricNamer` for easy customization
+    - Move AdminServletModule into [metrics-guice-servlet](https://github.com/palominolabs/metrics-guice-servlet)
 - 3.1.2
     - Make injection listeners public
     - Depend on Metrics 3.1.0
