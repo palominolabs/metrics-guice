@@ -93,5 +93,6 @@ public class DefaultMetricNamer implements MetricNamer {
             return name(method.getDeclaringClass(), method.getName(), TIMED_SUFFIX);
         }
 
-        return name(method.getDeclaringClass(), timed.name());    }
+        return name(method.getDeclaringClass(), timed.name());
+    }
 }

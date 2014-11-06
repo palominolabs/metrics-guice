@@ -19,13 +19,13 @@ public class InstrumentedWithExceptionMetered {
     String explodeForUnnamedMetric() {
         throw new RuntimeException("Boom!");
     }
-    
-    @ExceptionMetered(name="n")
+
+    @ExceptionMetered(name = "n")
     String explodeForMetricWithName() {
         throw new RuntimeException("Boom!");
     }
 
-    @ExceptionMetered(name="absoluteName", absolute = true)
+    @ExceptionMetered(name = "absoluteName", absolute = true)
     String explodeForMetricWithAbsoluteName() {
         throw new RuntimeException("Boom!");
     }
@@ -46,7 +46,7 @@ public class InstrumentedWithExceptionMetered {
     }
 
     @ExceptionMetered(name = "things",
-                      cause = ArrayIndexOutOfBoundsException.class)
+        cause = ArrayIndexOutOfBoundsException.class)
     public Object causeAnOutOfBoundsException() {
         final Object[] arr = {};
         return arr[1];

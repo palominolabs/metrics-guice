@@ -23,7 +23,6 @@ public class InstrumentedWithMetered {
         return "withName";
     }
 
-
     @Metered(name = "nameAbs", absolute = true)
     protected String doAThingWithAbsoluteName() {
         return "absoluteName";

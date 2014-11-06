@@ -33,11 +33,9 @@ public class GaugeListener implements TypeListener {
                         method));
                 } else {
                     encounter.addError("Method %s is annotated with @Gauge but requires parameters.",
-                                       method);
+                        method);
                 }
             }
         }
     }
-
-
 }

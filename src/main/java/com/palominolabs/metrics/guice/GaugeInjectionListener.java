@@ -1,14 +1,14 @@
 package com.palominolabs.metrics.guice;
 
-import java.lang.reflect.Method;
-
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.spi.InjectionListener;
 
+import java.lang.reflect.Method;
+
 /**
- * An injection listener which creates a gauge for the declaring class with the given name (or the
- * method's name, if none was provided) which returns the value returned by the annotated method.
+ * An injection listener which creates a gauge for the declaring class with the given name (or the method's name, if
+ * none was provided) which returns the value returned by the annotated method.
  */
 public class GaugeInjectionListener<I> implements InjectionListener<I> {
     private final MetricRegistry metricRegistry;

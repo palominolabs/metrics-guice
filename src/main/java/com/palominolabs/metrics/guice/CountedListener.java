@@ -1,18 +1,16 @@
 package com.palominolabs.metrics.guice;
 
-import java.lang.reflect.Method;
-
 import com.codahale.metrics.Counter;
-import com.codahale.metrics.annotation.Counted;
-import org.aopalliance.intercept.MethodInterceptor;
-
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.Counted;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
+import org.aopalliance.intercept.MethodInterceptor;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Method;
 
 /**
  * A listener which adds method interceptors to counted methods.

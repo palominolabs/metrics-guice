@@ -32,14 +32,13 @@ public class GaugeTest {
         final Gauge metric = registry.getGauges().get(name(InstrumentedWithGauge.class, "things"));
 
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-                   ((Gauge<String>) metric).getValue(),
-                   is("poop"));
+            ((Gauge<String>) metric).getValue(),
+            is("poop"));
     }
-
 
     @Test
     @SuppressWarnings("unchecked")
@@ -47,15 +46,15 @@ public class GaugeTest {
         instance.doAnotherThing();
 
         final Gauge metric = registry.getGauges().get(name(InstrumentedWithGauge.class,
-                                                                       "doAnotherThing", GAUGE_SUFFIX));
+            "doAnotherThing", GAUGE_SUFFIX));
 
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-                   ((Gauge<String>) metric).getValue(),
-                   is("anotherThing"));
+            ((Gauge<String>) metric).getValue(),
+            is("anotherThing"));
     }
 
     @Test
@@ -66,12 +65,11 @@ public class GaugeTest {
         final Gauge metric = registry.getGauges().get(name("absoluteName"));
 
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-                   ((Gauge<String>) metric).getValue(),
-                   is("anotherThingWithAbsoluteName"));
+            ((Gauge<String>) metric).getValue(),
+            is("anotherThingWithAbsoluteName"));
     }
-
 }

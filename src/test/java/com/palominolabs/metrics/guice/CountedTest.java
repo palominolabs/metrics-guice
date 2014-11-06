@@ -32,46 +32,45 @@ public class CountedTest {
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class, "things"));
 
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
 
         assertThat("Guice creates a counter with the given value",
-                   metric.getCount(),
-                   is((long)1));
+            metric.getCount(),
+            is((long) 1));
     }
-
 
     @Test
     public void aCounterAnnotatedMethodWithDefaultName() throws Exception {
         instance.doAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doAnotherThing", COUNTER_SUFFIX_MONOTONIC));
+            "doAnotherThing", COUNTER_SUFFIX_MONOTONIC));
 
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
 
         assertThat("Guice creates a counter with the given value",
-                   metric.getCount(),
-                   is((long)1));
+            metric.getCount(),
+            is((long) 1));
     }
-    
+
     @Test
     public void aCounterAnnotatedMethodWithDefaultNameAndMonotonicFalse() throws Exception {
         instance.doYetAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doYetAnotherThing", COUNTER_SUFFIX));
+            "doYetAnotherThing", COUNTER_SUFFIX));
 
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
 
         // if things are working well then this should still be zero...
         assertThat("Guice creates a counter with the given value",
-                   metric.getCount(),
-                   is((long)0));
+            metric.getCount(),
+            is((long) 0));
     }
 
     @Test
@@ -81,12 +80,11 @@ public class CountedTest {
         final Counter metric = registry.getCounters().get(name("absoluteName"));
 
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
 
         assertThat("Guice creates a counter with the given value",
-                   metric.getCount(),
-                   is((long)1));
+            metric.getCount(),
+            is((long) 1));
     }
-
 }

@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A guice servlet module that registers the {@link AdminServlet} via guice and also configures all
- * healthchecks bound via guice to it.
+ * A guice servlet module that registers the {@link AdminServlet} via guice and also configures all healthchecks bound
+ * via guice to it.
  *
- * To use, install this module in your servlet module (or add as a separate module), and bind the health checks
- * via a multi binder:
+ * To use, install this module in your servlet module (or add as a separate module), and bind the health checks via a
+ * multi binder:
  * <pre>
  * <code>install(new AdminServletModule());
  *
@@ -21,8 +21,7 @@ import java.util.Map;
  * healthChecksBinder.addBinding().to(MyOtherCoolHealthCheck.class);
  * </code>
  * </pre>
- * The module offers the same overloaded constructors to specifiy the uris
- * for the healthcheck, metrics, etc. E.g.
+ * The module offers the same overloaded constructors to specifiy the uris for the healthcheck, metrics, etc. E.g.
  * <pre>
  * <code>install(new AdminServletModule("/1.0/healthcheck", "/1.0/metrics", "/1.0/ping", "/1.0/threads"));
  * </code>
@@ -56,7 +55,7 @@ public class AdminServletModule extends ServletModule {
 
     public AdminServletModule() {
         this(AdminServlet.DEFAULT_HEALTHCHECK_URI, AdminServlet.DEFAULT_METRICS_URI,
-             AdminServlet.DEFAULT_PING_URI, AdminServlet.DEFAULT_THREADS_URI);
+            AdminServlet.DEFAULT_PING_URI, AdminServlet.DEFAULT_THREADS_URI);
     }
 
     public AdminServletModule(String healthcheckUri, String metricsUri, String pingUri, String threadsUri) {

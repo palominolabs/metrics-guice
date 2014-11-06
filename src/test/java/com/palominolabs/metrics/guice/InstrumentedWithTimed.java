@@ -18,7 +18,7 @@ public class InstrumentedWithTimed {
         return "defaultProtected";
     }
 
-    @Timed(name="absoluteName", absolute = true)
+    @Timed(name = "absoluteName", absolute = true)
     protected String doAThingWithAbsoluteName() {
         return "defaultProtected";
     }

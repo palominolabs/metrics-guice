@@ -34,8 +34,8 @@ public class MeteredTest {
         assertMetricIsSetup(metric);
 
         assertThat("Guice creates a meter which gets marked",
-                   metric.getCount(),
-                   is(1L));
+            metric.getCount(),
+            is(1L));
     }
 
     @Test
@@ -46,14 +46,14 @@ public class MeteredTest {
         assertMetricIsSetup(metric);
 
         assertThat("Metric initialises to zero",
-                   metric.getCount(),
-                   is(0L));
+            metric.getCount(),
+            is(0L));
 
         instance.doAThingWithDefaultScope();
 
         assertThat("Metric is marked",
-                   metric.getCount(),
-                   is(1L));
+            metric.getCount(),
+            is(1L));
     }
 
     @Test
@@ -65,14 +65,14 @@ public class MeteredTest {
         assertMetricIsSetup(metric);
 
         assertThat("Metric initialises to zero",
-                   metric.getCount(),
-                   is(0L));
+            metric.getCount(),
+            is(0L));
 
         instance.doAThingWithProtectedScope();
 
         assertThat("Metric is marked",
-                   metric.getCount(),
-                   is(1L));
+            metric.getCount(),
+            is(1L));
     }
 
     @Test
@@ -83,14 +83,14 @@ public class MeteredTest {
         assertMetricIsSetup(metric);
 
         assertThat("Metric initialises to zero",
-                   metric.getCount(),
-                   is(0L));
+            metric.getCount(),
+            is(0L));
 
         instance.doAThingWithName();
 
         assertThat("Metric is marked",
-                   metric.getCount(),
-                   is(1L));
+            metric.getCount(),
+            is(1L));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class MeteredTest {
 
     private void assertMetricIsSetup(final Meter metric) {
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
     }
 }

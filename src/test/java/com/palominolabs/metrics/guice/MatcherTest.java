@@ -45,8 +45,8 @@ public class MatcherTest {
             "things"));
 
         assertThat("Guice did not create a metric for timed",
-                   metric,
-                   is(nullValue()));
+            metric,
+            is(nullValue()));
     }
 
     @Test
@@ -57,11 +57,11 @@ public class MatcherTest {
         final Meter metric = registry.getMeters().get(name(InstrumentedWithMetered.class, "things"));
 
         assertThat("Guice creates a metric",
-                   metric,
-                   is(notNullValue()));
+            metric,
+            is(notNullValue()));
 
         assertThat("Guice creates a meter which gets marked",
-                   metric.getCount(),
-                   is(1L));
+            metric.getCount(),
+            is(1L));
     }
 }

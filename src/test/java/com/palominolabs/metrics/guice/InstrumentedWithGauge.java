@@ -13,7 +13,7 @@ public class InstrumentedWithGauge {
         return "anotherThing";
     }
 
-    @Gauge(name="absoluteName", absolute = true)
+    @Gauge(name = "absoluteName", absolute = true)
     public String doAThingWithAbsoluteName() {
         return "anotherThingWithAbsoluteName";
     }
