@@ -21,7 +21,7 @@ import java.util.Map;
  * healthChecksBinder.addBinding().to(MyOtherCoolHealthCheck.class);
  * </code>
  * </pre>
- * The module offers the same overloaded constructors to specifiy the uris for the healthcheck, metrics, etc. E.g.
+ * The module offers the same overloaded constructors to specify the uris for the healthcheck, metrics, etc. E.g.
  * <pre>
  * <code>install(new AdminServletModule("/1.0/healthcheck", "/1.0/metrics", "/1.0/ping", "/1.0/threads"));
  * </code>
