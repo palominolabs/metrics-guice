@@ -9,6 +9,9 @@ import com.codahale.metrics.annotation.Timed;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 
+/**
+ * Generates for the metrics corresponding to the various metric annotations.
+ */
 public interface MetricNamer {
 
     @Nonnull

@@ -8,14 +8,14 @@ Maven:
 <dependency>
   <groupId>com.palominolabs.metrics</groupId>
   <artifactId>metrics-guice</artifactId>
-  <version>3.0.2</version>
+  <version>[the latest version]</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-compile 'com.palominolabs.metrics:metrics-guice:3.0.2'
+compile 'com.palominolabs.metrics:metrics-guice:[the latest version]'
 ```
 
 ### Install the Guice module
@@ -27,9 +27,9 @@ install(new MetricsInstrumentationModule(yourFavoriteMetricRegistry));
 
 ### Use it
 
-The `MetricsInstrumentationModule` you installed above will create and appropriately invoke a [Timer](http://metrics.codahale.com/manual/core/#timers) for `@Timed` methods, a [Meter](http://metrics.codahale.com/manual/core/#meters) for `@Metered` methods, and a [Gauge](http://metrics.codahale.com/manual/core/#gauges) for `@Gauge` methods. `@ExcptionMetered` is also supported; this creates a `Meter` that measures how often a method throws exceptions.
+The `MetricsInstrumentationModule` you installed above will create and appropriately invoke a [Timer](https://dropwizard.github.io/metrics/3.1.0/manual/core/#timers) for `@Timed` methods, a [Meter](https://dropwizard.github.io/metrics/3.1.0/manual/core/#meters) for `@Metered` methods, a [Counter](https://dropwizard.github.io/metrics/3.1.0/manual/core/#counters) for `@Counted` methods, and a [Gauge](https://dropwizard.github.io/metrics/3.1.0/manual/core/#gauges) for `@Gauge` methods. `@ExcptionMetered` is also supported; this creates a `Meter` that measures how often a method throws exceptions.
 
-The annotations have some configuration options available for metric name, etc.
+The annotations have some configuration options available for metric name, etc. You can also provide a custom `MetricNamer` implementation if the default name scheme does not work for you.
 
 #### Example
 
@@ -43,7 +43,7 @@ class SuperCriticalFunctionality {
 }
 ```
 
-and you want to use a [Timer](http://metrics.codahale.com/manual/core/#timers) to measure duration, etc, you could always do it by hand:
+and you want to use a [Timer](https://dropwizard.github.io/metrics/3.1.0/manual/core/#timers) to measure duration, etc, you could always do it by hand:
 
 ```java
 public void doSomethingImportant() {
