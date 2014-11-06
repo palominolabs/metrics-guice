@@ -80,6 +80,7 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-servlets</artifactId>
             <version>${metrics.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
