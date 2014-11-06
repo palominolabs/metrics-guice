@@ -21,7 +21,7 @@ class CountedInterceptor implements MethodInterceptor {
         try {
             return invocation.proceed();
         } finally {
-            if (annotation.monotonic()) {
+            if (!annotation.monotonic()) {
                 counter.dec();
             }
         }

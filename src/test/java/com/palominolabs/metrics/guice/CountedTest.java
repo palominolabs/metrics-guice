@@ -46,7 +46,7 @@ public class CountedTest {
         instance.doAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doAnotherThing", COUNTER_SUFFIX));
+                                                                       "doAnotherThing", COUNTER_SUFFIX_MONOTONIC));
 
         assertThat("Guice creates a metric",
                    metric,
@@ -58,11 +58,11 @@ public class CountedTest {
     }
     
     @Test
-    public void aCounterAnnotatedMethodWithDefaultNameAndMonotonic() throws Exception {
+    public void aCounterAnnotatedMethodWithDefaultNameAndMonotonicFalse() throws Exception {
         instance.doYetAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
-                                                                       "doYetAnotherThing", COUNTER_SUFFIX_MONOTONIC));
+                                                                       "doYetAnotherThing", COUNTER_SUFFIX));
 
         assertThat("Guice creates a metric",
                    metric,
