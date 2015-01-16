@@ -1,4 +1,4 @@
-- TBD
+- 3.1.3
     - Add support for `@Counted`
     - Move metric name creation into `MetricNamer` for easy customization
     - Move AdminServletModule into [metrics-guice-servlet](https://github.com/palominolabs/metrics-guice-servlet)
