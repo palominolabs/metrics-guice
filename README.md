@@ -68,5 +68,5 @@ public void doSomethingImportant() {
 
 # History
 
-This module started from the state of metrics-guice immediately before it was removed from the [main metrics repo](https://github.com/codahale/metrics) in [codahale/metrics@e058f76dabf3f805d1c220950a4f42c2ec605ecd](https://github.com/codahale/metrics/commit/e058f76dabf3f805d1c220950a4f42c2ec605ecd).
+This module started from the state of metrics-guice immediately before it was removed from the [main metrics repo](https://github.com/dropwizard/metrics) in [dropwizard/metrics@e058f76dabf3f805d1c220950a4f42c2ec605ecd](https://github.com/dropwizard/metrics/commit/e058f76dabf3f805d1c220950a4f42c2ec605ecd).
 
