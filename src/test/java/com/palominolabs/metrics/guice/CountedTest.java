@@ -12,8 +12,7 @@ import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX;
 import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX_MONOTONIC;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class CountedTest {
@@ -113,9 +112,7 @@ public class CountedTest {
 
         final Counter metric = registry.getCounters().get(name("counterParent"));
 
-        assertNotNull(metric);
-
-        // won't update because we can't intercept annotated methods in the supertype
-        assertEquals(0, metric.getCount());
+        // won't be created because we don't bother looking for supertype methods
+        assertNull(metric);
     }
 }
