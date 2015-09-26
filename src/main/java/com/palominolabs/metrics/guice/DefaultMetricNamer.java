@@ -5,14 +5,13 @@ import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
-
-import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
+import javax.annotation.Nonnull;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
 /**
- * Implements the default metric naming policy.
+ * Implements the default metric naming policy: uses the name fields in the metric annotations.
  */
 public class DefaultMetricNamer implements MetricNamer {
     static final String COUNTER_SUFFIX = "counter";
