@@ -14,7 +14,7 @@ public class CountedListener extends ClassHierarchyTraversingTypeListener {
     private final MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
 
-    CountedListener(MetricRegistry metricRegistry, MetricNamer metricNamer) {
+    public CountedListener(MetricRegistry metricRegistry, MetricNamer metricNamer) {
         this.metricRegistry = metricRegistry;
         this.metricNamer = metricNamer;
     }
