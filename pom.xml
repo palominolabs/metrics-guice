@@ -20,8 +20,8 @@
 
     <licenses>
         <license>
-            <name>Apache License 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <name>COIL 0.4</name>
+            <url>http://copyfree.org/content/standard/licenses/coil/license.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>

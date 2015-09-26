@@ -12,6 +12,7 @@ import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX;
 import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX_MONOTONIC;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class CountedTest {
@@ -86,5 +87,32 @@ public class CountedTest {
         assertThat("Guice creates a counter with the given value",
             metric.getCount(),
             is((long) 1));
+    }
+
+    /**
+     * Test to document the current (correct but regrettable) behavior.
+     *
+     * Crawling the injected class's supertype hierarchy doesn't really accomplish anything because AOPing supertype
+     * methods doesn't work.
+     *
+     * In certain cases (e.g. a public type that inherits a public method from a non-public supertype), a synthetic
+     * bridge method is generated in the subtype that invokes the supertype method, and this does copy the annotations
+     * of the supertype method. However, we can't allow intercepting synthetic bridge methods in general: when a subtype
+     * overrides a generic supertype's method with a more specifically typed method that would not override the
+     * type-erased supertype method, a bridge method matching the supertype's erased signature is generated, but with
+     * the subtype's method's annotation. It's not OK to intercept that synthetic method becuase that would lead to
+     * double-counting, etc, since we also would intercept the regular non-synthetic method.
+     *
+     * Thus, we cannot intercept synthetic methods to maintain correctness, so we also lose out on one small way that we
+     * could intercept annotated methods in superclasses.
+     */
+    @Test
+    public void aCounterForSuperclassMethod() {
+        instance.counterParent();
+
+        final Counter metric = registry.getCounters().get(name("counterParent"));
+
+        // won't be created because we don't bother looking for supertype methods
+        assertNull(metric);
     }
 }

@@ -5,7 +5,6 @@ import com.codahale.metrics.annotation.Gauge;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-
 import java.lang.reflect.Method;
 
 /**
@@ -23,19 +22,31 @@ public class GaugeListener implements TypeListener {
     @Override
     public <I> void hear(final TypeLiteral<I> literal, TypeEncounter<I> encounter) {
         Class<? super I> klass = literal.getRawType();
-        for (final Method method : klass.getMethods()) {
-            final Gauge annotation = method.getAnnotation(Gauge.class);
-            if (annotation != null) {
-                if (method.getParameterTypes().length == 0) {
-                    final String metricName = metricNamer.getNameForGauge(method, annotation);
-                    encounter.register(new GaugeInjectionListener<I>(metricRegistry,
-                        metricName,
-                        method));
-                } else {
-                    encounter.addError("Method %s is annotated with @Gauge but requires parameters.",
-                        method);
+
+        do {
+            for (Method method : klass.getDeclaredMethods()) {
+                if (method.isSynthetic()) {
+                    continue;
+                }
+
+                final Gauge annotation = method.getAnnotation(Gauge.class);
+                if (annotation != null) {
+                    if (method.getParameterTypes().length == 0) {
+                        final String metricName = metricNamer.getNameForGauge(method, annotation);
+
+                        if (!method.isAccessible()) {
+                            method.setAccessible(true);
+                        }
+
+                        encounter.register(new GaugeInjectionListener<I>(metricRegistry,
+                            metricName,
+                            method));
+                    } else {
+                        encounter.addError("Method %s is annotated with @Gauge but requires parameters.",
+                            method);
+                    }
                 }
             }
-        }
+        } while ((klass = klass.getSuperclass()) != null);
     }
 }
