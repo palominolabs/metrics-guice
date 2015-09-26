@@ -3,19 +3,14 @@ package com.palominolabs.metrics.guice;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Metered;
-import com.google.inject.TypeLiteral;
-import com.google.inject.matcher.Matchers;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
-import org.aopalliance.intercept.MethodInterceptor;
-
-import javax.annotation.Nullable;
 import java.lang.reflect.Method;
+import javax.annotation.Nullable;
+import org.aopalliance.intercept.MethodInterceptor;
 
 /**
  * A listener which adds method interceptors to metered methods.
  */
-public class MeteredListener implements TypeListener {
+public class MeteredListener extends ClassHierarchyTraversingTypeListener {
     private final MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
 
@@ -24,23 +19,9 @@ public class MeteredListener implements TypeListener {
         this.metricNamer = metricNamer;
     }
 
-    @Override
-    public <T> void hear(TypeLiteral<T> literal,
-        TypeEncounter<T> encounter) {
-        Class<? super T> klass = literal.getRawType();
-
-        do {
-            for (Method method : klass.getDeclaredMethods()) {
-                final MethodInterceptor interceptor = getInterceptor(metricRegistry, method);
-                if (interceptor != null) {
-                    encounter.bindInterceptor(Matchers.only(method), interceptor);
-                }
-            }
-        } while ((klass = klass.getSuperclass()) != null);
-    }
-
     @Nullable
-    private MethodInterceptor getInterceptor(MetricRegistry metricRegistry, Method method) {
+    @Override
+    protected MethodInterceptor getInterceptor(Method method) {
         final Metered annotation = method.getAnnotation(Metered.class);
         if (annotation != null) {
             final Meter meter = metricRegistry.meter(metricNamer.getNameForMetered(method, annotation));
