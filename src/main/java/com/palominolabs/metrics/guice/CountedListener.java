@@ -10,7 +10,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 /**
  * A listener which adds method interceptors to counted methods.
  */
-public class CountedListener extends ClassHierarchyTraversingTypeListener {
+public class CountedListener extends DeclaredMethodsTypeListener {
     private final MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
 

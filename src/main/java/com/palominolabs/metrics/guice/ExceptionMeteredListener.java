@@ -10,7 +10,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 /**
  * A listener which adds method interceptors to methods that should be instrumented for exceptions
  */
-public class ExceptionMeteredListener extends ClassHierarchyTraversingTypeListener {
+public class ExceptionMeteredListener extends DeclaredMethodsTypeListener {
     private final MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
 

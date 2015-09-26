@@ -10,7 +10,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 /**
  * A listener which adds method interceptors to metered methods.
  */
-public class MeteredListener extends ClassHierarchyTraversingTypeListener {
+public class MeteredListener extends DeclaredMethodsTypeListener {
     private final MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
 

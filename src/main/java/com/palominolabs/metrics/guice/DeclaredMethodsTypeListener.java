@@ -9,27 +9,25 @@ import javax.annotation.Nullable;
 import org.aopalliance.intercept.MethodInterceptor;
 
 /**
- * A TypeListener which provides the basic class-walking functionality and delegates interceptor generation to
- * subclasses.
+ * A TypeListener which delegates to {@link DeclaredMethodsTypeListener#getInterceptor(Method)} for each method in the
+ * class's declared methods.
  */
-abstract class ClassHierarchyTraversingTypeListener implements TypeListener {
+abstract class DeclaredMethodsTypeListener implements TypeListener {
 
     @Override
     public <T> void hear(TypeLiteral<T> literal, TypeEncounter<T> encounter) {
         Class<? super T> klass = literal.getRawType();
 
-        do {
-            for (Method method : klass.getDeclaredMethods()) {
-                if (method.isSynthetic()) {
-                    continue;
-                }
-
-                final MethodInterceptor interceptor = getInterceptor(method);
-                if (interceptor != null) {
-                    encounter.bindInterceptor(Matchers.only(method), interceptor);
-                }
+        for (Method method : klass.getDeclaredMethods()) {
+            if (method.isSynthetic()) {
+                continue;
             }
-        } while ((klass = klass.getSuperclass()) != null);
+
+            final MethodInterceptor interceptor = getInterceptor(method);
+            if (interceptor != null) {
+                encounter.bindInterceptor(Matchers.only(method), interceptor);
+            }
+        }
     }
 
     /**

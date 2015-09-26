@@ -90,6 +90,23 @@ public class CountedTest {
             is((long) 1));
     }
 
+    /**
+     * Test to document the current (correct but regrettable) behavior.
+     *
+     * Crawling the injected class's supertype hierarchy doesn't really accomplish anything because AOPing supertype
+     * methods doesn't work.
+     *
+     * In certain cases (e.g. a public type that inherits a public method from a non-public supertype), a synthetic
+     * bridge method is generated in the subtype that invokes the supertype method, and this does copy the annotations
+     * of the supertype method. However, we can't allow intercepting synthetic bridge methods in general: when a subtype
+     * overrides a generic supertype's method with a more specifically typed method that would not override the
+     * type-erased supertype method, a bridge method matching the supertype's erased signature is generated, but with
+     * the subtype's method's annotation. It's not OK to intercept that synthetic method becuase that would lead to
+     * double-counting, etc, since we also would intercept the regular non-synthetic method.
+     *
+     * Thus, we cannot intercept synthetic methods to maintain correctness, so we also lose out on one small way that we
+     * could intercept annotated methods in superclasses.
+     */
     @Test
     public void aCounterForSuperclassMethod() {
         instance.counterParent();
@@ -98,6 +115,7 @@ public class CountedTest {
 
         assertNotNull(metric);
 
-        assertEquals(1, metric.getCount());
+        // won't update because we can't intercept annotated methods in the supertype
+        assertEquals(0, metric.getCount());
     }
 }
