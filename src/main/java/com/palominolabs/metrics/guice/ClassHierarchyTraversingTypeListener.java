@@ -20,6 +20,10 @@ abstract class ClassHierarchyTraversingTypeListener implements TypeListener {
 
         do {
             for (Method method : klass.getDeclaredMethods()) {
+                if (method.isSynthetic()) {
+                    continue;
+                }
+
                 final MethodInterceptor interceptor = getInterceptor(method);
                 if (interceptor != null) {
                     encounter.bindInterceptor(Matchers.only(method), interceptor);

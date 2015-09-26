@@ -2,7 +2,7 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.annotation.Counted;
 
-public class InstrumentedWithCounter {
+public class InstrumentedWithCounter extends InstrumentedWithCounterParent {
     @Counted(name = "things", monotonic = true)
     public String doAThing() {
         return "poop";
@@ -22,4 +22,5 @@ public class InstrumentedWithCounter {
     public String doAThingWithAbsoluteName() {
         return "anotherThingWithAbsoluteName";
     }
+
 }

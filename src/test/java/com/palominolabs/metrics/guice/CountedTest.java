@@ -12,6 +12,8 @@ import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX;
 import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX_MONOTONIC;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class CountedTest {
@@ -86,5 +88,16 @@ public class CountedTest {
         assertThat("Guice creates a counter with the given value",
             metric.getCount(),
             is((long) 1));
+    }
+
+    @Test
+    public void aCounterForSuperclassMethod() {
+        instance.counterParent();
+
+        final Counter metric = registry.getCounters().get(name("counterParent"));
+
+        assertNotNull(metric);
+
+        assertEquals(1, metric.getCount());
     }
 }
