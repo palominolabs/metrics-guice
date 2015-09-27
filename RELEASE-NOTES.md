@@ -1,4 +1,5 @@
-- TBD
+- 3.1.4
+    - Switch to releasing in bintray
     - Remove superclass traversal when looking for annotated methods to intercept because AOP on superclass methods doesn't appear to work anyway
     - Switch build to Gradle
     - License under COIL
