@@ -2,6 +2,8 @@
 
 ### Get the artifacts
 
+Artifacts are released in [Bintray](https://bintray.com/). For gradle, use the `jcenter()` repository. For maven, [go here](https://bintray.com/bintray/jcenter?filterByPkgName=com.palominolabs.metrics%3Ametrics-guice) and click "Set me up".
+
 Maven:
 
 ```xml
