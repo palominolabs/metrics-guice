@@ -1,4 +1,5 @@
 - TBD
+    - Switch build to Gradle
     - License under COIL
     - Add ability to have non-public @Gauge methods anywhere in the type hierarchy of an injected type
     - Updated dependencies: Metrics 3.1.2, SLF4J 1.7.12, Guice 4.0
