@@ -1,4 +1,5 @@
 - TBD
+    - Remove superclass traversal when looking for annotated methods to intercept because AOP on superclass methods doesn't appear to work anyway
     - Switch build to Gradle
     - License under COIL
     - Add ability to have non-public @Gauge methods anywhere in the type hierarchy of an injected type
