@@ -1,3 +1,6 @@
+- v.next
+    - Update to Gradle 3.1
+    - Updated dependencie: SLF4J 1.7.21
 - 3.1.4
     - Switch to releasing in bintray
     - Remove superclass traversal when looking for annotated methods to intercept because AOP on superclass methods doesn't appear to work anyway
