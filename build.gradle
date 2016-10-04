@@ -1,7 +1,7 @@
 plugins {
   id 'java'
   id 'osgi'
-  id 'com.jfrog.bintray' version '1.3.1'
+  id 'com.jfrog.bintray' version '1.7.1'
   id 'maven-publish'
 }
 
@@ -23,7 +23,7 @@ dependencies {
   compile "io.dropwizard.metrics:metrics-core:$deps.metrics"
   compile "io.dropwizard.metrics:metrics-annotation:$deps.metrics"
   compile "com.google.inject:guice:$deps.guice"
-  compile 'com.google.code.findbugs:jsr305:3.0.0'
+  compile 'com.google.code.findbugs:jsr305:3.0.1'
 
   testRuntime "org.slf4j:slf4j-simple:$deps.slf4j"
   testRuntime "org.slf4j:jul-to-slf4j:$deps.slf4j"
