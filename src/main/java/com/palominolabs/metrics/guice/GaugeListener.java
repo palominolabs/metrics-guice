@@ -5,6 +5,7 @@ import com.codahale.metrics.annotation.Gauge;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
+import com.palominolabs.metrics.guice.matcher.AnnotationProvider;
 import java.lang.reflect.Method;
 
 /**
@@ -13,10 +14,12 @@ import java.lang.reflect.Method;
 public class GaugeListener implements TypeListener {
     private final MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
+    private final AnnotationProvider provider;
 
-    public GaugeListener(MetricRegistry metricRegistry, MetricNamer metricNamer) {
+    public GaugeListener(MetricRegistry metricRegistry, MetricNamer metricNamer, final AnnotationProvider provider) {
         this.metricRegistry = metricRegistry;
         this.metricNamer = metricNamer;
+        this.provider = provider;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class GaugeListener implements TypeListener {
                     continue;
                 }
 
-                final Gauge annotation = method.getAnnotation(Gauge.class);
+                final Gauge annotation = provider.getAnnotation(Gauge.class, method);
                 if (annotation != null) {
                     if (method.getParameterTypes().length == 0) {
                         final String metricName = metricNamer.getNameForGauge(method, annotation);
