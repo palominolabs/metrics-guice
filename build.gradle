@@ -15,7 +15,7 @@ group = 'com.palominolabs.metrics'
 ext.deps = [
     metrics: '3.1.2',
     slf4j  : '1.7.21',
-    guice  : '4.0'
+    guice  : '4.1.0'
 ]
 ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 

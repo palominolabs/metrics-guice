@@ -1,6 +1,8 @@
 - v.next
     - Update to Gradle 3.1
-    - Updated dependencie: SLF4J 1.7.21
+    - Updated dependencies: SLF4J 1.7.21, Guice 4.1.0
+    - Allow customization in how annotations are resolved for a method. The default is the previous behavior (only looks on the method itself), but implementations for looking on the class and combining multiple resolvers are provided.
+    - `MetricsInstrumentationModule` is now constructed builder-style.
 - 3.1.4
     - Switch to releasing in bintray
     - Remove superclass traversal when looking for annotated methods to intercept because AOP on superclass methods doesn't appear to work anyway
