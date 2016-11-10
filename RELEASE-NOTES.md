@@ -1,4 +1,4 @@
-- v.next
+- 3.2.0
     - Update to Gradle 3.1
     - Updated dependencies: SLF4J 1.7.21, Guice 4.1.0
     - Allow customization in how annotations are resolved for a method. The default is the previous behavior (only looks on the method itself), but implementations for looking on the class and combining multiple resolvers are provided.

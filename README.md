@@ -1,4 +1,5 @@
-
+[![Build Status](https://semaphoreci.com/api/v1/marshallpierce/metrics-guice/branches/master/badge.svg)](https://semaphoreci.com/marshallpierce/metrics-guice)
+ [ ![Download](https://api.bintray.com/packages/marshallpierce/maven/com.palominolabs.metrics%3Ametrics-guice/images/download.svg) ](https://bintray.com/marshallpierce/maven/com.palominolabs.metrics%3Ametrics-guice/_latestVersion) 
 # Quick Start
 
 ### Get the artifacts
