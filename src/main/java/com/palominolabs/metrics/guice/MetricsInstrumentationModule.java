@@ -69,6 +69,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
 
         /**
          * @param metricRegistry The registry to use when creating meters, etc. for annotated methods.
+         * @return this
          */
         @Nonnull
         public Builder withMetricRegistry(@Nonnull MetricRegistry metricRegistry) {
@@ -79,6 +80,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
 
         /**
          * @param matcher The matcher to determine which types to look for metrics in
+         * @return this
          */
         @Nonnull
         public Builder withMatcher(@Nonnull Matcher<? super TypeLiteral<?>> matcher) {
@@ -89,6 +91,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
 
         /**
          * @param metricNamer The metric namer to use when creating names for metrics for annotated methods
+         * @return this
          */
         @Nonnull
         public Builder withMetricNamer(@Nonnull MetricNamer metricNamer) {
@@ -99,6 +102,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
 
         /**
          * @param annotationResolver Annotation resolver to use
+         * @return this
          */
         @Nonnull
         public Builder withAnnotationMatcher(@Nonnull AnnotationResolver annotationResolver) {
