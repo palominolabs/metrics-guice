@@ -7,19 +7,18 @@ import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
-import com.palominolabs.metrics.guice.matcher.AnnotationMatcher;
-import com.palominolabs.metrics.guice.matcher.AnnotationProvider;
-import com.palominolabs.metrics.guice.matcher.MethodAnnotationMatcher;
-import java.util.List;
+import com.palominolabs.metrics.guice.annotation.AnnotationResolver;
+import com.palominolabs.metrics.guice.annotation.MethodAnnotationResolver;
+import javax.annotation.Nonnull;
 
 /**
  * A Guice module which instruments methods annotated with the {@link Metered}, {@link Timed}, {@link Gauge}, {@link
  * Counted}, and {@link ExceptionMetered} annotations.
+ *
  * @see Gauge
  * @see Metered
  * @see Timed
@@ -33,45 +32,46 @@ public class MetricsInstrumentationModule extends AbstractModule {
     private final MetricRegistry metricRegistry;
     private final Matcher<? super TypeLiteral<?>> matcher;
     private final MetricNamer metricNamer;
-    private final AnnotationProvider annotationProvider;
+    private final AnnotationResolver annotationResolver;
 
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * @param metricRegistry The registry to use when creating meters, etc. for annotated methods.
-     * @param matcher The matcher to determine which types to look for metrics in
-     * @param metricNamer The metric namer to use when creating names for metrics for annotated methods
-     * @param annotationProvider The annotation provider
+     * @param metricRegistry     The registry to use when creating meters, etc. for annotated methods.
+     * @param matcher            The matcher to determine which types to look for metrics in
+     * @param metricNamer        The metric namer to use when creating names for metrics for annotated methods
+     * @param annotationResolver The annotation provider
      */
     private MetricsInstrumentationModule(MetricRegistry metricRegistry, Matcher<? super TypeLiteral<?>> matcher,
-        MetricNamer metricNamer, AnnotationProvider annotationProvider) {
+            MetricNamer metricNamer, AnnotationResolver annotationResolver) {
         this.metricRegistry = metricRegistry;
         this.matcher = matcher;
         this.metricNamer = metricNamer;
-        this.annotationProvider = annotationProvider;
+        this.annotationResolver = annotationResolver;
     }
 
     @Override
     protected void configure() {
-        bindListener(matcher, new MeteredListener(metricRegistry, metricNamer, annotationProvider));
-        bindListener(matcher, new TimedListener(metricRegistry, metricNamer, annotationProvider));
-        bindListener(matcher, new GaugeListener(metricRegistry, metricNamer, annotationProvider));
-        bindListener(matcher, new ExceptionMeteredListener(metricRegistry, metricNamer, annotationProvider));
-        bindListener(matcher, new CountedListener(metricRegistry, metricNamer, annotationProvider));
+        bindListener(matcher, new MeteredListener(metricRegistry, metricNamer, annotationResolver));
+        bindListener(matcher, new TimedListener(metricRegistry, metricNamer, annotationResolver));
+        bindListener(matcher, new GaugeListener(metricRegistry, metricNamer, annotationResolver));
+        bindListener(matcher, new ExceptionMeteredListener(metricRegistry, metricNamer, annotationResolver));
+        bindListener(matcher, new CountedListener(metricRegistry, metricNamer, annotationResolver));
     }
 
     public static class Builder {
         private MetricRegistry metricRegistry;
         private Matcher<? super TypeLiteral<?>> matcher = Matchers.any();
         private MetricNamer metricNamer = new DefaultMetricNamer();
-        private List<AnnotationMatcher> annotationMatchers = Lists.newArrayList();
+        private AnnotationResolver annotationResolver = new MethodAnnotationResolver();
 
         /**
          * @param metricRegistry The registry to use when creating meters, etc. for annotated methods.
          */
-        public Builder withMetricRegistry(MetricRegistry metricRegistry) {
+        @Nonnull
+        public Builder withMetricRegistry(@Nonnull MetricRegistry metricRegistry) {
             this.metricRegistry = metricRegistry;
 
             return this;
@@ -80,7 +80,8 @@ public class MetricsInstrumentationModule extends AbstractModule {
         /**
          * @param matcher The matcher to determine which types to look for metrics in
          */
-        public Builder withMatcher(Matcher<? super TypeLiteral<?>> matcher) {
+        @Nonnull
+        public Builder withMatcher(@Nonnull Matcher<? super TypeLiteral<?>> matcher) {
             this.matcher = matcher;
 
             return this;
@@ -89,33 +90,31 @@ public class MetricsInstrumentationModule extends AbstractModule {
         /**
          * @param metricNamer The metric namer to use when creating names for metrics for annotated methods
          */
-        public Builder withMetricNamer(MetricNamer metricNamer) {
+        @Nonnull
+        public Builder withMetricNamer(@Nonnull MetricNamer metricNamer) {
             this.metricNamer = metricNamer;
 
             return this;
         }
 
         /**
-         * @param matcher Annotation matcher to use
+         * @param annotationResolver Annotation resolver to use
          */
-        public Builder withAnnotationMatcher(AnnotationMatcher matcher) {
-            annotationMatchers.add(matcher);
+        @Nonnull
+        public Builder withAnnotationMatcher(@Nonnull AnnotationResolver annotationResolver) {
+            this.annotationResolver = annotationResolver;
 
             return this;
         }
 
+        @Nonnull
         public MetricsInstrumentationModule build() {
-            if (annotationMatchers.isEmpty()) {
-                annotationMatchers.add(new MethodAnnotationMatcher());
-            }
-
             return new MetricsInstrumentationModule(
-                Preconditions.checkNotNull(metricRegistry),
-                Preconditions.checkNotNull(matcher),
-                Preconditions.checkNotNull(metricNamer),
-                new AnnotationProvider(annotationMatchers)
+                    Preconditions.checkNotNull(metricRegistry),
+                    Preconditions.checkNotNull(matcher),
+                    Preconditions.checkNotNull(metricNamer),
+                    Preconditions.checkNotNull(annotationResolver)
             );
         }
-
     }
 }

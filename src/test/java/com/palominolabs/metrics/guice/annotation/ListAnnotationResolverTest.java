@@ -1,4 +1,4 @@
-package com.palominolabs.metrics.guice.matcher;
+package com.palominolabs.metrics.guice.annotation;
 
 import com.codahale.metrics.annotation.Counted;
 import com.codahale.metrics.annotation.Metered;
@@ -13,14 +13,14 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class AnnotationProviderTest {
+public class ListAnnotationResolverTest {
 
     @Test
     public void testMixedAnnotations() throws Exception {
-        AnnotationProvider annotationProvider = new AnnotationProvider(
+        ListAnnotationResolver annotationProvider = new ListAnnotationResolver(
                 Lists.newArrayList(
-                        new MethodAnnotationMatcher(),
-                        new ClassAnnotationMatcher()
+                        new MethodAnnotationResolver(),
+                        new ClassAnnotationResolver()
                 )
         );
 
@@ -29,21 +29,21 @@ public class AnnotationProviderTest {
         Method protectedMethod = klass.getDeclaredMethod("protectedMethod");
         Method packagePrivateMethod = klass.getDeclaredMethod("packagePrivateMethod");
 
-        Timed classTimed = annotationProvider.getAnnotation(Timed.class, publicMethod);
+        Timed classTimed = annotationProvider.findAnnotation(Timed.class, publicMethod);
         assertNotNull(classTimed);
         assertFalse(classTimed.absolute());
-        assertNull(annotationProvider.getAnnotation(Metered.class, publicMethod));
-        assertNull(annotationProvider.getAnnotation(Counted.class, publicMethod));
+        assertNull(annotationProvider.findAnnotation(Metered.class, publicMethod));
+        assertNull(annotationProvider.findAnnotation(Counted.class, publicMethod));
 
-        assertNotNull(annotationProvider.getAnnotation(Timed.class, protectedMethod));
-        assertNotNull(annotationProvider.getAnnotation(Metered.class, protectedMethod));
-        assertNull(annotationProvider.getAnnotation(Counted.class, protectedMethod));
+        assertNotNull(annotationProvider.findAnnotation(Timed.class, protectedMethod));
+        assertNotNull(annotationProvider.findAnnotation(Metered.class, protectedMethod));
+        assertNull(annotationProvider.findAnnotation(Counted.class, protectedMethod));
 
-        Timed methodTimed = annotationProvider.getAnnotation(Timed.class, packagePrivateMethod);
+        Timed methodTimed = annotationProvider.findAnnotation(Timed.class, packagePrivateMethod);
         assertNotNull(methodTimed);
         assertTrue(methodTimed.absolute());
-        assertNull(annotationProvider.getAnnotation(Metered.class, packagePrivateMethod));
-        assertNull(annotationProvider.getAnnotation(Counted.class, packagePrivateMethod));
+        assertNull(annotationProvider.findAnnotation(Metered.class, packagePrivateMethod));
+        assertNull(annotationProvider.findAnnotation(Counted.class, packagePrivateMethod));
     }
 
     @Timed

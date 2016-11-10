@@ -1,33 +1,35 @@
-package com.palominolabs.metrics.guice.matcher;
+package com.palominolabs.metrics.guice.annotation;
 
 import com.codahale.metrics.annotation.Counted;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import java.lang.reflect.Method;
+
 import static junit.framework.TestCase.assertNotNull;
+
 import org.junit.Test;
 
-public class ClassAnnotationMatcherTest {
+public class ClassAnnotationResolverTest {
 
     @Test
     public void testTypeLevelAnnotations() throws Exception {
-        AnnotationMatcher matcher = new ClassAnnotationMatcher();
+        AnnotationResolver matcher = new ClassAnnotationResolver();
         Class<TypeLevelAnnotatedClass> klass = TypeLevelAnnotatedClass.class;
         Method publicMethod = klass.getDeclaredMethod("publicMethod");
         Method protectedMethod = klass.getDeclaredMethod("protectedMethod");
         Method packagePrivateMethod = klass.getDeclaredMethod("packagePrivateMethod");
 
-        assertNotNull(matcher.match(Timed.class, publicMethod));
-        assertNotNull(matcher.match(Metered.class, publicMethod));
-        assertNotNull(matcher.match(Counted.class, publicMethod));
+        assertNotNull(matcher.findAnnotation(Timed.class, publicMethod));
+        assertNotNull(matcher.findAnnotation(Metered.class, publicMethod));
+        assertNotNull(matcher.findAnnotation(Counted.class, publicMethod));
 
-        assertNotNull(matcher.match(Timed.class, protectedMethod));
-        assertNotNull(matcher.match(Metered.class, protectedMethod));
-        assertNotNull(matcher.match(Counted.class, protectedMethod));
+        assertNotNull(matcher.findAnnotation(Timed.class, protectedMethod));
+        assertNotNull(matcher.findAnnotation(Metered.class, protectedMethod));
+        assertNotNull(matcher.findAnnotation(Counted.class, protectedMethod));
 
-        assertNotNull(matcher.match(Timed.class, packagePrivateMethod));
-        assertNotNull(matcher.match(Metered.class, packagePrivateMethod));
-        assertNotNull(matcher.match(Counted.class, packagePrivateMethod));
+        assertNotNull(matcher.findAnnotation(Timed.class, packagePrivateMethod));
+        assertNotNull(matcher.findAnnotation(Metered.class, packagePrivateMethod));
+        assertNotNull(matcher.findAnnotation(Counted.class, packagePrivateMethod));
     }
 
     @Timed

@@ -5,7 +5,7 @@ import com.codahale.metrics.annotation.Gauge;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import com.palominolabs.metrics.guice.matcher.AnnotationProvider;
+import com.palominolabs.metrics.guice.annotation.AnnotationResolver;
 import java.lang.reflect.Method;
 
 /**
@@ -14,12 +14,13 @@ import java.lang.reflect.Method;
 public class GaugeListener implements TypeListener {
     private final MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
-    private final AnnotationProvider provider;
+    private final AnnotationResolver annotationResolver;
 
-    public GaugeListener(MetricRegistry metricRegistry, MetricNamer metricNamer, final AnnotationProvider provider) {
+    public GaugeListener(MetricRegistry metricRegistry, MetricNamer metricNamer,
+            final AnnotationResolver annotationResolver) {
         this.metricRegistry = metricRegistry;
         this.metricNamer = metricNamer;
-        this.provider = provider;
+        this.annotationResolver = annotationResolver;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class GaugeListener implements TypeListener {
                     continue;
                 }
 
-                final Gauge annotation = provider.getAnnotation(Gauge.class, method);
+                final Gauge annotation = annotationResolver.findAnnotation(Gauge.class, method);
                 if (annotation != null) {
                     if (method.getParameterTypes().length == 0) {
                         final String metricName = metricNamer.getNameForGauge(method, annotation);
@@ -41,12 +42,10 @@ public class GaugeListener implements TypeListener {
                             method.setAccessible(true);
                         }
 
-                        encounter.register(new GaugeInjectionListener<I>(metricRegistry,
-                            metricName,
-                            method));
+                        encounter.register(new GaugeInjectionListener<I>(metricRegistry, metricName, method));
                     } else {
                         encounter.addError("Method %s is annotated with @Gauge but requires parameters.",
-                            method);
+                                method);
                     }
                 }
             }
