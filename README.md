@@ -35,18 +35,16 @@ The `MetricsInstrumentationModule` you installed above will create and appropria
 
 The annotations have some configuration options available for metric name, etc. You can also provide a custom `MetricNamer` implementation if the default name scheme does not work for you.
 
-### Type level annotations
+### Customizing annotation lookup
 
-By default `MetricsInstrumentationModule` will provide metrics only for annotated methods, it is possible to enable type level annotation checks to get metrics for all declared methods of the class. To enable type level checks, you should provide `AnnotationMatcher`.
-`ClassAnnotationMatcher` for matching class level annotations and `MethodAnnotationMatcher` for method level annotations are provided. 
+By default `MetricsInstrumentationModule` will provide metrics only for annotated methods. You can also look for annotations on the enclosing classes, or both, or provide your own custom logic.  To change annotation resolution, provide an `AnnotationResolver` when building the `MetricsInstrumentationModule`. `MethodAnnotationResolver` is the default implementation. `ClassAnnotationResolver` will look for annotations on the class instead of the method. You can invoke multiple resolvers in order with `ListAnnotationResolver `, so if you wanted to look in methods first and then the class, you could do that:
 
 ```java
 // somewhere in your Guice module setup
 install(
     MetricsInstrumentationModule.builder()
         .withRegistry(yourFavoriteMetricRegistry)
-        .withAnnotationMatcher(new ClassAnnotationMatcher())
-        .withAnnotationMatcher(new MethodAnnotationMatcher())
+        .withAnnotationResolver(new ListAnnotationResolver(Lists.newArrayList(new ClassAnnotationResolver(), new MethodAnnotationResolver()))
         .build()
 );
 ```
