@@ -31,7 +31,7 @@ public class MatcherTest {
                 return InstrumentedWithMetered.class.isAssignableFrom(typeLiteral.getRawType());
             }
         };
-        final Injector injector = Guice.createInjector(new MetricsInstrumentationModule(registry, matcher));
+        final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).withMatcher(matcher).build());
         this.timedInstance = injector.getInstance(InstrumentedWithTimed.class);
         this.meteredInstance = injector.getInstance(InstrumentedWithMetered.class);
     }

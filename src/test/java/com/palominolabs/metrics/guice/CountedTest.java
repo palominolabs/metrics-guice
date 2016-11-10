@@ -22,7 +22,7 @@ public class CountedTest {
     @Before
     public void setup() {
         this.registry = new MetricRegistry();
-        final Injector injector = Guice.createInjector(new MetricsInstrumentationModule(registry));
+        final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());
         this.instance = injector.getInstance(InstrumentedWithCounter.class);
     }
 

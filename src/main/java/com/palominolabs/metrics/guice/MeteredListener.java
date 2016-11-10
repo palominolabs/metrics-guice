@@ -3,6 +3,7 @@ package com.palominolabs.metrics.guice;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Metered;
+import com.palominolabs.metrics.guice.matcher.AnnotationProvider;
 import java.lang.reflect.Method;
 import javax.annotation.Nullable;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -13,16 +14,18 @@ import org.aopalliance.intercept.MethodInterceptor;
 public class MeteredListener extends DeclaredMethodsTypeListener {
     private final MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
+    private final AnnotationProvider provider;
 
-    public MeteredListener(MetricRegistry metricRegistry, MetricNamer metricNamer) {
+    public MeteredListener(MetricRegistry metricRegistry, MetricNamer metricNamer, AnnotationProvider provider) {
         this.metricRegistry = metricRegistry;
         this.metricNamer = metricNamer;
+        this.provider = provider;
     }
 
     @Nullable
     @Override
     protected MethodInterceptor getInterceptor(Method method) {
-        final Metered annotation = method.getAnnotation(Metered.class);
+        final Metered annotation = provider.getAnnotation(Metered.class, method);
         if (annotation != null) {
             final Meter meter = metricRegistry.meter(metricNamer.getNameForMetered(method, annotation));
             return new MeteredInterceptor(meter);
