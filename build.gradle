@@ -3,13 +3,13 @@ plugins {
   id 'osgi'
   id 'com.jfrog.bintray' version '1.7.2'
   id 'maven-publish'
+  id 'net.researchgate.release' version '2.4.1'
 }
 
 repositories {
   jcenter()
 }
 
-version = '3.1.5-SNAPSHOT'
 group = 'com.palominolabs.metrics'
 
 ext.deps = [
@@ -82,3 +82,8 @@ bintray {
     }
   }
 }
+
+release {
+  tagTemplate = 'v$version'
+}
+afterReleaseBuild.dependsOn bintrayUpload
