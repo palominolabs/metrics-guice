@@ -2,15 +2,16 @@ package com.palominolabs.metrics.guice.matcher;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * Class level annotation matcher.
- *
- * @author Timur Khamrakulov <timur.khamrakulov@gmail.com>.
+ * Looks for annotations on the enclosing class of the method.
  */
 public class ClassAnnotationMatcher implements AnnotationMatcher {
     @Override
-    public <T extends Annotation> T match(final Class<T> clazz, final Method method) {
-        return method.getDeclaringClass().getAnnotation(clazz);
+    @Nullable
+    public <T extends Annotation> T match(@Nonnull final Class<T> annotationClass, @Nonnull final Method method) {
+        return method.getDeclaringClass().getAnnotation(annotationClass);
     }
 }

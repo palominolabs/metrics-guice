@@ -5,22 +5,23 @@ import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import java.lang.reflect.Method;
+
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
-/**
- * @author Timur Khamrakulov <timur.khamrakulov@gmail.com>.
- */
 public class AnnotationProviderTest {
 
     @Test
     public void testMixedAnnotations() throws Exception {
         AnnotationProvider annotationProvider = new AnnotationProvider(
-            Lists.newArrayList(
-                new ClassAnnotationMatcher(),
-                new MethodAnnotationMatcher()
-            )
+                Lists.newArrayList(
+                        new MethodAnnotationMatcher(),
+                        new ClassAnnotationMatcher()
+                )
         );
 
         Class<MixedAnnotatedClass> klass = MixedAnnotatedClass.class;
@@ -28,7 +29,9 @@ public class AnnotationProviderTest {
         Method protectedMethod = klass.getDeclaredMethod("protectedMethod");
         Method packagePrivateMethod = klass.getDeclaredMethod("packagePrivateMethod");
 
-        assertNotNull(annotationProvider.getAnnotation(Timed.class, publicMethod));
+        Timed classTimed = annotationProvider.getAnnotation(Timed.class, publicMethod);
+        assertNotNull(classTimed);
+        assertFalse(classTimed.absolute());
         assertNull(annotationProvider.getAnnotation(Metered.class, publicMethod));
         assertNull(annotationProvider.getAnnotation(Counted.class, publicMethod));
 
@@ -36,7 +39,9 @@ public class AnnotationProviderTest {
         assertNotNull(annotationProvider.getAnnotation(Metered.class, protectedMethod));
         assertNull(annotationProvider.getAnnotation(Counted.class, protectedMethod));
 
-        assertNotNull(annotationProvider.getAnnotation(Timed.class, packagePrivateMethod));
+        Timed methodTimed = annotationProvider.getAnnotation(Timed.class, packagePrivateMethod);
+        assertNotNull(methodTimed);
+        assertTrue(methodTimed.absolute());
         assertNull(annotationProvider.getAnnotation(Metered.class, packagePrivateMethod));
         assertNull(annotationProvider.getAnnotation(Counted.class, packagePrivateMethod));
     }
@@ -50,6 +55,7 @@ public class AnnotationProviderTest {
         protected void protectedMethod() {
         }
 
+        @Timed(absolute = true)
         void packagePrivateMethod() {
         }
     }

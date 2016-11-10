@@ -8,9 +8,6 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import org.junit.Test;
 
-/**
- * @author Timur Khamrakulov <timur.khamrakulov@gmail.com>.
- */
 public class MethodAnnotationMatcherTest {
     @Test
     public void testMethodAnnotations() throws Exception {

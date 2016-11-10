@@ -2,11 +2,19 @@ package com.palominolabs.metrics.guice.matcher;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * Annotation matcher interface, provides implementation matched annotations.
- * @author Timur Khamrakulov <timur.khamrakulov@gmail.com>.
+ * Finds annotations, if any, pertaining to a particular Method. Extension point for customizing annotation lookup.
  */
 public interface AnnotationMatcher {
-    public <T extends Annotation> T match(Class<T> clazz, Method method);
+    /**
+     * @param annotationClass Metrics annotation to look for
+     * @param method     method that the corresponding metric may be applied to
+     * @param <T>        annotation type
+     * @return a T instance, if found, else null
+     */
+    @Nullable
+    <T extends Annotation> T match(@Nonnull Class<T> annotationClass, @Nonnull Method method);
 }

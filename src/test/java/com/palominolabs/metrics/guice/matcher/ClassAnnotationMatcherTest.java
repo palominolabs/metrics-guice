@@ -7,9 +7,6 @@ import java.lang.reflect.Method;
 import static junit.framework.TestCase.assertNotNull;
 import org.junit.Test;
 
-/**
- * @author Timur Khamrakulov <timur.khamrakulov@gmail.com>.
- */
 public class ClassAnnotationMatcherTest {
 
     @Test
