@@ -1,9 +1,9 @@
 plugins {
   id 'java'
   id 'osgi'
-  id 'com.jfrog.bintray' version '1.7.2'
+  id 'com.jfrog.bintray' version '1.7.3'
   id 'maven-publish'
-  id 'net.researchgate.release' version '2.4.1'
+  id 'net.researchgate.release' version '2.6.0'
 }
 
 repositories {
