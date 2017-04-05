@@ -1,3 +1,6 @@
+- 3.2.1
+    - Update to Metrics 3.2 and SLF4J 1.7.25
+    - Update to Gradle 3.4
 - 3.2.0
     - Update to Gradle 3.1
     - Updated dependencies: SLF4J 1.7.21, Guice 4.1.0
