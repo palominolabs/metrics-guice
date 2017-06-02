@@ -43,7 +43,7 @@ By default `MetricsInstrumentationModule` will provide metrics only for annotate
 // somewhere in your Guice module setup
 install(
     MetricsInstrumentationModule.builder()
-        .withRegistry(yourFavoriteMetricRegistry)
+        .withMetricRegistry(yourFavoriteMetricRegistry)
         .withAnnotationResolver(new ListAnnotationResolver(Lists.newArrayList(new ClassAnnotationResolver(), new MethodAnnotationResolver()))
         .build()
 );
