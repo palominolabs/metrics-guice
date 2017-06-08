@@ -74,6 +74,14 @@ public class GaugeTest {
     }
 
     @Test
+    public void aGaugeWithoutNameInSuperclass() throws Exception {
+        final Gauge<?> metric = registry.getGauges().get(name(InstrumentedWithGaugeParent.class,"justAGaugeFromParent", GAUGE_SUFFIX));
+
+        assertNotNull(metric);
+        assertEquals("justAGaugeFromParent", metric.getValue());
+    }
+
+    @Test
     public void aGaugeInSuperclass() throws Exception {
         final Gauge<?> metric = registry.getGauges().get(name("gaugeParent"));
 
