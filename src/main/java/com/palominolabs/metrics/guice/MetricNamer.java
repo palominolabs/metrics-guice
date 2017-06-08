@@ -21,7 +21,7 @@ public interface MetricNamer {
     String getNameForExceptionMetered(@Nonnull Method method, @Nonnull ExceptionMetered exceptionMetered);
 
     @Nonnull
-    String getNameForGauge(@Nonnull Method method, @Nonnull Gauge gauge);
+    String getNameForGauge(@Nonnull Class<?> klass, @Nonnull Method method, @Nonnull Gauge gauge);
 
     @Nonnull
     String getNameForMetered(@Nonnull Method method, @Nonnull Metered metered);

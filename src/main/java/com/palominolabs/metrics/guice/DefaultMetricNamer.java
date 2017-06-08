@@ -55,7 +55,7 @@ public class DefaultMetricNamer implements MetricNamer {
 
     @Nonnull
     @Override
-    public String getNameForGauge(@Nonnull Method method, @Nonnull Gauge gauge) {
+    public String getNameForGauge(@Nonnull Class<?> klass, @Nonnull Method method, @Nonnull Gauge gauge) {
         if (gauge.absolute()) {
             return gauge.name();
         }
