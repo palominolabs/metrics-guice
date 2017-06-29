@@ -1,3 +1,6 @@
+- 3.2.2
+    - Update to Metrics 3.2.3
+    - Update to Gradle 4.0
 - 3.2.1
     - Update to Metrics 3.2 and SLF4J 1.7.25
     - Update to Gradle 3.4
