@@ -51,7 +51,7 @@ install(
 
 ### Metric namer
 
-Custom metric namers can be applied by providing `MetricNamer` implementations. By default `DefaultMetricNamer` is used.
+The default `MetricNamer` implementation probably does what you want out of the box, but you can also write and use your own. 
 
 #### Example
 
@@ -93,6 +93,8 @@ public void doSomethingImportant() {
 Since this uses Guice AOP, instances must be created by Guice; see [the Guice wiki](https://github.com/google/guice/wiki/AOP). This means that using a Provider where you create the instance won't work, or binding a singleton to an instance, etc.
 
 Guice AOP doesn't allow us to intercept method calls to annotated methods in supertypes, so `@Counted`, etc, will not have metrics generated for them if they are in supertypes of the injectable class. One small consolation is that `@Gauge` methods can be anywhere in the type hierarchy since they work differently from the other metrics (the generated Gauge object invokes the `java.lang.reflect.Method` directly, so we can call the supertype method unambiguously).
+
+One common way users might hit this issue is if when trying to use `@Counted`, etc on a JAX-RS resource annotated with `@Path`, `@GET`, etc. This may pose problems for the JAX-RS implementation because the thing it has at runtime is now an auto-generated proxy class, not the "normal" class. A perfectly reasonable approach is instead to handle metrics generation for those classes via the hooks available in the JAX-RS implementation. For Jersey 2, might I suggest [jersey2-metrics](https://bitbucket.org/marshallpierce/jersey2-metrics)?
 
 # History
 

@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
-import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX;
-import static com.palominolabs.metrics.guice.DefaultMetricNamer.COUNTER_SUFFIX_MONOTONIC;
+import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.COUNTER_SUFFIX;
+import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.COUNTER_SUFFIX_MONOTONIC;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNull;
@@ -100,7 +100,7 @@ public class CountedTest {
      * of the supertype method. However, we can't allow intercepting synthetic bridge methods in general: when a subtype
      * overrides a generic supertype's method with a more specifically typed method that would not override the
      * type-erased supertype method, a bridge method matching the supertype's erased signature is generated, but with
-     * the subtype's method's annotation. It's not OK to intercept that synthetic method becuase that would lead to
+     * the subtype's method's annotation. It's not OK to intercept that synthetic method because that would lead to
      * double-counting, etc, since we also would intercept the regular non-synthetic method.
      *
      * Thus, we cannot intercept synthetic methods to maintain correctness, so we also lose out on one small way that we

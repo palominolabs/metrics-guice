@@ -64,7 +64,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
     public static class Builder {
         private MetricRegistry metricRegistry;
         private Matcher<? super TypeLiteral<?>> matcher = Matchers.any();
-        private MetricNamer metricNamer = new DefaultMetricNamer();
+        private MetricNamer metricNamer = new GaugeInstanceClassMetricNamer();
         private AnnotationResolver annotationResolver = new MethodAnnotationResolver();
 
         /**

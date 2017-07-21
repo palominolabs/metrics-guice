@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
-import static com.palominolabs.metrics.guice.DefaultMetricNamer.TIMED_SUFFIX;
+import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.TIMED_SUFFIX;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.hamcrest.Matchers.greaterThan;

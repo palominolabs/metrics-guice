@@ -11,9 +11,9 @@ import javax.annotation.Nonnull;
 import static com.codahale.metrics.MetricRegistry.name;
 
 /**
- * Implements the default metric naming policy: uses the name fields in the metric annotations.
+ * Uses the name fields in the metric annotations, if present, or the method declaring class and method name.
  */
-public class DefaultMetricNamer implements MetricNamer {
+public class DeclaringClassMetricNamer implements MetricNamer {
     static final String COUNTER_SUFFIX = "counter";
     static final String COUNTER_SUFFIX_MONOTONIC = "current";
     static final String GAUGE_SUFFIX = "gauge";
@@ -47,7 +47,7 @@ public class DefaultMetricNamer implements MetricNamer {
 
         if (exceptionMetered.name().isEmpty()) {
             return
-                name(method.getDeclaringClass(), method.getName(), ExceptionMetered.DEFAULT_NAME_SUFFIX);
+                    name(method.getDeclaringClass(), method.getName(), ExceptionMetered.DEFAULT_NAME_SUFFIX);
         }
 
         return name(method.getDeclaringClass(), exceptionMetered.name());
@@ -55,7 +55,7 @@ public class DefaultMetricNamer implements MetricNamer {
 
     @Nonnull
     @Override
-    public String getNameForGauge(@Nonnull Method method, @Nonnull Gauge gauge) {
+    public String getNameForGauge(@Nonnull Class<?> instanceClass, @Nonnull Method method, @Nonnull Gauge gauge) {
         if (gauge.absolute()) {
             return gauge.name();
         }

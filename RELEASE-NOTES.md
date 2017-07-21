@@ -1,3 +1,8 @@
+- 3.3.0
+    - Change default `MetricNamer` implementation to one that is friendlier to re-using superclass gauges in multiple child classes. The previous behavior is still available as `DeclaringClassMetricNamer`.
+    - Change `MetricNamer.getNameForGauge` to take an additional parameter to support the superclass logic above.
+    - Add Animal Sniffer to build to ensure that only JDK6 types are used.
+    - Update to Gradle 4.0.1
 - 3.2.2
     - Update to Metrics 3.2.3
     - Update to Gradle 4.0

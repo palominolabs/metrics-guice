@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
-import static com.palominolabs.metrics.guice.DefaultMetricNamer.GAUGE_SUFFIX;
+import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.GAUGE_SUFFIX;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
@@ -16,16 +16,22 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("unchecked")
-public class GaugeTest {
+public abstract class GaugeTestBase {
     private InstrumentedWithGauge instance;
-    private MetricRegistry registry;
+    MetricRegistry registry;
 
     @Before
     public void setup() {
         this.registry = new MetricRegistry();
-        final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());
+        final Injector injector =
+                Guice.createInjector(MetricsInstrumentationModule.builder()
+                        .withMetricRegistry(registry)
+                        .withMetricNamer(getMetricNamer())
+                        .build());
         this.instance = injector.getInstance(InstrumentedWithGauge.class);
     }
+
+    abstract MetricNamer getMetricNamer();
 
     @Test
     public void aGaugeAnnotatedMethod() throws Exception {
@@ -34,12 +40,12 @@ public class GaugeTest {
         final Gauge metric = registry.getGauges().get(name(InstrumentedWithGauge.class, "things"));
 
         assertThat("Guice creates a metric",
-            metric,
-            is(notNullValue()));
+                metric,
+                is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-            ((Gauge<String>) metric).getValue(),
-            is("poop"));
+                ((Gauge<String>) metric).getValue(),
+                is("poop"));
     }
 
     @Test
@@ -47,15 +53,15 @@ public class GaugeTest {
         instance.doAnotherThing();
 
         final Gauge metric = registry.getGauges().get(name(InstrumentedWithGauge.class,
-            "doAnotherThing", GAUGE_SUFFIX));
+                "doAnotherThing", GAUGE_SUFFIX));
 
         assertThat("Guice creates a metric",
-            metric,
-            is(notNullValue()));
+                metric,
+                is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-            ((Gauge<String>) metric).getValue(),
-            is("anotherThing"));
+                ((Gauge<String>) metric).getValue(),
+                is("anotherThing"));
     }
 
     @Test
@@ -65,12 +71,12 @@ public class GaugeTest {
         final Gauge metric = registry.getGauges().get(name("absoluteName"));
 
         assertThat("Guice creates a metric",
-            metric,
-            is(notNullValue()));
+                metric,
+                is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-            ((Gauge<String>) metric).getValue(),
-            is("anotherThingWithAbsoluteName"));
+                ((Gauge<String>) metric).getValue(),
+                is("anotherThingWithAbsoluteName"));
     }
 
     @Test

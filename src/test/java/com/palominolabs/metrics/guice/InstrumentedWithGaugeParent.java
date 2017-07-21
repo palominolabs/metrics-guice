@@ -12,4 +12,9 @@ class InstrumentedWithGaugeParent {
     private String gaugeParentPrivate() {
         return "gaugeParentPrivate";
     }
+
+    @Gauge
+    public String justAGaugeFromParent() {
+        return "justAGaugeFromParent";
+    }
 }
