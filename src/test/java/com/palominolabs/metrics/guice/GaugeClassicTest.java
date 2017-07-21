@@ -1,5 +1,9 @@
 package com.palominolabs.metrics.guice;
 
+import java.lang.reflect.Method;
+
+import javax.annotation.Nonnull;
+
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Guice;
@@ -16,14 +20,34 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("unchecked")
-public class GaugeTest {
+public class GaugeClassicTest
+{
     private InstrumentedWithGauge instance;
     private MetricRegistry registry;
+
+    private static class ClassicMetricNamer extends DefaultMetricNamer {
+        @Nonnull
+        @Override
+        public String getNameForGauge(@Nonnull final Class<?> klass,
+                                      @Nonnull final Method method,
+                                      @Nonnull final com.codahale.metrics.annotation.Gauge gauge)
+        {
+            if (gauge.absolute()) {
+                return gauge.name();
+            }
+
+            if (gauge.name().isEmpty()) {
+                return name(klass, method.getName(), GAUGE_SUFFIX);
+            }
+
+            return name(klass, gauge.name());
+        }
+    }
 
     @Before
     public void setup() {
         this.registry = new MetricRegistry();
-        final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());
+        final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).withMetricNamer(new ClassicMetricNamer()).build());
         this.instance = injector.getInstance(InstrumentedWithGauge.class);
     }
 
@@ -75,7 +99,7 @@ public class GaugeTest {
 
     @Test
     public void aGaugeWithoutNameInSuperclass() throws Exception {
-        final Gauge<?> metric = registry.getGauges().get(name(InstrumentedWithGaugeParent.class,"justAGaugeFromParent", GAUGE_SUFFIX));
+        final Gauge<?> metric = registry.getGauges().get(name(InstrumentedWithGauge.class,"justAGaugeFromParent", GAUGE_SUFFIX));
 
         assertNotNull(metric);
         assertEquals("justAGaugeFromParent", metric.getValue());

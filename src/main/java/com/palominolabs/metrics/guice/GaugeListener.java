@@ -25,7 +25,8 @@ public class GaugeListener implements TypeListener {
 
     @Override
     public <I> void hear(final TypeLiteral<I> literal, TypeEncounter<I> encounter) {
-        Class<? super I> klass = literal.getRawType();
+        final Class<? super I> literalKlass = literal.getRawType();
+        Class<? super I> klass = literalKlass;
 
         do {
             for (Method method : klass.getDeclaredMethods()) {
@@ -36,7 +37,7 @@ public class GaugeListener implements TypeListener {
                 final Gauge annotation = annotationResolver.findAnnotation(Gauge.class, method);
                 if (annotation != null) {
                     if (method.getParameterTypes().length == 0) {
-                        final String metricName = metricNamer.getNameForGauge(method, annotation);
+                        final String metricName = metricNamer.getNameForGauge(literalKlass, method, annotation);
 
                         if (!method.isAccessible()) {
                             method.setAccessible(true);
