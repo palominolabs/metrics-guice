@@ -5,6 +5,7 @@ plugins {
   id 'maven-publish'
   id 'net.researchgate.release' version '2.6.0'
   id 'com.github.ben-manes.versions' version '0.15.0'
+  id 'ru.vyarus.animalsniffer' version '1.4.0'
 }
 
 repositories {
@@ -31,6 +32,8 @@ dependencies {
   testRuntime "org.slf4j:log4j-over-slf4j:$deps.slf4j"
   testCompile 'junit:junit:4.12'
   testCompile 'org.hamcrest:hamcrest-all:1.3'
+
+  signature 'org.codehaus.mojo.signature:java16:1.1@signature'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_6
