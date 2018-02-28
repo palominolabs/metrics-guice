@@ -1,5 +1,7 @@
-- Next
-    - Build system updates; update Gradle to 4.1
+- 4.0.0
+    - Build system updates; update Gradle to 4.6
+    - Update to Metrics 4.0.2
+    - Update to Java 8
 - 3.3.0
     - Change default `MetricNamer` implementation to one that is friendlier to re-using superclass gauges in multiple child classes. The previous behavior is still available as `DeclaringClassMetricNamer`.
     - Change `MetricNamer.getNameForGauge` to take an additional parameter to support the superclass logic above.

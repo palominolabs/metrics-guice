@@ -1,11 +1,11 @@
 plugins {
   id 'java'
   id 'osgi'
-  id 'com.jfrog.bintray' version '1.7.3'
+  id 'com.jfrog.bintray' version '1.8.0'
   id 'maven-publish'
   id 'net.researchgate.release' version '2.6.0'
-  id 'com.github.ben-manes.versions' version '0.15.0'
-  id 'ru.vyarus.animalsniffer' version '1.4.2'
+  id 'com.github.ben-manes.versions' version '0.17.0'
+  id 'ru.vyarus.animalsniffer' version '1.4.3'
 }
 
 repositories {
@@ -15,7 +15,7 @@ repositories {
 group = 'com.palominolabs.metrics'
 
 ext.deps = [
-    metrics: '3.2.3',
+    metrics: '4.0.2',
     slf4j  : '1.7.25',
     guice  : '4.1.0'
 ]
@@ -25,7 +25,7 @@ dependencies {
   compile "io.dropwizard.metrics:metrics-core:$deps.metrics"
   compile "io.dropwizard.metrics:metrics-annotation:$deps.metrics"
   compile "com.google.inject:guice:$deps.guice"
-  compile 'com.google.code.findbugs:jsr305:3.0.1'
+  compile 'com.google.code.findbugs:jsr305:3.0.2'
 
   testRuntime "org.slf4j:slf4j-simple:$deps.slf4j"
   testRuntime "org.slf4j:jul-to-slf4j:$deps.slf4j"
@@ -36,8 +36,13 @@ dependencies {
   signature 'org.codehaus.mojo.signature:java16:1.1@signature'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_6
+sourceCompatibility = JavaVersion.VERSION_1_8
 compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+  options.compilerArgs << '-Xlint:unchecked'
+  options.deprecation = true
+}
 
 task sourceJar(type: Jar, dependsOn: classes) {
   from sourceSets.main.allJava

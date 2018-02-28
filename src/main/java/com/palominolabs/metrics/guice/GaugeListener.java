@@ -39,11 +39,12 @@ public class GaugeListener implements TypeListener {
                     if (method.getParameterTypes().length == 0) {
                         final String metricName = metricNamer.getNameForGauge(instanceType, method, annotation);
 
+                        // deprecated method in java 9, but replacement is not available in java 8
                         if (!method.isAccessible()) {
                             method.setAccessible(true);
                         }
 
-                        encounter.register(new GaugeInjectionListener<I>(metricRegistry, metricName, method));
+                        encounter.register(new GaugeInjectionListener<>(metricRegistry, metricName, method));
                     } else {
                         encounter.addError("Method %s is annotated with @Gauge but requires parameters.",
                                 method);

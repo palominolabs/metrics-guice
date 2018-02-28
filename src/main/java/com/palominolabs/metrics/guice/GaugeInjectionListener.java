@@ -23,14 +23,11 @@ public class GaugeInjectionListener<I> implements InjectionListener<I> {
 
     @Override
     public void afterInjection(final I i) {
-        metricRegistry.register(metricName, new Gauge<Object>() {
-            @Override
-            public Object getValue() {
-                try {
-                    return method.invoke(i);
-                } catch (Exception e) {
-                    return new RuntimeException(e);
-                }
+        metricRegistry.register(metricName, (Gauge<Object>) () -> {
+            try {
+                return method.invoke(i);
+            } catch (Exception e) {
+                return new RuntimeException(e);
             }
         });
     }
