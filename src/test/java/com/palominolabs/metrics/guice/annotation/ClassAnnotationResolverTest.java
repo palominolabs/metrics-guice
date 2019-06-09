@@ -35,6 +35,7 @@ public class ClassAnnotationResolverTest {
     @Timed
     @Metered
     @Counted
+    @SuppressWarnings("unused")
     private static class TypeLevelAnnotatedClass {
         public void publicMethod() {
         }

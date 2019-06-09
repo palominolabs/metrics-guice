@@ -37,7 +37,7 @@ public abstract class GaugeTestBase {
     public void aGaugeAnnotatedMethod() throws Exception {
         instance.doAThing();
 
-        final Gauge metric = registry.getGauges().get(name(InstrumentedWithGauge.class, "things"));
+        final Gauge<?> metric = registry.getGauges().get(name(InstrumentedWithGauge.class, "things"));
 
         assertThat("Guice creates a metric",
                 metric,
@@ -52,7 +52,7 @@ public abstract class GaugeTestBase {
     public void aGaugeAnnotatedMethodWithDefaultName() throws Exception {
         instance.doAnotherThing();
 
-        final Gauge metric = registry.getGauges().get(name(InstrumentedWithGauge.class,
+        final Gauge<?> metric = registry.getGauges().get(name(InstrumentedWithGauge.class,
                 "doAnotherThing", GAUGE_SUFFIX));
 
         assertThat("Guice creates a metric",
@@ -68,7 +68,7 @@ public abstract class GaugeTestBase {
     public void aGaugeAnnotatedMethodWithAbsoluteName() throws Exception {
         instance.doAThingWithAbsoluteName();
 
-        final Gauge metric = registry.getGauges().get(name("absoluteName"));
+        final Gauge<?> metric = registry.getGauges().get(name("absoluteName"));
 
         assertThat("Guice creates a metric",
                 metric,

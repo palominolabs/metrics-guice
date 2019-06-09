@@ -8,17 +8,19 @@ import com.google.inject.spi.TypeListener;
 import com.palominolabs.metrics.guice.annotation.AnnotationResolver;
 import java.lang.reflect.Method;
 
+import javax.inject.Provider;
+
 /**
  * A listener which adds gauge injection listeners to classes with gauges.
  */
 public class GaugeListener implements TypeListener {
-    private final MetricRegistry metricRegistry;
+    private final Provider<MetricRegistry> metricRegistryProvider;
     private final MetricNamer metricNamer;
     private final AnnotationResolver annotationResolver;
 
-    public GaugeListener(MetricRegistry metricRegistry, MetricNamer metricNamer,
+    public GaugeListener(Provider<MetricRegistry> metricRegistryProvider, MetricNamer metricNamer,
             final AnnotationResolver annotationResolver) {
-        this.metricRegistry = metricRegistry;
+        this.metricRegistryProvider = metricRegistryProvider;
         this.metricNamer = metricNamer;
         this.annotationResolver = annotationResolver;
     }
@@ -29,6 +31,7 @@ public class GaugeListener implements TypeListener {
         final Class<?> instanceType = klass;
 
         do {
+            final MetricRegistry metricRegistry = metricRegistryProvider.get();
             for (Method method : klass.getDeclaredMethods()) {
                 if (method.isSynthetic()) {
                     continue;
@@ -43,7 +46,6 @@ public class GaugeListener implements TypeListener {
                         if (!method.isAccessible()) {
                             method.setAccessible(true);
                         }
-
                         encounter.register(new GaugeInjectionListener<>(metricRegistry, metricName, method));
                     } else {
                         encounter.addError("Method %s is annotated with @Gauge but requires parameters.",

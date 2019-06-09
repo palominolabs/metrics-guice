@@ -15,9 +15,9 @@ public class GaugeInheritanceTest {
         MetricRegistry registry = new MetricRegistry();
         final Injector injector = Guice
                 .createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());
-        Parent parent = injector.getInstance(Parent.class);
-        Child1 child1 = injector.getInstance(Child1.class);
-        Child2 child2 = injector.getInstance(Child2.class);
+        injector.getInstance(Parent.class);
+        injector.getInstance(Child1.class);
+        injector.getInstance(Child2.class);
 
         // gauge in parent class is registered separately for each
 

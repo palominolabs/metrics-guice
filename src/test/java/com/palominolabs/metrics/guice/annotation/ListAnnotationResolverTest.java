@@ -47,6 +47,7 @@ public class ListAnnotationResolverTest {
     }
 
     @Timed
+    @SuppressWarnings("unused")
     private static class MixedAnnotatedClass {
         public void publicMethod() {
         }
