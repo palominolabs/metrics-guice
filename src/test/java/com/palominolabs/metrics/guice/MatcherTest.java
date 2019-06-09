@@ -8,22 +8,22 @@ import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 
-public class MatcherTest {
+class MatcherTest {
     private InstrumentedWithTimed timedInstance;
     private InstrumentedWithMetered meteredInstance;
     private MetricRegistry registry;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         this.registry = new MetricRegistry();
         final Matcher<? super TypeLiteral<?>> matcher = new AbstractMatcher<TypeLiteral<?>>() {
             @Override
@@ -37,7 +37,7 @@ public class MatcherTest {
     }
 
     @Test
-    public void aTimedAnnotatedMethod() throws Exception {
+    void aTimedAnnotatedMethod() throws Exception {
 
         timedInstance.doAThing();
 
@@ -50,7 +50,7 @@ public class MatcherTest {
     }
 
     @Test
-    public void aMeteredAnnotatedMethod() throws Exception {
+    void aMeteredAnnotatedMethod() {
 
         meteredInstance.doAThing();
 

@@ -4,30 +4,30 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
 import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.COUNTER_SUFFIX;
 import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.COUNTER_SUFFIX_MONOTONIC;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CountedTest {
+class CountedTest {
     private InstrumentedWithCounter instance;
     private MetricRegistry registry;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         this.registry = new MetricRegistry();
         final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());
         this.instance = injector.getInstance(InstrumentedWithCounter.class);
     }
 
     @Test
-    public void aCounterAnnotatedMethod() throws Exception {
+    void aCounterAnnotatedMethod() {
         instance.doAThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class, "things"));
@@ -42,7 +42,7 @@ public class CountedTest {
     }
 
     @Test
-    public void aCounterAnnotatedMethodWithDefaultName() throws Exception {
+    void aCounterAnnotatedMethodWithDefaultName() {
         instance.doAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
@@ -58,7 +58,7 @@ public class CountedTest {
     }
 
     @Test
-    public void aCounterAnnotatedMethodWithDefaultNameAndMonotonicFalse() throws Exception {
+    void aCounterAnnotatedMethodWithDefaultNameAndMonotonicFalse() {
         instance.doYetAnotherThing();
 
         final Counter metric = registry.getCounters().get(name(InstrumentedWithCounter.class,
@@ -75,7 +75,7 @@ public class CountedTest {
     }
 
     @Test
-    public void aCounterAnnotatedMethodWithAbsoluteName() throws Exception {
+    void aCounterAnnotatedMethodWithAbsoluteName() {
         instance.doAThingWithAbsoluteName();
 
         final Counter metric = registry.getCounters().get(name("absoluteName"));
@@ -107,7 +107,7 @@ public class CountedTest {
      * could intercept annotated methods in superclasses.
      */
     @Test
-    public void aCounterForSuperclassMethod() {
+    void aCounterForSuperclassMethod() {
         instance.counterParent();
 
         final Counter metric = registry.getCounters().get(name("counterParent"));

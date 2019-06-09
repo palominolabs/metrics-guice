@@ -5,14 +5,14 @@ import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import java.lang.reflect.Method;
 
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class MethodAnnotationResolverTest {
+class MethodAnnotationResolverTest {
     @Test
-    public void testMethodAnnotations() throws Exception {
+    void testMethodAnnotations() throws Exception {
         AnnotationResolver matcher = new MethodAnnotationResolver();
         Class<MethodAnnotatedClass> klass = MethodAnnotatedClass.class;
         Method publicMethod = klass.getDeclaredMethod("publicMethod");
@@ -28,6 +28,7 @@ public class MethodAnnotationResolverTest {
         assertNull(matcher.findAnnotation(Metered.class, publicMethod));
     }
 
+    @SuppressWarnings("WeakerAccess")
     private static class MethodAnnotatedClass {
         @Timed
         public void publicMethod() {

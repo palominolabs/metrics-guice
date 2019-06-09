@@ -32,7 +32,8 @@ dependencies {
     testRuntime("org.slf4j:slf4j-simple:${deps["slf4j"]}")
     testRuntime("org.slf4j:jul-to-slf4j:${deps["slf4j"]}")
     testRuntime("org.slf4j:log4j-over-slf4j:${deps["slf4j"]}")
-    testImplementation("junit:junit:4.12")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.2")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
 
     signature("org.codehaus.mojo.signature:java18:1.0@signature")
@@ -50,6 +51,10 @@ tasks.withType<JavaCompile> {
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
+
     register<Jar>("sourceJar") {
         from(project.the<SourceSetContainer>()["main"].allJava)
         archiveClassifier.set("sources")
