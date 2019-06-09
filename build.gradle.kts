@@ -18,9 +18,9 @@ group = "com.palominolabs.metrics"
 
 val deps by extra {
     mapOf(
-            "metrics" to "4.0.2",
+            "metrics" to "4.1.0",
             "slf4j" to "1.7.26",
-            "guice" to "4.1.0")
+            "guice" to "4.2.2")
 }
 
 dependencies {
