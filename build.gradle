@@ -5,7 +5,7 @@ plugins {
   id 'maven-publish'
   id 'net.researchgate.release' version '2.6.0'
   id 'com.github.ben-manes.versions' version '0.17.0'
-  id 'ru.vyarus.animalsniffer' version '1.4.3'
+  id 'ru.vyarus.animalsniffer' version '1.5.0'
 }
 
 repositories {
