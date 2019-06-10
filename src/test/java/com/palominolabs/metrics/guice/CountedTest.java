@@ -22,8 +22,7 @@ class CountedTest {
     @BeforeEach
     void setup() {
         this.registry = new MetricRegistry();
-        final Injector injector = Guice.createInjector(
-                MetricsInstrumentationModule.builder().withMetricRegistryProvider(() -> registry).build());
+        final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());
         this.instance = injector.getInstance(InstrumentedWithCounter.class);
     }
 
