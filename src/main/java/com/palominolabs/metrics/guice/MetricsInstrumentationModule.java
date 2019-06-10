@@ -13,10 +13,8 @@ import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
 import com.palominolabs.metrics.guice.annotation.AnnotationResolver;
 import com.palominolabs.metrics.guice.annotation.MethodAnnotationResolver;
-
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Provider;
 
 /**
@@ -33,7 +31,8 @@ import javax.inject.Provider;
  * @see GaugeInjectionListener
  */
 public class MetricsInstrumentationModule extends AbstractModule {
-    private final Optional<Provider<MetricRegistry>> optionalMetricRegistryProvider;
+    @Nullable
+    private final Provider<MetricRegistry> metricRegistryProvider;
     private final Matcher<? super TypeLiteral<?>> matcher;
     private final MetricNamer metricNamer;
     private final AnnotationResolver annotationResolver;
@@ -43,14 +42,14 @@ public class MetricsInstrumentationModule extends AbstractModule {
     }
 
     /**
-     * @param metricRegistry     The registry to use when creating meters, etc. for annotated methods.
-     * @param matcher            The matcher to determine which types to look for metrics in
-     * @param metricNamer        The metric namer to use when creating names for metrics for annotated methods
-     * @param annotationResolver The annotation provider
+     * @param metricRegistryProvider The registry provider to use when creating meters, etc. for annotated methods, or null if the module should request a provider from the injector instead.
+     * @param matcher                The matcher to determine which types to look for metrics in
+     * @param metricNamer            The metric namer to use when creating names for metrics for annotated methods
+     * @param annotationResolver     The annotation provider
      */
-    private MetricsInstrumentationModule(Optional<Provider<MetricRegistry>> optionalMetricRegistryProvider,
+    private MetricsInstrumentationModule(@Nullable Provider<MetricRegistry> metricRegistryProvider,
             Matcher<? super TypeLiteral<?>> matcher, MetricNamer metricNamer, AnnotationResolver annotationResolver) {
-        this.optionalMetricRegistryProvider = optionalMetricRegistryProvider;
+        this.metricRegistryProvider = metricRegistryProvider;
         this.matcher = matcher;
         this.metricNamer = metricNamer;
         this.annotationResolver = annotationResolver;
@@ -58,8 +57,9 @@ public class MetricsInstrumentationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        Provider<MetricRegistry> metricRegistryProvider = optionalMetricRegistryProvider
-                .orElse(getProvider(MetricRegistry.class));
+        Provider<MetricRegistry> metricRegistryProvider = this.metricRegistryProvider == null
+                ? getProvider(MetricRegistry.class)
+                : this.metricRegistryProvider;
 
         bindListener(matcher, new MeteredListener(metricRegistryProvider, metricNamer, annotationResolver));
         bindListener(matcher, new TimedListener(metricRegistryProvider, metricNamer, annotationResolver));
@@ -69,7 +69,8 @@ public class MetricsInstrumentationModule extends AbstractModule {
     }
 
     public static class Builder {
-        private Optional<Provider<MetricRegistry>> optionalMetricRegistryProvider = Optional.empty();
+        @Nullable
+        private Provider<MetricRegistry> metricRegistryProvider = null;
         private Matcher<? super TypeLiteral<?>> matcher = Matchers.any();
         private MetricNamer metricNamer = new GaugeInstanceClassMetricNamer();
         private AnnotationResolver annotationResolver = new MethodAnnotationResolver();
@@ -80,7 +81,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
          */
         @Nonnull
         public Builder withMetricRegistry(@Nonnull MetricRegistry metricRegistry) {
-            this.optionalMetricRegistryProvider = Optional.of(() -> metricRegistry);
+            this.metricRegistryProvider = () -> metricRegistry;
 
             return this;
         }
@@ -91,7 +92,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
          */
         @Nonnull
         public Builder withMetricRegistryProvider(@Nonnull Provider<MetricRegistry> metricRegistryProvider) {
-            this.optionalMetricRegistryProvider = Optional.of(metricRegistryProvider);
+            this.metricRegistryProvider = metricRegistryProvider;
 
             return this;
         }
@@ -132,7 +133,7 @@ public class MetricsInstrumentationModule extends AbstractModule {
         @Nonnull
         public MetricsInstrumentationModule build() {
             return new MetricsInstrumentationModule(
-                    Preconditions.checkNotNull(optionalMetricRegistryProvider),
+                    metricRegistryProvider,
                     Preconditions.checkNotNull(matcher),
                     Preconditions.checkNotNull(metricNamer),
                     Preconditions.checkNotNull(annotationResolver));
