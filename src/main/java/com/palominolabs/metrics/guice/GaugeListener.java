@@ -31,7 +31,6 @@ public class GaugeListener implements TypeListener {
         final Class<?> instanceType = klass;
 
         do {
-            final MetricRegistry metricRegistry = metricRegistryProvider.get();
             for (Method method : klass.getDeclaredMethods()) {
                 if (method.isSynthetic()) {
                     continue;
@@ -39,6 +38,7 @@ public class GaugeListener implements TypeListener {
 
                 final Gauge annotation = annotationResolver.findAnnotation(Gauge.class, method);
                 if (annotation != null) {
+                    final MetricRegistry metricRegistry = metricRegistryProvider.get();
                     if (method.getParameterTypes().length == 0) {
                         final String metricName = metricNamer.getNameForGauge(instanceType, method, annotation);
 
