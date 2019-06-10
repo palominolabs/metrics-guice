@@ -2,24 +2,26 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.annotation.Counted;
 
-public class InstrumentedWithCounter extends InstrumentedWithCounterParent {
+@SuppressWarnings("UnusedReturnValue")
+class InstrumentedWithCounter extends InstrumentedWithCounterParent {
     @Counted(name = "things", monotonic = true)
-    public String doAThing() {
+    String doAThing() {
         return "poop";
     }
 
     @Counted(monotonic = true)
-    public String doAnotherThing() {
+    String doAnotherThing() {
         return "anotherThing";
     }
 
+    @SuppressWarnings("DefaultAnnotationParam")
     @Counted(monotonic = false)
-    public String doYetAnotherThing() {
+    String doYetAnotherThing() {
         return "anotherThing";
     }
 
     @Counted(name = "absoluteName", absolute = true, monotonic = true)
-    public String doAThingWithAbsoluteName() {
+    String doAThingWithAbsoluteName() {
         return "anotherThingWithAbsoluteName";
     }
 

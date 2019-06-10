@@ -6,17 +6,17 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import java.lang.reflect.Method;
 
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ListAnnotationResolverTest {
+class ListAnnotationResolverTest {
 
     @Test
-    public void testMixedAnnotations() throws Exception {
+    void testMixedAnnotations() throws Exception {
         ListAnnotationResolver annotationProvider = new ListAnnotationResolver(
                 Lists.newArrayList(
                         new MethodAnnotationResolver(),
@@ -46,8 +46,8 @@ public class ListAnnotationResolverTest {
         assertNull(annotationProvider.findAnnotation(Counted.class, packagePrivateMethod));
     }
 
+    @SuppressWarnings("WeakerAccess")
     @Timed
-    @SuppressWarnings("unused")
     private static class MixedAnnotatedClass {
         public void publicMethod() {
         }

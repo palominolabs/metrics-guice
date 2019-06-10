@@ -2,10 +2,11 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.annotation.Counted;
 
-public class InstrumentedWithCounterParent {
+@SuppressWarnings("UnusedReturnValue")
+class InstrumentedWithCounterParent {
 
     @Counted(name = "counterParent", absolute = true)
-    public String counterParent() {
+    String counterParent() {
         return "counterParent";
     }
 }

@@ -4,24 +4,24 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
 import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.GAUGE_SUFFIX;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SuppressWarnings("unchecked")
-public abstract class GaugeTestBase {
+abstract class GaugeTestBase {
     private InstrumentedWithGauge instance;
     MetricRegistry registry;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         this.registry = new MetricRegistry();
         final Injector injector =
                 Guice.createInjector(MetricsInstrumentationModule.builder()
@@ -34,25 +34,25 @@ public abstract class GaugeTestBase {
     abstract MetricNamer getMetricNamer();
 
     @Test
-    public void aGaugeAnnotatedMethod() throws Exception {
+    void aGaugeAnnotatedMethod() {
         instance.doAThing();
 
-        final Gauge<?> metric = registry.getGauges().get(name(InstrumentedWithGauge.class, "things"));
+        final Gauge<String> metric = registry.getGauges().get(name(InstrumentedWithGauge.class, "things"));
 
         assertThat("Guice creates a metric",
                 metric,
                 is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-                ((Gauge<String>) metric).getValue(),
+                metric.getValue(),
                 is("poop"));
     }
 
     @Test
-    public void aGaugeAnnotatedMethodWithDefaultName() throws Exception {
+    void aGaugeAnnotatedMethodWithDefaultName() {
         instance.doAnotherThing();
 
-        final Gauge<?> metric = registry.getGauges().get(name(InstrumentedWithGauge.class,
+        final Gauge<String> metric = registry.getGauges().get(name(InstrumentedWithGauge.class,
                 "doAnotherThing", GAUGE_SUFFIX));
 
         assertThat("Guice creates a metric",
@@ -60,27 +60,27 @@ public abstract class GaugeTestBase {
                 is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-                ((Gauge<String>) metric).getValue(),
+                metric.getValue(),
                 is("anotherThing"));
     }
 
     @Test
-    public void aGaugeAnnotatedMethodWithAbsoluteName() throws Exception {
+    void aGaugeAnnotatedMethodWithAbsoluteName() {
         instance.doAThingWithAbsoluteName();
 
-        final Gauge<?> metric = registry.getGauges().get(name("absoluteName"));
+        final Gauge<String> metric = registry.getGauges().get(name("absoluteName"));
 
         assertThat("Guice creates a metric",
                 metric,
                 is(notNullValue()));
 
         assertThat("Guice creates a gauge with the given value",
-                ((Gauge<String>) metric).getValue(),
+                metric.getValue(),
                 is("anotherThingWithAbsoluteName"));
     }
 
     @Test
-    public void aGaugeInSuperclass() throws Exception {
+    void aGaugeInSuperclass() {
         final Gauge<?> metric = registry.getGauges().get(name("gaugeParent"));
 
         assertNotNull(metric);
@@ -88,7 +88,7 @@ public abstract class GaugeTestBase {
     }
 
     @Test
-    public void aPrivateGaugeInSuperclass() throws Exception {
+    void aPrivateGaugeInSuperclass() {
         final Gauge<?> metric = registry.getGauges().get(name("gaugeParentPrivate"));
 
         assertNotNull(metric);
@@ -96,7 +96,7 @@ public abstract class GaugeTestBase {
     }
 
     @Test
-    public void aPrivateGauge() throws Exception {
+    void aPrivateGauge() {
         final Gauge<?> metric = registry.getGauges().get(name(InstrumentedWithGauge.class, "gaugePrivate"));
 
         assertNotNull(metric);

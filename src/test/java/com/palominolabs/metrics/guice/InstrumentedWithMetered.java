@@ -2,7 +2,8 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.annotation.Metered;
 
-public class InstrumentedWithMetered {
+@SuppressWarnings({"UnusedReturnValue", "WeakerAccess"})
+class InstrumentedWithMetered {
     @Metered(name = "things")
     public String doAThing() {
         return "poop";

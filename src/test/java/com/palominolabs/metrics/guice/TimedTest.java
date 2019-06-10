@@ -4,32 +4,32 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
 import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.TIMED_SUFFIX;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
-public class TimedTest {
+class TimedTest {
     private InstrumentedWithTimed instance;
     private MetricRegistry registry;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         this.registry = new MetricRegistry();
         final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());
         this.instance = injector.getInstance(InstrumentedWithTimed.class);
     }
 
     @Test
-    public void aTimedAnnotatedMethod() throws Exception {
+    void aTimedAnnotatedMethod() throws Exception {
 
         instance.doAThing();
 
@@ -52,7 +52,7 @@ public class TimedTest {
     }
 
     @Test
-    public void aTimedAnnotatedMethodWithDefaultScope() throws Exception {
+    void aTimedAnnotatedMethodWithDefaultScope() {
 
         instance.doAThingWithDefaultScope();
 
@@ -63,7 +63,7 @@ public class TimedTest {
     }
 
     @Test
-    public void aTimedAnnotatedMethodWithProtectedScope() throws Exception {
+    void aTimedAnnotatedMethodWithProtectedScope() {
 
         instance.doAThingWithProtectedScope();
 
@@ -74,7 +74,7 @@ public class TimedTest {
     }
 
     @Test
-    public void aTimedAnnotatedMethodWithAbsoluteName() throws Exception {
+    void aTimedAnnotatedMethodWithAbsoluteName() {
 
         instance.doAThingWithAbsoluteName();
 

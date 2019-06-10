@@ -3,15 +3,15 @@ package com.palominolabs.metrics.guice;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GaugeInheritanceTest {
+class GaugeInheritanceTest {
 
     @Test
-    public void testInheritance() {
+    void testInheritance() {
         MetricRegistry registry = new MetricRegistry();
         final Injector injector = Guice
                 .createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());

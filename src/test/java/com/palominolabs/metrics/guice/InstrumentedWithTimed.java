@@ -2,7 +2,8 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.annotation.Timed;
 
-public class InstrumentedWithTimed {
+@SuppressWarnings({"UnusedReturnValue", "WeakerAccess"})
+class InstrumentedWithTimed {
     @Timed(name = "things")
     public String doAThing() throws InterruptedException {
         Thread.sleep(10);

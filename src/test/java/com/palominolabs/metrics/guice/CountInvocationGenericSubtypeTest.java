@@ -4,27 +4,27 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codahale.metrics.MetricRegistry.name;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CountInvocationGenericSubtypeTest {
+class CountInvocationGenericSubtypeTest {
 
     private GenericThing<String> instance;
     private MetricRegistry registry;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         this.registry = new MetricRegistry();
         final Injector injector = Guice.createInjector(MetricsInstrumentationModule.builder().withMetricRegistry(registry).build());
         this.instance = injector.getInstance(StringThing.class);
     }
 
     @Test
-    public void testCountsInvocationOfGenericOverride() {
+    void testCountsInvocationOfGenericOverride() {
         instance.doThing("foo");
 
         final Counter metric = registry.getCounters().get(name("stringThing"));

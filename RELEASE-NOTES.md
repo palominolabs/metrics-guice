@@ -1,3 +1,5 @@
+- Next
+    - Update to Guice 4.2.2 and Metrics 4.1.0
 - 4.0.0
     - Build system updates; update Gradle to 4.6
     - Update to Metrics 4.0.2

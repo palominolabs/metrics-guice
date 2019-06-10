@@ -2,19 +2,20 @@ package com.palominolabs.metrics.guice;
 
 import com.codahale.metrics.annotation.Gauge;
 
-public class InstrumentedWithGauge extends InstrumentedWithGaugeParent {
+@SuppressWarnings("UnusedReturnValue")
+class InstrumentedWithGauge extends InstrumentedWithGaugeParent {
     @Gauge(name = "things")
-    public String doAThing() {
+    String doAThing() {
         return "poop";
     }
 
     @Gauge
-    public String doAnotherThing() {
+    String doAnotherThing() {
         return "anotherThing";
     }
 
     @Gauge(name = "absoluteName", absolute = true)
-    public String doAThingWithAbsoluteName() {
+    String doAThingWithAbsoluteName() {
         return "anotherThingWithAbsoluteName";
     }
 

@@ -4,7 +4,8 @@ import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 
-public class InstrumentedWithExceptionMetered {
+@SuppressWarnings("UnusedReturnValue")
+class InstrumentedWithExceptionMetered {
 
     @ExceptionMetered(name = "exceptionCounter")
     String explodeWithPublicScope(boolean explode) {
@@ -36,25 +37,27 @@ public class InstrumentedWithExceptionMetered {
     }
 
     @ExceptionMetered
-    protected String explodeWithProtectedScope() {
+    String explodeWithProtectedScope() {
         throw new RuntimeException("Boom!");
     }
 
     @ExceptionMetered(name = "failures", cause = MyException.class)
-    public void errorProneMethod(RuntimeException e) {
+    void errorProneMethod(RuntimeException e) {
         throw e;
     }
 
     @ExceptionMetered(name = "things",
         cause = ArrayIndexOutOfBoundsException.class)
-    public Object causeAnOutOfBoundsException() {
+    Object causeAnOutOfBoundsException() {
+        @SuppressWarnings("MismatchedReadAndWriteOfArray")
         final Object[] arr = {};
+        //noinspection ConstantConditions
         return arr[1];
     }
 
     @Timed
     @ExceptionMetered
-    public void timedAndException(RuntimeException e) {
+    void timedAndException(RuntimeException e) {
         if (e != null) {
             throw e;
         }
@@ -62,7 +65,7 @@ public class InstrumentedWithExceptionMetered {
 
     @Metered
     @ExceptionMetered
-    public void meteredAndException(RuntimeException e) {
+    void meteredAndException(RuntimeException e) {
         if (e != null) {
             throw e;
         }
