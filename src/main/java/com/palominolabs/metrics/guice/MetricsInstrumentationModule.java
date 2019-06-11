@@ -8,6 +8,7 @@ import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
@@ -42,7 +43,8 @@ public class MetricsInstrumentationModule extends AbstractModule {
     }
 
     /**
-     * @param metricRegistryProvider The registry provider to use when creating meters, etc. for annotated methods, or null if the module should request a provider from the injector instead.
+     * @param metricRegistryProvider The registry provider to use when creating meters, etc. for annotated methods, or
+     *                               null if the module should request a provider from the injector instead.
      * @param matcher                The matcher to determine which types to look for metrics in
      * @param metricNamer            The metric namer to use when creating names for metrics for annotated methods
      * @param annotationResolver     The annotation provider
@@ -57,15 +59,36 @@ public class MetricsInstrumentationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        Provider<MetricRegistry> metricRegistryProvider = this.metricRegistryProvider == null
-                ? getProvider(MetricRegistry.class)
-                : this.metricRegistryProvider;
+        /*
+         * Provider<MetricRegistry> metricRegistryProvider = this.metricRegistryProvider == null
+         * ? getProvider(MetricRegistry.class)
+         * : this.metricRegistryProvider;
+         */
 
-        bindListener(matcher, new MeteredListener(metricRegistryProvider, metricNamer, annotationResolver));
-        bindListener(matcher, new TimedListener(metricRegistryProvider, metricNamer, annotationResolver));
-        bindListener(matcher, new GaugeListener(metricRegistryProvider, metricNamer, annotationResolver));
-        bindListener(matcher, new ExceptionMeteredListener(metricRegistryProvider, metricNamer, annotationResolver));
-        bindListener(matcher, new CountedListener(metricRegistryProvider, metricNamer, annotationResolver));
+        if (this.metricRegistryProvider != null) {
+            bind(MetricRegistry.class).toProvider(metricRegistryProvider).in(Singleton.class);
+        }
+
+        GaugeListener gaugeListener = new GaugeListener(metricNamer, annotationResolver);
+        requestInjection(gaugeListener);
+        bindListener(matcher, gaugeListener);
+
+        MeteredListener meteredListener = new MeteredListener(metricNamer, annotationResolver);
+        requestInjection(meteredListener);
+        bindListener(matcher, meteredListener);
+
+        TimedListener timedListener = new TimedListener(metricNamer, annotationResolver);
+        requestInjection(timedListener);
+        bindListener(matcher, timedListener);
+
+        ExceptionMeteredListener exceptionMeteredListener = new ExceptionMeteredListener(metricNamer,
+                annotationResolver);
+        requestInjection(exceptionMeteredListener);
+        bindListener(matcher, exceptionMeteredListener);
+
+        CountedListener countedListener = new CountedListener(metricNamer, annotationResolver);
+        requestInjection(countedListener);
+        bindListener(matcher, countedListener);
     }
 
     public static class Builder {

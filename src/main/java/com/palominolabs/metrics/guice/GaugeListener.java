@@ -1,26 +1,26 @@
 package com.palominolabs.metrics.guice;
 
+import java.lang.reflect.Method;
+
+import javax.inject.Inject;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Gauge;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import com.palominolabs.metrics.guice.annotation.AnnotationResolver;
-import java.lang.reflect.Method;
-
-import javax.inject.Provider;
 
 /**
  * A listener which adds gauge injection listeners to classes with gauges.
  */
 public class GaugeListener implements TypeListener {
-    private final Provider<MetricRegistry> metricRegistryProvider;
+    @Inject
+    private MetricRegistry metricRegistry;
     private final MetricNamer metricNamer;
     private final AnnotationResolver annotationResolver;
 
-    public GaugeListener(Provider<MetricRegistry> metricRegistryProvider, MetricNamer metricNamer,
-            final AnnotationResolver annotationResolver) {
-        this.metricRegistryProvider = metricRegistryProvider;
+    public GaugeListener(MetricNamer metricNamer, final AnnotationResolver annotationResolver) {
         this.metricNamer = metricNamer;
         this.annotationResolver = annotationResolver;
     }
@@ -38,7 +38,6 @@ public class GaugeListener implements TypeListener {
 
                 final Gauge annotation = annotationResolver.findAnnotation(Gauge.class, method);
                 if (annotation != null) {
-                    final MetricRegistry metricRegistry = metricRegistryProvider.get();
                     if (method.getParameterTypes().length == 0) {
                         final String metricName = metricNamer.getNameForGauge(instanceType, method, annotation);
 
