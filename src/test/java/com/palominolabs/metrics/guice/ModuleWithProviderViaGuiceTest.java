@@ -5,6 +5,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,12 +20,17 @@ public class ModuleWithProviderViaGuiceTest {
 
     @BeforeEach
     void setup() {
-        final Injector injector = Guice.createInjector(
+        final Injector injector = Guice.createInjector(Stage.PRODUCTION,
                 MetricsInstrumentationModule.builder().build(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {
                         bind(MetricRegistry.class).toInstance(new MetricRegistry());
+                        bind(InstrumentedWithMetered.class);
+                        bind(InstrumentedWithTimed.class);
+                        bind(InstrumentedWithGauge.class);
+                        bind(InstrumentedWithCounter.class);
+                        bind(InstrumentedWithExceptionMetered.class);
                     }
                 });
         this.registry = injector.getInstance(MetricRegistry.class);

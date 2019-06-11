@@ -8,6 +8,7 @@ import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
@@ -57,15 +58,19 @@ public class MetricsInstrumentationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        Provider<MetricRegistry> metricRegistryProvider = this.metricRegistryProvider == null
-                ? getProvider(MetricRegistry.class)
-                : this.metricRegistryProvider;
+        Provider<MetricRegistry> provider;
+        if (this.metricRegistryProvider == null) {
+            provider = new MetricRegistryHolder();
+            requestInjection(provider);
+        } else {
+            provider = this.metricRegistryProvider;
+        }
 
-        bindListener(matcher, new MeteredListener(metricRegistryProvider, metricNamer, annotationResolver));
-        bindListener(matcher, new TimedListener(metricRegistryProvider, metricNamer, annotationResolver));
-        bindListener(matcher, new GaugeListener(metricRegistryProvider, metricNamer, annotationResolver));
-        bindListener(matcher, new ExceptionMeteredListener(metricRegistryProvider, metricNamer, annotationResolver));
-        bindListener(matcher, new CountedListener(metricRegistryProvider, metricNamer, annotationResolver));
+        bindListener(matcher, new MeteredListener(provider, metricNamer, annotationResolver));
+        bindListener(matcher, new TimedListener(provider, metricNamer, annotationResolver));
+        bindListener(matcher, new GaugeListener(provider, metricNamer, annotationResolver));
+        bindListener(matcher, new ExceptionMeteredListener(provider, metricNamer, annotationResolver));
+        bindListener(matcher, new CountedListener(provider, metricNamer, annotationResolver));
     }
 
     public static class Builder {
@@ -137,6 +142,17 @@ public class MetricsInstrumentationModule extends AbstractModule {
                     Preconditions.checkNotNull(matcher),
                     Preconditions.checkNotNull(metricNamer),
                     Preconditions.checkNotNull(annotationResolver));
+        }
+    }
+
+    private static class MetricRegistryHolder implements Provider<MetricRegistry> {
+
+        @Inject
+        private volatile MetricRegistry registry;
+
+        @Override
+        public MetricRegistry get() {
+            return registry;
         }
     }
 }
