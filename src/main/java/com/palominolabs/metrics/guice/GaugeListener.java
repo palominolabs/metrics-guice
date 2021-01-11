@@ -1,7 +1,8 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.annotation.Gauge;
+import io.dropwizard.metrics5.MetricName;
+import io.dropwizard.metrics5.MetricRegistry;
+import io.dropwizard.metrics5.annotation.Gauge;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
@@ -37,7 +38,7 @@ public class GaugeListener implements TypeListener {
                 final Gauge annotation = annotationResolver.findAnnotation(Gauge.class, method);
                 if (annotation != null) {
                     if (method.getParameterTypes().length == 0) {
-                        final String metricName = metricNamer.getNameForGauge(instanceType, method, annotation);
+                        final MetricName metricName = metricNamer.getNameForGauge(instanceType, method, annotation);
 
                         // deprecated method in java 9, but replacement is not available in java 8
                         if (!method.isAccessible()) {

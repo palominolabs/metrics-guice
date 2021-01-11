@@ -1,8 +1,8 @@
 package com.palominolabs.metrics.guice.annotation;
 
-import com.codahale.metrics.annotation.Counted;
-import com.codahale.metrics.annotation.Metered;
-import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.metrics5.annotation.Counted;
+import io.dropwizard.metrics5.annotation.Metered;
+import io.dropwizard.metrics5.annotation.Timed;
 import com.google.common.collect.Lists;
 import java.lang.reflect.Method;
 

@@ -1,6 +1,6 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.Timer;
+import io.dropwizard.metrics5.Timer;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 

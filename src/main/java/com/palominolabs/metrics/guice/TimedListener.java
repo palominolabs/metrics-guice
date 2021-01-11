@@ -1,8 +1,8 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
-import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.metrics5.MetricRegistry;
+import io.dropwizard.metrics5.Timer;
+import io.dropwizard.metrics5.annotation.Timed;
 import com.palominolabs.metrics.guice.annotation.AnnotationResolver;
 import java.lang.reflect.Method;
 import javax.annotation.Nullable;

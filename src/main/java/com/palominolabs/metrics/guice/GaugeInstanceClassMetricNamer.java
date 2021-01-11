@@ -1,10 +1,11 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.annotation.Gauge;
+import io.dropwizard.metrics5.MetricName;
+import io.dropwizard.metrics5.annotation.Gauge;
 import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 
-import static com.codahale.metrics.MetricRegistry.name;
+import static io.dropwizard.metrics5.MetricRegistry.name;
 
 /**
  * For gauges (which can reside in superclasses of the type being instantiated), this will use the instantiated type for
@@ -17,9 +18,9 @@ import static com.codahale.metrics.MetricRegistry.name;
 public class GaugeInstanceClassMetricNamer extends DeclaringClassMetricNamer {
     @Nonnull
     @Override
-    public String getNameForGauge(@Nonnull Class<?> instanceClass, @Nonnull Method method, @Nonnull Gauge gauge) {
+    public MetricName getNameForGauge(@Nonnull Class<?> instanceClass, @Nonnull Method method, @Nonnull Gauge gauge) {
         if (gauge.absolute()) {
-            return gauge.name();
+            return name(gauge.name());
         }
 
         if (gauge.name().isEmpty()) {

@@ -1,13 +1,13 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
+import io.dropwizard.metrics5.MetricRegistry;
+import io.dropwizard.metrics5.Timer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codahale.metrics.MetricRegistry.name;
+import static io.dropwizard.metrics5.MetricRegistry.name;
 import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.TIMED_SUFFIX;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;

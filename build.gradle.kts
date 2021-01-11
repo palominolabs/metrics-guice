@@ -3,11 +3,11 @@ import java.util.Date
 plugins {
     `java-library`
     `maven-publish`
-    id("osgi")
-    id("com.jfrog.bintray") version "1.8.4"
-    id("net.researchgate.release") version "2.8.0"
-    id("com.github.ben-manes.versions") version "0.21.0"
-    id("ru.vyarus.animalsniffer") version "1.5.0"
+    id("biz.aQute.bnd.builder") version "5.2.0"
+    id("com.jfrog.bintray") version "1.8.5"
+    id("net.researchgate.release") version "2.8.1"
+    id("com.github.ben-manes.versions") version "0.36.0"
+    id("ru.vyarus.animalsniffer") version "1.5.2"
 }
 
 repositories {
@@ -18,22 +18,22 @@ group = "com.palominolabs.metrics"
 
 val deps by extra {
     mapOf(
-            "metrics" to "4.1.0",
-            "slf4j" to "1.7.26",
-            "guice" to "4.2.2")
+            "metrics" to "5.0.0",
+            "slf4j" to "1.7.30",
+            "guice" to "4.2.3")
 }
 
 dependencies {
-    implementation("io.dropwizard.metrics:metrics-core:${deps["metrics"]}")
-    implementation("io.dropwizard.metrics:metrics-annotation:${deps["metrics"]}")
+    implementation("io.dropwizard.metrics5:metrics-core:${deps["metrics"]}")
+    implementation("io.dropwizard.metrics5:metrics-annotation:${deps["metrics"]}")
     implementation("com.google.inject:guice:${deps["guice"]}")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
 
-    testRuntime("org.slf4j:slf4j-simple:${deps["slf4j"]}")
-    testRuntime("org.slf4j:jul-to-slf4j:${deps["slf4j"]}")
-    testRuntime("org.slf4j:log4j-over-slf4j:${deps["slf4j"]}")
+    testRuntimeOnly("org.slf4j:slf4j-simple:${deps["slf4j"]}")
+    testRuntimeOnly("org.slf4j:jul-to-slf4j:${deps["slf4j"]}")
+    testRuntimeOnly("org.slf4j:log4j-over-slf4j:${deps["slf4j"]}")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
 
     signature("org.codehaus.mojo.signature:java18:1.0@signature")

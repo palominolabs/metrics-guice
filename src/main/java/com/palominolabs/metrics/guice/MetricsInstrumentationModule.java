@@ -1,11 +1,11 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.annotation.Counted;
-import com.codahale.metrics.annotation.ExceptionMetered;
-import com.codahale.metrics.annotation.Gauge;
-import com.codahale.metrics.annotation.Metered;
-import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.metrics5.MetricRegistry;
+import io.dropwizard.metrics5.annotation.Counted;
+import io.dropwizard.metrics5.annotation.ExceptionMetered;
+import io.dropwizard.metrics5.annotation.Gauge;
+import io.dropwizard.metrics5.annotation.Metered;
+import io.dropwizard.metrics5.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;

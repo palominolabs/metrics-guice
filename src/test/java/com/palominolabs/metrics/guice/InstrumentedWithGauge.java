@@ -1,6 +1,6 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.annotation.Gauge;
+import io.dropwizard.metrics5.annotation.Gauge;
 
 @SuppressWarnings("UnusedReturnValue")
 class InstrumentedWithGauge extends InstrumentedWithGaugeParent {
