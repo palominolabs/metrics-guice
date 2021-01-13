@@ -32,8 +32,8 @@ dependencies {
     testRuntimeOnly("org.slf4j:slf4j-simple:${deps["slf4j"]}")
     testRuntimeOnly("org.slf4j:jul-to-slf4j:${deps["slf4j"]}")
     testRuntimeOnly("org.slf4j:log4j-over-slf4j:${deps["slf4j"]}")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
 
     signature("org.codehaus.mojo.signature:java18:1.0@signature")
