@@ -1,8 +1,8 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.annotation.Metered;
+import io.dropwizard.metrics5.Meter;
+import io.dropwizard.metrics5.MetricRegistry;
+import io.dropwizard.metrics5.annotation.Metered;
 import com.palominolabs.metrics.guice.annotation.AnnotationResolver;
 import java.lang.reflect.Method;
 import javax.annotation.Nullable;

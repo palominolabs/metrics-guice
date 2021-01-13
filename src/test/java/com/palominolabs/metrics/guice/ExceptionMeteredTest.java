@@ -1,15 +1,15 @@
 package com.palominolabs.metrics.guice;
 
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
+import io.dropwizard.metrics5.Meter;
+import io.dropwizard.metrics5.MetricRegistry;
+import io.dropwizard.metrics5.Timer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codahale.metrics.MetricRegistry.name;
-import static com.codahale.metrics.annotation.ExceptionMetered.DEFAULT_NAME_SUFFIX;
+import static io.dropwizard.metrics5.MetricRegistry.name;
+import static io.dropwizard.metrics5.annotation.ExceptionMetered.DEFAULT_NAME_SUFFIX;
 import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.METERED_SUFFIX;
 import static com.palominolabs.metrics.guice.DeclaringClassMetricNamer.TIMED_SUFFIX;
 import static org.hamcrest.MatcherAssert.assertThat;
