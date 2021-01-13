@@ -1,4 +1,4 @@
-- Next
+- 5.0.0
     - Build system updates; update Gradle to 6.8
     - Update to Guice 4.2.3
     - Update to Metrics 5.0.0
