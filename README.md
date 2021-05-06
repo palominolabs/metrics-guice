@@ -1,9 +1,8 @@
- [ ![Download](https://api.bintray.com/packages/marshallpierce/maven/com.palominolabs.metrics%3Ametrics-guice/images/download.svg) ](https://bintray.com/marshallpierce/maven/com.palominolabs.metrics%3Ametrics-guice/_latestVersion) 
 # Quick Start
 
 ### Get the artifacts
 
-Artifacts are released in [Bintray](https://bintray.com/). For gradle, use the `jcenter()` repository. For maven, [go here](https://bintray.com/bintray/jcenter?filterByPkgName=com.palominolabs.metrics%3Ametrics-guice) and click "Set me up".
+Artifacts are released in Maven Central.
 
 Maven:
 
