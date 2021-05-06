@@ -1,26 +1,29 @@
-import java.util.Date
+import java.time.Duration
+import java.net.URI
 
 plugins {
     `java-library`
     `maven-publish`
-    id("biz.aQute.bnd.builder") version "5.2.0"
-    id("com.jfrog.bintray") version "1.8.5"
+    signing
+    id("biz.aQute.bnd.builder") version "5.3.0"
     id("net.researchgate.release") version "2.8.1"
-    id("com.github.ben-manes.versions") version "0.36.0"
-    id("ru.vyarus.animalsniffer") version "1.5.2"
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("com.github.ben-manes.versions") version "0.38.0"
+    id("ru.vyarus.animalsniffer") version "1.5.3"
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 group = "com.palominolabs.metrics"
 
 val deps by extra {
     mapOf(
-            "metrics" to "5.0.0",
-            "slf4j" to "1.7.30",
-            "guice" to "4.2.3")
+        "metrics" to "5.0.0",
+        "slf4j" to "1.7.30",
+        "guice" to "4.2.3"
+    )
 }
 
 dependencies {
@@ -42,6 +45,8 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.withType<JavaCompile> {
@@ -55,54 +60,68 @@ tasks {
         useJUnitPlatform()
     }
 
-    register<Jar>("sourceJar") {
-        from(project.the<SourceSetContainer>()["main"].allJava)
-        archiveClassifier.set("sources")
-    }
-
-    register<Jar>("docJar") {
-        from(project.tasks["javadoc"])
-        archiveClassifier.set("javadoc")
-    }
-
     afterReleaseBuild {
-        dependsOn(bintrayUpload)
+        dependsOn(provider { project.tasks.named("publishToSonatype") })
     }
 }
 
 publishing {
     publications {
-        register<MavenPublication>("bintray") {
-            groupId = project.group.toString()
-            artifactId = project.name
-            version = project.version.toString()
-
+        register<MavenPublication>("sonatype") {
             from(components["java"])
-            artifact(tasks["sourceJar"])
-            artifact(tasks["docJar"])
+            // sonatype required pom elements
+            pom {
+                name.set("${project.group}:${project.name}")
+                description.set(name)
+                url.set("https://github.com/palominolabs/metrics-guice")
+                licenses {
+                    license {
+                        name.set("Copyfree Open Innovation License 0.4")
+                        url.set("https://copyfree.org/content/standard/licenses/coil/license.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("marshallpierce")
+                        name.set("Marshall Pierce")
+                        email.set("575695+marshallpierce@users.noreply.github.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:https://github.com/palominolabs/metrics-guice")
+                    developerConnection.set("scm:git:ssh://git@github.com:palominolabs/metrics-guice.git")
+                    url.set("https://github.com/palominolabs/metrics-guice")
+                }
+            }
+        }
+    }
+
+    // A safe throw-away place to publish to:
+    // ./gradlew publishSonatypePublicationToLocalDebugRepository -Pversion=foo
+    repositories {
+        maven {
+            name = "localDebug"
+            url = URI.create("file:///${project.buildDir}/repos/localDebug")
         }
     }
 }
 
-bintray {
-    user = rootProject.findProperty("bintrayUser")?.toString()
-    key = rootProject.findProperty("bintrayApiKey")?.toString()
-    setPublications("bintray")
-
-    with(pkg) {
-        repo = "maven"
-        setLicenses("Copyfree")
-        vcsUrl = "https://github.com/palominolabs/metrics-guice"
-        name = "com.palominolabs.metrics:metrics-guice"
-
-        with(version) {
-            name = project.version.toString()
-            released = Date().toString()
-            vcsTag = "v" + project.version.toString()
-        }
+// don't barf for devs without signing set up
+if (project.hasProperty("signing.keyId")) {
+    signing {
+        sign(project.extensions.getByType<PublishingExtension>().publications["sonatype"])
     }
 }
 
-release {
-    tagTemplate = "v\$version"
+nexusPublishing {
+    repositories {
+        sonatype {
+            // sonatypeUsername and sonatypePassword properties are used automatically
+            stagingProfileId.set("26c8b7fff47581") // com.palominolabs
+        }
+    }
+    // these are not strictly required. The default timeouts are set to 1 minute. But Sonatype can be really slow.
+    // If you get the error "java.net.SocketTimeoutException: timeout", these lines will help.
+    connectTimeout.set(Duration.ofMinutes(3))
+    clientTimeout.set(Duration.ofMinutes(3))
 }

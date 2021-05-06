@@ -1,3 +1,6 @@
+- 5.0.1
+    - Publish to maven central
+    - Build system updates
 - 5.0.0
     - Build system updates; update Gradle to 6.8
     - Update to Guice 4.2.3
